@@ -1,0 +1,12 @@
+-- Optional: seed the community feed with the mockup's example builds.
+-- Run AFTER you've created at least one real user (sign up in the app).
+-- Replace 'YOUR-USER-ID' below with the auth.users id of the seed user.
+
+-- Example:
+-- insert into public.builds (user_id, kit_name, grade, series, modifications, photo_url, score, scores, verdict, strength, work_on)
+-- values
+--   ('YOUR-USER-ID', 'Nu Gundam Ver. Ka', 'MG', 'CCA', 'Panel lined', null, 94,
+--    '{"panel_lining":95,"paint_finish":94,"pose_composition":93,"weathering":92,"overall_polish":95}',
+--    'A textbook MG build with confident weathering and razor-sharp panel lines.',
+--    'Exceptional surface finish on the funnels',
+--    'Subtle decal placement on the shoulders');

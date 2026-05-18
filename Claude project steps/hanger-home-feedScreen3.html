@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HANGER — Home Feed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:           #050918;
+    --surface:      #0B1530;
+    --surface2:     #0F1C3A;
+    --surface3:     #142447;
+    --accent:       #C9A84C;
+    --accent-dim:   rgba(201,168,76,0.13);
+    --accent-ring:  rgba(201,168,76,0.28);
+    --royal:        #1A3A8F;
+    --royal-bright: #2952CC;
+    --royal-soft:   rgba(41,82,204,0.18);
+    --white:        #FFFFFF;
+    --gold-light:   #F0D98A;
+    --text-mid:     rgba(255,255,255,0.62);
+    --text-dim:     rgba(255,255,255,0.32);
+    --text-faint:   rgba(255,255,255,0.18);
+    --border:       rgba(255,255,255,0.06);
+    --border-mid:   rgba(255,255,255,0.10);
+    --border-gold:  rgba(201,168,76,0.22);
+    --like:         #FF5577;
+  }
+
+  html, body {
+    background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--white);
+    min-height: 100vh;
+  }
+
+  /* ── Background grid ──────────────────────────────────────────── */
+  .grid-bg {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      linear-gradient(rgba(41,82,204,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(41,82,204,0.05) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .glow-bg {
+    position: fixed; top: -200px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(26,58,143,0.25) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── App shell ────────────────────────────────────────────────── */
+  .app {
+    position: relative; z-index: 1;
+    max-width: 480px; margin: 0 auto;
+    padding-bottom: 90px;
+    min-height: 100vh;
+  }
+
+  /* ── Sticky header ────────────────────────────────────────────── */
+  .header {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(16px);
+    background: rgba(5,9,24,0.85);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 20px 14px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px; letter-spacing: 4px; color: var(--accent);
+    line-height: 1;
+  }
+  .live-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #4ADE80;
+    box-shadow: 0 0 8px rgba(74,222,128,0.6);
+    animation: livePulse 2s ease-in-out infinite;
+  }
+  @keyframes livePulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .icon-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--border-mid);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.18s;
+  }
+  .icon-btn:hover { border-color: var(--border-gold); background: var(--surface2); }
+  .icon-btn svg { width: 16px; height: 16px; }
+  .badge-dot {
+    position: absolute; top: 8px; right: 8px;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    border: 1px solid var(--bg);
+  }
+  .avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--royal-bright);
+    border: 1.5px solid var(--accent-ring);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px; letter-spacing: 1px; color: var(--gold-light);
+    cursor: pointer; transition: border-color 0.18s;
+  }
+  .avatar:hover { border-color: var(--accent); }
+
+  /* ── Stats strip ──────────────────────────────────────────────── */
+  .stats-strip {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px; background: var(--border);
+    margin-bottom: 4px;
+  }
+  .stat-cell {
+    background: var(--bg); padding: 14px 12px;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px; letter-spacing: 1.5px; color: var(--white);
+    line-height: 1;
+  }
+  .stat-num .accent { color: var(--accent); }
+  .stat-label {
+    font-size: 9px; letter-spacing: 2px; color: var(--text-dim);
+    margin-top: 4px; font-weight: 500;
+  }
+
+  /* ── Section title ────────────────────────────────────────────── */
+  .section {
+    padding: 24px 20px 0;
+  }
+  .section-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .section-title {
+    font-size: 11px; letter-spacing: 3px; font-weight: 500;
+    color: var(--text-mid);
+  }
+  .section-title .accent { color: var(--accent); }
+  .section-more {
+    font-size: 11px; letter-spacing: 1.5px; color: var(--accent);
+    cursor: pointer; font-weight: 500;
+  }
+
+  /* ── Featured weekly card ─────────────────────────────────────── */
+  .featured {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    border: 1px solid var(--border-gold);
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    padding: 18px;
+    display: flex; align-items: center; gap: 16px;
+    transition: transform 0.2s, border-color 0.2s;
+    cursor: pointer;
+  }
+  .featured::before {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 140px; height: 140px;
+    background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .featured:hover { transform: translateY(-2px); border-color: rgba(201,168,76,0.4); }
+
+  .crown-badge {
+    position: absolute; top: 14px; right: 14px;
+    display: flex; align-items: center; gap: 5px;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid var(--border-gold);
+    padding: 4px 10px; border-radius: 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 10px; letter-spacing: 1.5px;
+    color: var(--gold-light);
+  }
+  .crown-badge svg { width: 11px; height: 11px; }
+
+  .featured-rank {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px; line-height: 1; letter-spacing: 1px;
+    color: rgba(201,168,76,0.18);
+    width: 50px;
+  }
+  .featured-img {
+    width: 78px; height: 78px; border-radius: 14px;
+    background: var(--surface3);
+    border: 1px solid var(--border-mid);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px; flex-shrink: 0;
+  }
+  .featured-info { flex: 1; min-width: 0; padding-right: 60px; }
+  .featured-name {
+    font-size: 16px; font-weight: 500; color: var(--white);
+    margin-bottom: 4px;
+  }
+  .featured-meta {
+    font-size: 11px; color: var(--text-dim); letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .featured-bottom {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .featured-score {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px; line-height: 1; color: var(--accent);
+    letter-spacing: 1.5px;
+  }
+  .featured-score-label {
+    font-size: 8px; letter-spacing: 1.5px; color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .featured-likes {
+    display: flex; align-items: center; gap: 4px;
+    color: var(--text-mid); font-size: 12px;
+  }
+  .featured-likes svg { width: 12px; height: 12px; fill: var(--like); }
+
+  /* ── Filter pills ─────────────────────────────────────────────── */
+  .filters {
+    display: flex; gap: 8px;
+    margin-bottom: 14px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .filters::-webkit-scrollbar { display: none; }
+  .filter-pill {
+    flex-shrink: 0;
+    font-size: 11px; font-weight: 500; letter-spacing: 1px;
+    padding: 6px 14px; border-radius: 20px;
+    border: 1px solid var(--border-mid);
+    color: var(--text-mid);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.18s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .filter-pill:hover { border-color: var(--border-gold); color: var(--accent); }
+  .filter-pill.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0A0F1E;
+  }
+
+  /* ── Feed cards ───────────────────────────────────────────────── */
+  .feed-list { display: flex; flex-direction: column; gap: 10px; }
+  .feed-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex; align-items: center; gap: 12px;
+    cursor: pointer;
+    transition: all 0.18s;
+    animation: cardIn 0.5s cubic-bezier(0.22,1,0.36,1) both;
+  }
+  .feed-card:hover {
+    border-color: var(--border-gold);
+    background: var(--surface2);
+    transform: translateX(2px);
+  }
+  .feed-card:nth-child(1) { animation-delay: 0.05s; }
+  .feed-card:nth-child(2) { animation-delay: 0.10s; }
+  .feed-card:nth-child(3) { animation-delay: 0.15s; }
+  .feed-card:nth-child(4) { animation-delay: 0.20s; }
+  .feed-card:nth-child(5) { animation-delay: 0.25s; }
+  .feed-card:nth-child(6) { animation-delay: 0.30s; }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .feed-img {
+    width: 58px; height: 58px; border-radius: 12px;
+    background: var(--surface3);
+    border: 1px solid var(--border-mid);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; flex-shrink: 0;
+    position: relative;
+  }
+  .grade-pip {
+    position: absolute; bottom: -4px; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 9px; letter-spacing: 1px;
+    padding: 2px 6px; border-radius: 4px;
+    background: var(--bg);
+    border: 1px solid var(--border-mid);
+    color: var(--text-mid);
+  }
+  .grade-pip.MG { color: var(--accent); border-color: var(--border-gold); }
+  .grade-pip.RG { color: #7FA4FF; border-color: rgba(41,82,204,0.4); }
+  .grade-pip.HG { color: var(--text-mid); }
+  .grade-pip.PG { color: #F0997B; border-color: rgba(240,153,123,0.4); }
+
+  .feed-info { flex: 1; min-width: 0; }
+  .feed-name {
+    font-size: 14px; font-weight: 500; color: var(--white);
+    margin-bottom: 3px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .feed-meta {
+    font-size: 11px; color: var(--text-dim);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .meta-dot {
+    width: 2px; height: 2px; border-radius: 50%;
+    background: var(--text-faint);
+  }
+  .feed-user { color: var(--text-mid); }
+
+  .feed-right {
+    text-align: right; display: flex; flex-direction: column;
+    align-items: flex-end; gap: 4px; flex-shrink: 0;
+  }
+  .feed-score {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px; line-height: 1; letter-spacing: 1px;
+    color: var(--accent);
+  }
+  .feed-likes {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 10px; color: var(--text-dim);
+  }
+  .feed-likes svg { width: 9px; height: 9px; fill: var(--text-dim); }
+  .feed-likes.liked svg { fill: var(--like); }
+  .feed-likes.liked { color: var(--like); }
+
+  /* ── Bottom Nav ───────────────────────────────────────────────── */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(5,9,24,0.92);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border-gold);
+    padding: 12px 0 18px;
+    display: flex; justify-content: space-around;
+    max-width: 480px; margin: 0 auto;
+    z-index: 100;
+  }
+  .nav-item {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    font-size: 9px; letter-spacing: 1.5px; font-weight: 500;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: color 0.18s;
+    background: none; border: none;
+    font-family: 'DM Sans', sans-serif;
+    padding: 4px 8px;
+  }
+  .nav-item:hover { color: var(--text-mid); }
+  .nav-item.active { color: var(--accent); }
+  .nav-item svg { width: 20px; height: 20px; }
+  .nav-item.active svg path,
+  .nav-item.active svg circle,
+  .nav-item.active svg rect { stroke: var(--accent); }
+  .nav-item.active svg .filled { fill: var(--accent); stroke: none; }
+
+  .nav-judge {
+    position: relative; top: -8px;
+    background: var(--royal-bright);
+    width: 48px; height: 48px; border-radius: 50%;
+    border: 2px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold-light);
+    transition: transform 0.18s, box-shadow 0.18s;
+    box-shadow: 0 4px 14px rgba(41,82,204,0.4);
+  }
+  .nav-judge:hover { transform: scale(1.05); box-shadow: 0 4px 18px rgba(201,168,76,0.4); }
+  .nav-judge svg { width: 22px; height: 22px; }
+
+  .judge-label {
+    position: absolute; top: 100%; margin-top: 6px;
+    font-size: 9px; letter-spacing: 1.5px; color: var(--accent);
+    font-weight: 500; left: 50%; transform: translateX(-50%);
+    white-space: nowrap;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="glow-bg"></div>
+
+<div class="app">
+
+  <!-- ── Sticky Header ── -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">HANGER</div>
+      <div class="live-dot"></div>
+    </div>
+    <div class="header-right">
+      <button class="icon-btn" style="position:relative" title="Notifications">
+        <svg viewBox="0 0 16 16" fill="none">
+          <path d="M3 6.5C3 4.0147 5.0147 2 7.5 2H8.5C10.9853 2 13 4.0147 13 6.5V9.5L14 11H2L3 9.5V6.5Z" stroke="rgba(255,255,255,0.6)" stroke-width="1.2"/>
+          <path d="M6.5 13C6.5 13.8284 7.1716 14.5 8 14.5C8.8284 14.5 9.5 13.8284 9.5 13" stroke="rgba(255,255,255,0.6)" stroke-width="1.2"/>
+        </svg>
+        <span class="badge-dot"></span>
+      </button>
+      <div class="avatar" title="Profile">MK</div>
+    </div>
+  </header>
+
+  <!-- ── User stats strip ── -->
+  <div class="stats-strip">
+    <div class="stat-cell">
+      <div class="stat-num">12</div>
+      <div class="stat-label">YOUR KITS</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num"><span class="accent">87</span></div>
+      <div class="stat-label">AVG SCORE</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num">#142</div>
+      <div class="stat-label">GLOBAL RANK</div>
+    </div>
+  </div>
+
+  <!-- ── Featured weekly winner ── -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-title">THIS WEEK'S <span class="accent">CHAMPION</span></div>
+      <div class="section-more">VIEW ALL ↗</div>
+    </div>
+
+    <div class="featured" onclick="openKit('nu-gundam')">
+      <div class="crown-badge">
+        <svg viewBox="0 0 16 16" fill="currentColor">
+          <path d="M2 5L5 8L8 3L11 8L14 5V12H2V5Z M2 13H14V14H2V13Z"/>
+        </svg>
+        WEEKLY #1
+      </div>
+      <div class="featured-rank">01</div>
+      <div class="featured-img">⚪</div>
+      <div class="featured-info">
+        <div class="featured-name">Nu Gundam Ver. Ka</div>
+        <div class="featured-meta">@zeropilot · MG · 2d ago</div>
+        <div class="featured-bottom">
+          <div>
+            <div class="featured-score">94</div>
+            <div class="featured-score-label">AI SCORE</div>
+          </div>
+          <div class="featured-likes">
+            <svg viewBox="0 0 16 16">
+              <path d="M8 14s-5.5-3.5-5.5-7.5C2.5 4.5 4 3 6 3c1.2 0 2.2.6 2.5 1 .3-.4 1.3-1 2.5-1 2 0 3.5 1.5 3.5 3.5C13.5 10.5 8 14 8 14z"/>
+            </svg>
+            <span>1.2k</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Recent builds feed ── -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-title">RECENT <span class="accent">BUILDS</span></div>
+      <div class="section-more">FILTER ↗</div>
+    </div>
+
+    <div class="filters">
+      <button class="filter-pill active" onclick="setFilter(this)">ALL</button>
+      <button class="filter-pill" onclick="setFilter(this)">FOLLOWING</button>
+      <button class="filter-pill" onclick="setFilter(this)">HG</button>
+      <button class="filter-pill" onclick="setFilter(this)">MG</button>
+      <button class="filter-pill" onclick="setFilter(this)">RG</button>
+      <button class="filter-pill" onclick="setFilter(this)">PG</button>
+      <button class="filter-pill" onclick="setFilter(this)">TOP RATED</button>
+    </div>
+
+    <div class="feed-list">
+
+      <div class="feed-card" onclick="openKit('sinanju')">
+        <div class="feed-img">🔵<div class="grade-pip MG">MG</div></div>
+        <div class="feed-info">
+          <div class="feed-name">Sinanju Stein Narrative</div>
+          <div class="feed-meta">
+            <span class="feed-user">@msbuilder_tokyo</span>
+            <span class="meta-dot"></span>
+            <span>2h ago</span>
+          </div>
+        </div>
+        <div class="feed-right">
+          <div class="feed-score">89</div>
+          <div class="feed-likes">
+            <svg viewBox="0 0 16 16"><path d="M8 14s-5.5-3.5-5.5-7.5C2.5 4.5 4 3 6 3c1.2 0 2.2.6 2.5 1 .3-.4 1.3-1 2.5-1 2 0 3.5 1.5 3.5 3.5C13.5 10.5 8 14 8 14z"/></svg>
+            <span>204</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feed-card" onclick="openKit('strike-freedom')">
+        <div class="feed-img">🟡<div class="grade-pip RG">RG</div></div>
+        <div class="feed-info">
+          <div class="feed-name">Strike Freedom Custom</div>
+          <div class="feed-meta">
+            <span class="feed-user">@gundamkid</span>
+            <span class="meta-dot"></span>
+            <span>5h ago</span>
+          </div>
+        </div>
+        <div class="feed-right">
+          <div class="feed-score">82</div>
+          <div class="feed-likes liked">
+            <svg viewBox="0 0 16 16"><path d="M8 14s-5.5-3.5-5.5-7.5C2.5 4.5 4 3 6 3c1.2 0 2.2.6 2.5 1 .3-.4 1.3-1 2.5-1 2 0 3.5 1.5 3.5 3.5C13.5 10.5 8 14 8 14z"/></svg>
+            <span>178</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feed-card" onclick="openKit('sazabi')">
+        <div class="feed-img">🔴<div class="grade-pip MG">MG</div></div>
+        <div class="feed-info">
+          <div class="feed-name">Sazabi Ver. Ka — Weathered</div>
+          <div class="feed-meta">
+            <span class="feed-user">@redcomet_88</span>
+            <span class="meta-dot"></span>
+            <span>8h ago</span>
+          </div>
+        </div>
+        <div class="feed-right">
+          <div class="feed-score">91</div>
+          <div class="feed-likes">
+            <svg viewBox="0 0 16 16"><path d="M8 14s-5.5-3.5-5.5-7.5C2.5 4.5 4 3 6 3c1.2 0 2.2.6 2.5 1 .3-.4 1.3-1 2.5-1 2 0 3.5 1.5 3.5 3.5C13.5 10.5 8 14 8 14z"/></svg>
+            <span>287</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feed-card" onclick="openKit('00-raiser')">
+        <div class="feed-img">🔵<div class="grade-pip PG">PG</div></div>
+        <div class="feed-info">
+          <div class="feed-name">00 Raiser Full Saber</div>
+          <div class="feed-meta">
+            <span class="feed-user">@gn_drive_fan</span>
+            <span class="meta-dot"></span>
+            <span>12h ago</span>
+          </div>
+        </div>
+        <div class="feed-right">
+          <div class="feed-score">97</div>
+          <div class="feed-likes">
+            <svg viewBox="0 0 16 16"><path d="M8 14s-5.5-3.5-5.5-7.5C2.5 4.5 4 3 6 3c1.2 0 2.2.6 2.5 1 .3-.4 1.3-1 2.5-1 2 0 3.5 1.5 3.5 3.5C13.5 10.5 8 14 8 14z"/></svg>
+            <span>512</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feed-card" onclick="openKit('astray')">
+        <div class="feed-img">🔴<div class="grade-pip MG">MG</div></div>
+        <div class="feed-info">
+          <div class="feed-name">Astray Red Frame Kai</div>
+          <div class="feed-meta">
+            <span class="feed-user">@builder_seoul</span>
+            <span class="meta-dot"></span>
+            <span>1d ago</span>
+          </div>
+        </div>
+        <div class="feed-right">
+          <div class="feed-score">93</div>
+          <div class="feed-likes">
+            <svg viewBox="0 0 16 16"><path d="M8 14s-5.5-3.5-5.5-7.5C2.5 4.5 4 3 6 3c1.2 0 2.2.6 2.5 1 .3-.4 1.3-1 2.5-1 2 0 3.5 1.5 3.5 3.5C13.5 10.5 8 14 8 14z"/></svg>
+            <span>391</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feed-card" onclick="openKit('barbatos')">
+        <div class="feed-img">🟤<div class="grade-pip HG">HG</div></div>
+        <div class="feed-info">
+          <div class="feed-name">Barbatos Lupus Rex</div>
+          <div class="feed-meta">
+            <span class="feed-user">@iron_blooded</span>
+            <span class="meta-dot"></span>
+            <span>1d ago</span>
+          </div>
+        </div>
+        <div class="feed-right">
+          <div class="feed-score">76</div>
+          <div class="feed-likes">
+            <svg viewBox="0 0 16 16"><path d="M8 14s-5.5-3.5-5.5-7.5C2.5 4.5 4 3 6 3c1.2 0 2.2.6 2.5 1 .3-.4 1.3-1 2.5-1 2 0 3.5 1.5 3.5 3.5C13.5 10.5 8 14 8 14z"/></svg>
+            <span>112</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<!-- ── Bottom Navigation ── -->
+<nav class="bottom-nav">
+  <button class="nav-item active" onclick="navTo('feed')">
+    <svg viewBox="0 0 20 20" fill="none">
+      <rect x="3" y="9" width="6" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5" class="filled"/>
+      <rect x="11" y="4" width="6" height="14" rx="1.5" stroke="currentColor" stroke-width="1.5" class="filled"/>
+    </svg>
+    FEED
+  </button>
+
+  <button class="nav-item" onclick="navTo('hangar')">
+    <svg viewBox="0 0 20 20" fill="none">
+      <rect x="3" y="3" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+      <rect x="11" y="3" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+      <rect x="3" y="11" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+      <rect x="11" y="11" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+    </svg>
+    HANGAR
+  </button>
+
+  <button class="nav-judge" onclick="navTo('judge')" title="AI Judge">
+    <svg viewBox="0 0 20 20" fill="none">
+      <path d="M10 2L11.5 7.5L17 9L11.5 10.5L10 16L8.5 10.5L3 9L8.5 7.5L10 2Z" fill="#F0D98A"/>
+      <path d="M15 14L15.7 16.3L18 17L15.7 17.7L15 20L14.3 17.7L12 17L14.3 16.3L15 14Z" fill="#F0D98A" opacity="0.7"/>
+    </svg>
+  </button>
+
+  <button class="nav-item" onclick="navTo('community')">
+    <svg viewBox="0 0 20 20" fill="none">
+      <circle cx="7" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/>
+      <circle cx="14" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M2 17c0-2.8 2.2-5 5-5s5 2.2 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M12 17c0-2 1.5-4 4-4s4 2 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+    </svg>
+    COMMUNITY
+  </button>
+
+  <button class="nav-item" onclick="navTo('profile')">
+    <svg viewBox="0 0 20 20" fill="none">
+      <circle cx="10" cy="7" r="3.5" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M3 18c0-3.5 3.1-6 7-6s7 2.5 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    PROFILE
+  </button>
+</nav>
+
+<script>
+  function setFilter(btn) {
+    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function openKit(id) {
+    alert(`📋 Opening kit detail: ${id}\n\nThis screen lets you view photos, the full AI breakdown, comments, and like the build.`);
+  }
+
+  function navTo(screen) {
+    const labels = {
+      feed: 'Home Feed (you are here)',
+      hangar: 'Hangar — your shelf',
+      judge: 'AI Judge — get your build scored',
+      community: 'Community — global leaderboard',
+      profile: 'Profile — your builder page'
+    };
+    alert(`📍 ${labels[screen]}\n\nAsk Claude to build the ${screen} screen next!`);
+  }
+
+  // Subtle parallax on the glow as you scroll
+  let ticking = false;
+  document.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        document.querySelector('.glow-bg').style.transform =
+          `translateX(-50%) translateY(${y * 0.3}px)`;
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+</script>
+</body>
+</html>

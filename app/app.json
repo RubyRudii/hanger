@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "Hanger",
+    "slug": "hanger",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "hanger",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#0A0A0B",
+      "resizeMode": "contain"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.hanger.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0A0A0B"
+      },
+      "package": "com.hanger.app"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Hanger needs access to your photos so you can submit your kit for AI judging.",
+          "cameraPermission": "Hanger needs camera access so you can shoot your kit for AI judging."
+        }
+      ],
+      "expo-font"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

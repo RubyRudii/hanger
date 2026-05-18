@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HANGER — Gunpla Builder Community</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:          #0A0A0B;
+    --surface:     #141416;
+    --accent:      #E8341A;
+    --accent-dim:  rgba(232, 52, 26, 0.14);
+    --accent-glow: rgba(232, 52, 26, 0.055);
+    --accent-ring: rgba(232, 52, 26, 0.25);
+    --white:       #FFFFFF;
+    --text-mid:    rgba(255,255,255,0.55);
+    --text-dim:    rgba(255,255,255,0.28);
+    --border:      rgba(255,255,255,0.07);
+    --border-mid:  rgba(255,255,255,0.10);
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--white);
+    overflow: hidden;
+  }
+
+  /* ── Grid overlay ─────────────────────────────────────────── */
+  .grid {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+      linear-gradient(var(--accent-glow) 1px, transparent 1px),
+      linear-gradient(90deg, var(--accent-glow) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+
+  /* ── Ambient glow orb ─────────────────────────────────────── */
+  .glow-orb {
+    position: fixed;
+    top: 18%;
+    left: 50%;
+    transform: translateX(-50%) scale(0.7);
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232,52,26,0.18) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    animation: orbIn 1s ease 0.1s forwards;
+  }
+  @keyframes orbIn {
+    to { opacity: 1; transform: translateX(-50%) scale(1); }
+  }
+
+  /* ── Outer ring (decorative) ──────────────────────────────── */
+  .glow-ring {
+    position: fixed;
+    top: 18%;
+    left: 50%;
+    transform: translate(-50%, 20px);
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    border: 1px solid var(--accent-ring);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    animation: ringIn 1.2s ease 0.3s forwards;
+  }
+  .glow-ring-2 {
+    position: fixed;
+    top: 18%;
+    left: 50%;
+    transform: translate(-50%, 20px);
+    width: 340px;
+    height: 340px;
+    border-radius: 50%;
+    border: 1px solid rgba(232,52,26,0.08);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    animation: ringIn 1.4s ease 0.4s forwards;
+  }
+  @keyframes ringIn {
+    to { opacity: 1; transform: translate(-50%, 0); }
+  }
+
+  /* ── Page layout ──────────────────────────────────────────── */
+  .page {
+    position: relative;
+    z-index: 1;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 28px;
+    gap: 0;
+  }
+
+  /* ── Logo ─────────────────────────────────────────────────── */
+  .logo-block {
+    text-align: center;
+    margin-bottom: 44px;
+    opacity: 0;
+    transform: translateY(28px);
+    animation: slideUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.55s forwards;
+  }
+  .logo-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 14vw, 96px);
+    letter-spacing: 10px;
+    color: var(--accent);
+    line-height: 1;
+    /* subtle text glow */
+    text-shadow: 0 0 60px rgba(232,52,26,0.35);
+  }
+  .logo-sub {
+    font-size: 10px;
+    letter-spacing: 5px;
+    color: var(--text-dim);
+    font-weight: 300;
+    margin-top: 6px;
+  }
+
+  /* ── Tagline ──────────────────────────────────────────────── */
+  .tagline-block {
+    text-align: center;
+    margin-bottom: 52px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.8s forwards;
+  }
+  .tagline {
+    font-size: clamp(24px, 5vw, 32px);
+    font-weight: 300;
+    line-height: 1.4;
+    color: var(--white);
+  }
+  .tagline-accent {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .divider {
+    width: 36px;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 1px;
+    margin: 18px auto;
+    opacity: 0;
+    animation: fadeIn 0.5s ease 1.1s forwards;
+  }
+  .tagline-sub {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-mid);
+    line-height: 1.7;
+  }
+
+  /* ── CTA buttons ──────────────────────────────────────────── */
+  .cta-block {
+    width: 100%;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: slideUp 0.6s cubic-bezier(0.22,1,0.36,1) 1.05s forwards;
+  }
+
+  .btn-primary {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: var(--accent);
+    border: none;
+    border-radius: 30px;
+    padding: 15px 48px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    color: var(--white);
+    cursor: pointer;
+    transition: opacity 0.18s, transform 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0);
+    transition: background 0.2s;
+    border-radius: inherit;
+  }
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn-primary:active { transform: scale(0.975); opacity: 0.8; }
+  .btn-arrow { font-size: 16px; }
+
+  .sign-in-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    cursor: pointer;
+  }
+  .sign-in-text { font-size: 13px; font-weight: 300; color: var(--text-dim); }
+  .sign-in-link {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-mid);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    padding-bottom: 1px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .sign-in-link:hover { color: var(--white); border-color: rgba(255,255,255,0.4); }
+
+  /* ── Grade badges (decorative bottom) ────────────────────── */
+  .badge-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 48px;
+    opacity: 0;
+    animation: fadeIn 0.6s ease 1.3s forwards;
+  }
+  .grade-badge {
+    border: 1px solid var(--border-mid);
+    border-radius: 6px;
+    padding: 5px 13px;
+    background: rgba(255,255,255,0.02);
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .grade-badge:hover {
+    border-color: rgba(232,52,26,0.35);
+    background: rgba(232,52,26,0.05);
+  }
+  .grade-badge span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+  }
+
+  /* ── Corner accents (decorative) ─────────────────────────── */
+  .corner {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    animation: fadeIn 1s ease 1.4s forwards;
+  }
+  .corner-tl { top: 24px; left: 24px; border-top: 1px solid var(--border-mid); border-left: 1px solid var(--border-mid); }
+  .corner-tr { top: 24px; right: 24px; border-top: 1px solid var(--border-mid); border-right: 1px solid var(--border-mid); }
+  .corner-bl { bottom: 24px; left: 24px; border-bottom: 1px solid var(--border-mid); border-left: 1px solid var(--border-mid); }
+  .corner-br { bottom: 24px; right: 24px; border-bottom: 1px solid var(--border-mid); border-right: 1px solid var(--border-mid); }
+
+  /* ── Version tag ──────────────────────────────────────────── */
+  .version {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    font-weight: 300;
+    opacity: 0;
+    animation: fadeIn 0.6s ease 1.5s forwards;
+    z-index: 2;
+  }
+
+  /* ── Keyframes ────────────────────────────────────────────── */
+  @keyframes slideUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  /* ── Modal overlay (sign-in placeholder) ─────────────────── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border-mid);
+    border-radius: 20px;
+    padding: 32px 28px;
+    width: 90%;
+    max-width: 340px;
+    text-align: center;
+  }
+  .modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .modal-sub {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 24px;
+    font-weight: 300;
+  }
+  .modal-input {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border-mid);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 14px;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    margin-bottom: 10px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .modal-input::placeholder { color: var(--text-dim); }
+  .modal-input:focus { border-color: rgba(232,52,26,0.5); }
+  .modal-btn {
+    width: 100%;
+    background: var(--accent);
+    border: none;
+    border-radius: 10px;
+    padding: 13px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    color: var(--white);
+    cursor: pointer;
+    margin-top: 4px;
+    transition: opacity 0.15s;
+  }
+  .modal-btn:hover { opacity: 0.88; }
+  .modal-close {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 14px;
+    cursor: pointer;
+    font-weight: 300;
+    transition: color 0.15s;
+  }
+  .modal-close:hover { color: var(--text-mid); }
+</style>
+</head>
+<body>
+
+<!-- Grid + glow -->
+<div class="grid"></div>
+<div class="glow-orb"></div>
+<div class="glow-ring"></div>
+<div class="glow-ring-2"></div>
+
+<!-- Corner decorations -->
+<div class="corner corner-tl"></div>
+<div class="corner corner-tr"></div>
+<div class="corner corner-bl"></div>
+<div class="corner corner-br"></div>
+
+<!-- Main page -->
+<div class="page">
+
+  <!-- Logo -->
+  <div class="logo-block">
+    <div class="logo-text">HANGER</div>
+    <div class="logo-sub">GUNPLA BUILDER COMMUNITY</div>
+  </div>
+
+  <!-- Tagline -->
+  <div class="tagline-block">
+    <div class="tagline">
+      Build it. Judge it.<br>
+      <span class="tagline-accent">Show the world.</span>
+    </div>
+    <div class="divider"></div>
+    <div class="tagline-sub">
+      The first community built for serious Gunpla builders.<br>
+      AI scoring. Real feedback. Global rankings.
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-block">
+    <button class="btn-primary" onclick="handleGetStarted()">
+      GET STARTED
+      <span class="btn-arrow">→</span>
+    </button>
+    <div class="sign-in-row">
+      <span class="sign-in-text">Already building?&nbsp;</span>
+      <a class="sign-in-link" onclick="openModal()">Sign in</a>
+    </div>
+  </div>
+
+  <!-- Grade badges -->
+  <div class="badge-row">
+    <div class="grade-badge"><span>HG</span></div>
+    <div class="grade-badge"><span>MG</span></div>
+    <div class="grade-badge"><span>RG</span></div>
+    <div class="grade-badge"><span>PG</span></div>
+  </div>
+
+</div>
+
+<!-- Version -->
+<div class="version">V 1.0 · ALPHA</div>
+
+<!-- Sign-in modal (placeholder) -->
+<div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-title">SIGN IN</div>
+    <div class="modal-sub">Welcome back, builder</div>
+    <input class="modal-input" type="email" placeholder="Email address">
+    <input class="modal-input" type="password" placeholder="Password">
+    <button class="modal-btn">SIGN IN</button>
+    <div class="modal-close" onclick="closeModal()">Cancel</div>
+  </div>
+</div>
+
+<script>
+  function handleGetStarted() {
+    // In the real app this navigates to onboarding.
+    // For now, flash the button and show an alert.
+    alert("🚀 Next up: Onboarding screen!\n\nAsk Claude to build Screen 2 to continue.");
+  }
+
+  function openModal() {
+    document.getElementById('modal').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+  }
+
+  function closeModalOutside(e) {
+    if (e.target === document.getElementById('modal')) closeModal();
+  }
+
+  // Keyboard: Escape closes modal
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+  });
+</script>
+
+</body>
+</html>

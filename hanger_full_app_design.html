@@ -1,0 +1,672 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{font-family:'DM Sans',sans-serif}
+
+.screens-wrap{
+  display:flex;flex-direction:column;gap:32px;
+  padding:24px 12px;
+  background:var(--color-background-tertiary);
+}
+
+.screen-label{
+  font-size:11px;font-weight:500;letter-spacing:2px;
+  color:var(--color-text-secondary);
+  text-align:center;margin-bottom:8px;
+  font-family:'DM Sans',sans-serif;
+}
+
+.phone{
+  width:320px;margin:0 auto;
+  border-radius:36px;
+  border:1.5px solid var(--color-border-secondary);
+  overflow:hidden;
+  background:#0A0A0B;
+  position:relative;
+}
+
+.notch{
+  width:90px;height:26px;background:#0A0A0B;
+  border-radius:0 0 18px 18px;
+  margin:0 auto;position:relative;z-index:10;
+}
+
+.screen{width:100%;padding:0}
+
+/* ── SPLASH ── */
+.splash{
+  background:#0A0A0B;
+  min-height:560px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:40px 28px;
+  position:relative;
+}
+.splash-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(232,52,26,0.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(232,52,26,0.06) 1px,transparent 1px);
+  background-size:28px 28px;
+}
+.splash-accent{
+  position:absolute;top:80px;left:50%;transform:translateX(-50%);
+  width:180px;height:180px;
+  border-radius:50%;
+  background:rgba(232,52,26,0.08);
+}
+.splash-logo-wrap{z-index:2;text-align:center}
+.splash-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:64px;letter-spacing:6px;
+  color:#E8341A;line-height:1;
+}
+.splash-sub{
+  font-size:11px;letter-spacing:4px;
+  color:rgba(255,255,255,0.35);
+  margin-top:4px;font-weight:300;
+}
+.splash-tagline{
+  font-size:13px;color:rgba(255,255,255,0.5);
+  margin-top:28px;text-align:center;line-height:1.5;
+  font-weight:300;z-index:2;
+}
+.splash-btn{
+  margin-top:32px;z-index:2;
+  background:#E8341A;color:white;
+  font-size:13px;font-weight:500;letter-spacing:1.5px;
+  padding:13px 40px;border-radius:30px;
+  border:none;font-family:'DM Sans',sans-serif;
+}
+.splash-login{
+  margin-top:14px;font-size:12px;
+  color:rgba(255,255,255,0.3);z-index:2;
+}
+.splash-login span{color:rgba(255,255,255,0.6);}
+
+/* ── ONBOARDING ── */
+.onboard{
+  background:#0A0A0B;min-height:580px;
+  padding:32px 24px 28px;
+  display:flex;flex-direction:column;
+}
+.onboard-step{
+  display:flex;gap:4px;margin-bottom:32px;
+}
+.step-dot{
+  height:3px;flex:1;border-radius:2px;
+  background:rgba(255,255,255,0.12);
+}
+.step-dot.done{background:#E8341A;}
+.onboard-visual{
+  width:100%;height:160px;
+  border-radius:16px;
+  background:#141416;
+  margin-bottom:24px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.ob-glow{
+  width:100px;height:100px;border-radius:50%;
+  background:rgba(232,52,26,0.12);
+  display:flex;align-items:center;justify-content:center;
+}
+.ob-icon{font-size:40px}
+.onboard-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:32px;letter-spacing:2px;color:white;
+  margin-bottom:10px;line-height:1.1;
+}
+.onboard-body{
+  font-size:13px;color:rgba(255,255,255,0.45);
+  line-height:1.65;font-weight:300;flex:1;
+}
+.onboard-btn{
+  background:#E8341A;color:white;
+  font-size:14px;font-weight:500;letter-spacing:1px;
+  padding:14px;border-radius:14px;border:none;
+  width:100%;font-family:'DM Sans',sans-serif;
+  margin-top:24px;
+}
+.onboard-skip{
+  text-align:center;font-size:12px;
+  color:rgba(255,255,255,0.25);margin-top:10px;
+}
+
+/* ── HOME FEED ── */
+.home{background:#0A0A0B;min-height:640px;padding-bottom:72px;}
+.home-header{
+  padding:16px 20px 12px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.home-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:24px;letter-spacing:3px;color:#E8341A;
+}
+.avatar-sm{
+  width:32px;height:32px;border-radius:50%;
+  background:#1E1E22;
+  border:1.5px solid rgba(232,52,26,0.4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:500;color:rgba(255,255,255,0.7);
+}
+.section-head{
+  padding:0 20px 10px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.sec-title{
+  font-size:11px;letter-spacing:2px;
+  color:rgba(255,255,255,0.35);font-weight:500;
+}
+.sec-more{font-size:11px;color:#E8341A;}
+
+.weekly-card{
+  margin:0 20px 20px;
+  background:#141416;border-radius:16px;
+  border:0.5px solid rgba(255,255,255,0.07);
+  padding:16px;
+  display:flex;align-items:center;gap:14px;
+}
+.wk-rank{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:36px;color:rgba(232,52,26,0.25);
+  line-height:1;width:32px;
+}
+.wk-thumb{
+  width:54px;height:54px;border-radius:10px;
+  background:#1E1E22;
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;flex-shrink:0;
+}
+.wk-info{flex:1;min-width:0;}
+.wk-name{font-size:14px;font-weight:500;color:white;margin-bottom:2px;}
+.wk-user{font-size:11px;color:rgba(255,255,255,0.35);}
+.wk-score{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:24px;color:#E8341A;
+}
+.wk-label{font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:1px;}
+
+.feed-scroll{padding:0 20px;display:flex;flex-direction:column;gap:12px;}
+.feed-card{
+  background:#141416;border-radius:14px;
+  border:0.5px solid rgba(255,255,255,0.07);
+  padding:14px;
+  display:flex;gap:12px;align-items:center;
+}
+.feed-img{
+  width:56px;height:56px;border-radius:10px;
+  background:#1E1E22;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:26px;
+}
+.feed-info{flex:1;min-width:0;}
+.feed-name{font-size:13px;font-weight:500;color:white;margin-bottom:2px;}
+.feed-meta{font-size:11px;color:rgba(255,255,255,0.3);}
+.feed-right{text-align:right;flex-shrink:0;}
+.feed-score{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:22px;color:#E8341A;line-height:1;
+}
+.feed-grade{
+  font-size:9px;letter-spacing:1px;
+  color:rgba(255,255,255,0.3);font-weight:500;
+}
+.grade-pip{
+  display:inline-block;width:6px;height:6px;border-radius:50%;
+  margin-right:4px;vertical-align:middle;
+}
+
+.bottom-nav{
+  position:absolute;bottom:0;left:0;right:0;
+  background:#0F0F11;
+  border-top:0.5px solid rgba(255,255,255,0.06);
+  padding:10px 0 16px;
+  display:flex;justify-content:space-around;
+}
+.nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  font-size:9px;letter-spacing:1px;
+  color:rgba(255,255,255,0.25);font-weight:500;
+}
+.nav-item.act{color:#E8341A;}
+.nav-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
+
+/* ── AI JUDGE ── */
+.judge-screen{background:#0A0A0B;min-height:640px;padding-bottom:72px;}
+.judge-header{
+  padding:16px 20px 14px;
+  display:flex;align-items:center;gap:10px;
+}
+.back-btn{
+  width:32px;height:32px;border-radius:50%;
+  background:#1A1A1E;
+  display:flex;align-items:center;justify-content:center;
+  border:0.5px solid rgba(255,255,255,0.08);
+}
+.back-arrow{
+  width:14px;height:14px;
+  border-left:2px solid rgba(255,255,255,0.5);
+  border-bottom:2px solid rgba(255,255,255,0.5);
+  transform:rotate(45deg);margin-left:3px;
+}
+.judge-title-wrap{flex:1;}
+.judge-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:20px;letter-spacing:2px;color:white;
+}
+.judge-sub{font-size:11px;color:rgba(255,255,255,0.3);}
+
+.upload-area{
+  margin:0 20px 16px;
+  border:1px dashed rgba(232,52,26,0.3);
+  border-radius:16px;
+  background:#0F0F11;
+  padding:28px 16px;
+  text-align:center;
+}
+.upload-big{
+  font-size:36px;margin-bottom:10px;
+}
+.upload-txt{font-size:13px;font-weight:500;color:white;margin-bottom:4px;}
+.upload-hint{font-size:11px;color:rgba(255,255,255,0.25);}
+
+.form-area{padding:0 20px;display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
+.dark-input{
+  background:#141416;border:0.5px solid rgba(255,255,255,0.1);
+  border-radius:10px;padding:12px 14px;
+  font-size:13px;color:white;font-family:'DM Sans',sans-serif;
+  width:100%;
+}
+.dark-input::placeholder{color:rgba(255,255,255,0.2);}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.field-label{font-size:10px;letter-spacing:1.5px;color:rgba(255,255,255,0.3);font-weight:500;margin-bottom:5px;}
+
+.judge-cta{
+  margin:0 20px;
+  background:#E8341A;color:white;
+  font-size:14px;font-weight:500;letter-spacing:1.5px;
+  padding:15px;border-radius:14px;border:none;width:calc(100% - 40px);
+  font-family:'DM Sans',sans-serif;
+}
+
+.result-screen{background:#0A0A0B;min-height:660px;padding-bottom:72px;}
+.result-hero{
+  background:#141416;margin:0 20px 14px;
+  border-radius:16px;padding:18px;
+  border:0.5px solid rgba(255,255,255,0.07);
+}
+.result-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
+.result-kit-name{font-size:15px;font-weight:500;color:white;}
+.result-kit-sub{font-size:11px;color:rgba(255,255,255,0.3);margin-top:2px;}
+.big-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:52px;color:#E8341A;line-height:1;text-align:right;
+}
+.grade-letter{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:16px;letter-spacing:2px;
+  color:rgba(255,255,255,0.4);text-align:right;
+}
+.cat-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.cat-name{font-size:11px;color:rgba(255,255,255,0.35);width:90px;flex-shrink:0;}
+.bar-track{flex:1;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:2px;background:#E8341A;}
+.cat-num{font-size:11px;color:rgba(255,255,255,0.4);width:24px;text-align:right;}
+
+.verdict-box{
+  margin:0 20px 14px;
+  background:#141416;border-radius:14px;
+  border-left:3px solid #E8341A;
+  padding:14px 16px;
+  border-top:0.5px solid rgba(255,255,255,0.05);
+  border-right:0.5px solid rgba(255,255,255,0.05);
+  border-bottom:0.5px solid rgba(255,255,255,0.05);
+}
+.verdict-label{font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.25);font-weight:500;margin-bottom:6px;}
+.verdict-text{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.65;font-weight:300;}
+
+.tips-row{margin:0 20px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.tip-card{
+  background:#141416;border-radius:12px;padding:12px;
+  border:0.5px solid rgba(255,255,255,0.06);
+}
+.tip-label{font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,0.25);margin-bottom:5px;}
+.tip-text{font-size:11px;color:rgba(255,255,255,0.5);line-height:1.5;}
+
+/* ── PROFILE ── */
+.profile{background:#0A0A0B;min-height:640px;padding-bottom:72px;}
+.profile-hero{
+  background:#141416;
+  padding:28px 20px 20px;
+  text-align:center;
+  border-bottom:0.5px solid rgba(255,255,255,0.05);
+}
+.profile-av{
+  width:68px;height:68px;border-radius:50%;
+  background:#E8341A;margin:0 auto 12px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:26px;color:white;
+  border:2px solid rgba(232,52,26,0.4);
+}
+.profile-name{font-size:17px;font-weight:500;color:white;margin-bottom:2px;}
+.profile-handle{font-size:12px;color:rgba(255,255,255,0.3);}
+.profile-stats{
+  display:flex;justify-content:center;gap:28px;margin-top:16px;
+}
+.pstat{text-align:center;}
+.pstat-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:22px;color:white;line-height:1;
+}
+.pstat-label{font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,0.3);margin-top:2px;}
+
+.shelf-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:1px;
+  background:rgba(255,255,255,0.05);
+  margin-top:1px;
+}
+.shelf-item{
+  background:#0A0A0B;padding:14px;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.shelf-thumb{
+  width:52px;height:52px;border-radius:10px;
+  background:#141416;
+  display:flex;align-items:center;justify-content:center;font-size:24px;
+}
+.shelf-name{font-size:11px;font-weight:500;color:rgba(255,255,255,0.7);text-align:center;}
+.shelf-score{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:15px;color:#E8341A;
+}
+</style>
+
+<h2 class="sr-only">Hanger Gunpla App — complete mobile design mockup showing splash, onboarding, home feed, AI judge, results, and profile screens</h2>
+
+<div class="screens-wrap">
+
+  <div class="screen-label">SCREEN 1 — SPLASH</div>
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="screen splash">
+      <div class="splash-grid"></div>
+      <div class="splash-accent"></div>
+      <div class="splash-logo-wrap">
+        <div class="splash-logo">HANGER</div>
+        <div class="splash-sub">GUNPLA BUILDER COMMUNITY</div>
+      </div>
+      <div class="splash-tagline">Build it. Judge it.<br>Show the world.</div>
+      <button class="splash-btn">GET STARTED</button>
+      <div class="splash-login">Already building? <span>Sign in</span></div>
+    </div>
+  </div>
+
+  <div class="screen-label">SCREEN 2 — ONBOARDING</div>
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="screen onboard">
+      <div class="onboard-step">
+        <div class="step-dot done"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+      </div>
+      <div class="onboard-visual">
+        <div class="ob-glow">
+          <div class="ob-icon" style="font-size:38px">🤖</div>
+        </div>
+      </div>
+      <div class="onboard-title">AI scores<br>your builds</div>
+      <div class="onboard-body">Upload photos of your finished kit and our AI judge grades it across panel lining, weathering, paint finish, and composition — just like a real competition.</div>
+      <button class="onboard-btn">NEXT →</button>
+      <div class="onboard-skip">Skip intro</div>
+    </div>
+  </div>
+
+  <div class="screen-label">SCREEN 3 — HOME FEED</div>
+  <div class="phone" style="position:relative">
+    <div class="notch"></div>
+    <div class="screen home">
+      <div class="home-header">
+        <div class="home-logo">HANGER</div>
+        <div class="avatar-sm">MK</div>
+      </div>
+
+      <div class="section-head">
+        <div class="sec-title">THIS WEEK'S TOP BUILDS</div>
+        <div class="sec-more">See all</div>
+      </div>
+
+      <div class="weekly-card">
+        <div class="wk-rank">01</div>
+        <div class="wk-thumb">⚪</div>
+        <div class="wk-info">
+          <div class="wk-name">Nu Gundam Ver. Ka</div>
+          <div class="wk-user">@zeropilot · MG</div>
+        </div>
+        <div style="text-align:right">
+          <div class="wk-score">94</div>
+          <div class="wk-label">AI SCORE</div>
+        </div>
+      </div>
+
+      <div class="section-head" style="margin-top:4px">
+        <div class="sec-title">RECENT BUILDS</div>
+        <div class="sec-more">Filter</div>
+      </div>
+
+      <div class="feed-scroll">
+        <div class="feed-card">
+          <div class="feed-img">🔵</div>
+          <div class="feed-info">
+            <div class="feed-name">Sinanju Stein</div>
+            <div class="feed-meta">@msbuilder · MG · 2h ago</div>
+          </div>
+          <div class="feed-right">
+            <div class="feed-score">89</div>
+            <div class="feed-grade">GRADE A</div>
+          </div>
+        </div>
+        <div class="feed-card">
+          <div class="feed-img">🟡</div>
+          <div class="feed-info">
+            <div class="feed-name">Strike Freedom</div>
+            <div class="feed-meta">@gundamkid · RG · 5h ago</div>
+          </div>
+          <div class="feed-right">
+            <div class="feed-score">82</div>
+            <div class="feed-grade">GRADE B</div>
+          </div>
+        </div>
+        <div class="feed-card">
+          <div class="feed-img">🔴</div>
+          <div class="feed-info">
+            <div class="feed-name">Sazabi Ver. Ka</div>
+            <div class="feed-meta">@redcomet · MG · 8h ago</div>
+          </div>
+          <div class="feed-right">
+            <div class="feed-score">91</div>
+            <div class="feed-grade">GRADE S</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-item act">
+        <div class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="8" width="6" height="8" rx="1.5" fill="#E8341A"/><rect x="10" y="4" width="6" height="12" rx="1.5" fill="#E8341A"/></svg>
+        </div>
+        <span>FEED</span>
+      </div>
+      <div class="nav-item">
+        <div class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" rx="1.5" fill="rgba(255,255,255,0.2)"/><rect x="10" y="2" width="6" height="6" rx="1.5" fill="rgba(255,255,255,0.2)"/><rect x="2" y="10" width="6" height="6" rx="1.5" fill="rgba(255,255,255,0.2)"/><rect x="10" y="10" width="6" height="6" rx="1.5" fill="rgba(255,255,255,0.2)"/></svg>
+        </div>
+        <span>HANGAR</span>
+      </div>
+      <div class="nav-item">
+        <div class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/><line x1="9" y1="5" x2="9" y2="9" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linecap="round"/><line x1="9" y1="9" x2="12" y2="11" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <span>JUDGE</span>
+      </div>
+      <div class="nav-item">
+        <div class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="7" r="3.5" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/><path d="M2 16c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <span>PROFILE</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen-label">SCREEN 4 — AI JUDGE UPLOAD</div>
+  <div class="phone" style="position:relative">
+    <div class="notch"></div>
+    <div class="screen judge-screen">
+      <div class="judge-header">
+        <div class="back-btn"><div class="back-arrow"></div></div>
+        <div class="judge-title-wrap">
+          <div class="judge-title">AI JUDGE</div>
+          <div class="judge-sub">Get your build scored</div>
+        </div>
+      </div>
+
+      <div class="upload-area">
+        <div class="upload-big">📸</div>
+        <div class="upload-txt">Upload your kit photos</div>
+        <div class="upload-hint">Add 2–4 shots · front, back, detail</div>
+      </div>
+
+      <div class="form-area">
+        <div>
+          <div class="field-label">KIT NAME</div>
+          <div class="dark-input" style="color:rgba(255,255,255,0.6)">Wing Gundam Zero EW</div>
+        </div>
+        <div class="form-row-2">
+          <div>
+            <div class="field-label">GRADE</div>
+            <div class="dark-input" style="color:rgba(255,255,255,0.6)">Master Grade</div>
+          </div>
+          <div>
+            <div class="field-label">SERIES</div>
+            <div class="dark-input" style="color:rgba(255,255,255,0.6)">Wing EW</div>
+          </div>
+        </div>
+        <div>
+          <div class="field-label">MODIFICATIONS</div>
+          <div class="dark-input" style="color:rgba(255,255,255,0.6)">Panel lined + weathered</div>
+        </div>
+      </div>
+
+      <button class="judge-cta">SUBMIT FOR JUDGING →</button>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-item"><div class="nav-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="8" width="6" height="8" rx="1.5" fill="rgba(255,255,255,0.2)"/><rect x="10" y="4" width="6" height="12" rx="1.5" fill="rgba(255,255,255,0.2)"/></svg></div><span>FEED</span></div>
+      <div class="nav-item"><div class="nav-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" rx="1.5" fill="rgba(255,255,255,0.2)"/><rect x="10" y="2" width="6" height="6" rx="1.5" fill="rgba(255,255,255,0.2)"/><rect x="2" y="10" width="6" height="6" rx="1.5" fill="rgba(255,255,255,0.2)"/><rect x="10" y="10" width="6" height="6" rx="1.5" fill="rgba(255,255,255,0.2)"/></svg></div><span>HANGAR</span></div>
+      <div class="nav-item act"><div class="nav-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#E8341A" stroke-width="1.5"/><line x1="9" y1="5" x2="9" y2="9" stroke="#E8341A" stroke-width="1.5" stroke-linecap="round"/><line x1="9" y1="9" x2="12" y2="11" stroke="#E8341A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span>JUDGE</span></div>
+      <div class="nav-item"><div class="nav-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="7" r="3.5" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/><path d="M2 16c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linecap="round"/></svg></div><span>PROFILE</span></div>
+    </div>
+  </div>
+
+  <div class="screen-label">SCREEN 5 — AI JUDGE RESULTS</div>
+  <div class="phone" style="position:relative">
+    <div class="notch"></div>
+    <div class="screen result-screen">
+      <div class="judge-header">
+        <div class="back-btn"><div class="back-arrow"></div></div>
+        <div class="judge-title-wrap">
+          <div class="judge-title">YOUR RESULTS</div>
+          <div class="judge-sub">Wing Gundam Zero EW</div>
+        </div>
+      </div>
+
+      <div class="result-hero">
+        <div class="result-top">
+          <div>
+            <div class="result-kit-name">Wing Gundam Zero EW</div>
+            <div class="result-kit-sub">MG · Panel lined + weathered</div>
+          </div>
+          <div>
+            <div class="big-num">87</div>
+            <div class="grade-letter">GRADE A</div>
+          </div>
+        </div>
+        <div class="cat-row"><div class="cat-name">Panel lining</div><div class="bar-track"><div class="bar-fill" style="width:90%"></div></div><div class="cat-num">90</div></div>
+        <div class="cat-row"><div class="cat-name">Paint / finish</div><div class="bar-track"><div class="bar-fill" style="width:82%"></div></div><div class="cat-num">82</div></div>
+        <div class="cat-row"><div class="cat-name">Pose & composition</div><div class="bar-track"><div class="bar-fill" style="width:88%"></div></div><div class="cat-num">88</div></div>
+        <div class="cat-row"><div class="cat-name">Weathering</div><div class="bar-track"><div class="bar-fill" style="width:79%"></div></div><div class="cat-num">79</div></div>
+        <div class="cat-row" style="margin-bottom:0"><div class="cat-name">Overall polish</div><div class="bar-track"><div class="bar-fill" style="width:86%"></div></div><div class="cat-num">86</div></div>
+      </div>
+
+      <div class="verdict-box">
+        <div class="verdict-label">JUDGE'S VERDICT</div>
+        <div class="verdict-text">Wing Zero EW shows confident panel lining and a strong dramatic pose. The wing feathers are crisp and well-defined. Weathering on the joints reads natural — push it slightly further on the chest armor for more depth.</div>
+      </div>
+
+      <div class="tips-row">
+        <div class="tip-card">
+          <div class="tip-label">STRENGTH</div>
+          <div class="tip-text">Exceptional panel line consistency on the wings</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-label">WORK ON</div>
+          <div class="tip-text">Deepen chest armor weathering for next build</div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-item"><div class="nav-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="8" width="6" height="8" rx="1.5" fill="rgba(255,255,255,0.2)"/><rect x="10" y="4" width="6" height="12" rx="1.5" fill="rgba(255,255,255,0.2)"/></svg></div><span>FEED</span></div>
+      <div class="nav-item"><div class="nav-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" rx="1.5" fill="rgba(255,255,255,0.2)"/><rect x="10" y="2" width="6" height="6" rx="1.5" fill="rgba(255,255,255,0.2)"/><rect x="2" y="10" width="6" height="6" rx="1.5" fill="rgba(255,255,255,0.2)"/><rect x="10" y="10" width="6" height="6" rx="1.5" fill="rgba(255,255,255,0.2)"/></svg></div><span>HANGAR</span></div>
+      <div class="nav-item act"><div class="nav-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#E8341A" stroke-width="1.5"/><line x1="9" y1="5" x2="9" y2="9" stroke="#E8341A" stroke-width="1.5" stroke-linecap="round"/><line x1="9" y1="9" x2="12" y2="11" stroke="#E8341A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span>JUDGE</span></div>
+      <div class="nav-item"><div class="nav-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="7" r="3.5" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/><path d="M2 16c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linecap="round"/></svg></div><span>PROFILE</span></div>
+    </div>
+  </div>
+
+  <div class="screen-label">SCREEN 6 — BUILDER PROFILE</div>
+  <div class="phone" style="position:relative">
+    <div class="notch"></div>
+    <div class="screen profile">
+      <div class="profile-hero">
+        <div class="profile-av">MK</div>
+        <div class="profile-name">MechBuilder_Kyle</div>
+        <div class="profile-handle">@mechkyle · Joined 2024</div>
+        <div class="profile-stats">
+          <div class="pstat"><div class="pstat-num">12</div><div class="pstat-label">KITS</div></div>
+          <div class="pstat"><div class="pstat-num">87</div><div class="pstat-label">AVG SCORE</div></div>
+          <div class="pstat"><div class="pstat-num">1.2K</div><div class="pstat-label">FOLLOWERS</div></div>
+        </div>
+      </div>
+      <div class="shelf-grid">
+        <div class="shelf-item">
+          <div class="shelf-thumb">🔴</div>
+          <div class="shelf-name">Sazabi Ver. Ka</div>
+          <div class="shelf-score">91</div>
+        </div>
+        <div class="shelf-item">
+          <div class="shelf-thumb">⚪</div>
+          <div class="shelf-name">Wing Zero EW</div>
+          <div class="shelf-score">87</div>
+        </div>
+        <div class="shelf-item">
+          <div class="shelf-thumb">🟤</div>
+          <div class="shelf-name">Barbatos Lupus</div>
+          <div class="shelf-score">76</div>
+        </div>
+        <div class="shelf-item">
+          <div class="shelf-thumb">⚪</div>
+          <div class="shelf-name">Unicorn Gundam</div>
+          <div class="shelf-score">88</div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-item"><div class="nav-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="8" width="6" height="8" rx="1.5" fill="rgba(255,255,255,0.2)"/><rect x="10" y="4" width="6" height="12" rx="1.5" fill="rgba(255,255,255,0.2)"/></svg></div><span>FEED</span></div>
+      <div class="nav-item"><div class="nav-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" rx="1.5" fill="rgba(255,255,255,0.2)"/><rect x="10" y="2" width="6" height="6" rx="1.5" fill="rgba(255,255,255,0.2)"/><rect x="2" y="10" width="6" height="6" rx="1.5" fill="rgba(255,255,255,0.2)"/><rect x="10" y="10" width="6" height="6" rx="1.5" fill="rgba(255,255,255,0.2)"/></svg></div><span>HANGAR</span></div>
+      <div class="nav-item"><div class="nav-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/><line x1="9" y1="5" x2="9" y2="9" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linecap="round"/><line x1="9" y1="9" x2="12" y2="11" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linecap="round"/></svg></div><span>JUDGE</span></div>
+      <div class="nav-item act"><div class="nav-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="7" r="3.5" stroke="#E8341A" stroke-width="1.5"/><path d="M2 16c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="#E8341A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span>PROFILE</span></div>
+    </div>
+  </div>
+
+</div>

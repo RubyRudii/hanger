@@ -1,0 +1,85 @@
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { Session } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase';
+
+type Profile = {
+  id: string;
+  handle: string | null;
+  display_name: string | null;
+  joined_year: number | null;
+};
+
+type AuthState = {
+  session: Session | null;
+  profile: Profile | null;
+  loading: boolean;
+  signIn: (email: string, password: string) => Promise<{ error?: string }>;
+  signUp: (email: string, password: string, handle: string) => Promise<{ error?: string }>;
+  signOut: () => Promise<void>;
+  refreshProfile: () => Promise<void>;
+};
+
+const AuthCtx = createContext<AuthState | null>(null);
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [session, setSession] = useState<Session | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  async function loadProfile(userId: string) {
+    const { data } = await supabase.from('profiles').select('*').eq('id', userId).maybeSingle();
+    setProfile(data ?? null);
+  }
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setSession(data.session);
+      if (data.session?.user) {
+        loadProfile(data.session.user.id).finally(() => setLoading(false));
+      } else {
+        setLoading(false);
+      }
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
+      setSession(s);
+      if (s?.user) loadProfile(s.user.id);
+      else setProfile(null);
+    });
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
+  async function signIn(email: string, password: string) {
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    return { error: error?.message };
+  }
+
+  async function signUp(email: string, password: string, handle: string) {
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { handle } },
+    });
+    if (error) return { error: error.message };
+    return {};
+  }
+
+  async function signOut() {
+    await supabase.auth.signOut();
+  }
+
+  async function refreshProfile() {
+    if (session?.user) await loadProfile(session.user.id);
+  }
+
+  return (
+    <AuthCtx.Provider value={{ session, profile, loading, signIn, signUp, signOut, refreshProfile }}>
+      {children}
+    </AuthCtx.Provider>
+  );
+}
+
+export function useAuth() {
+  const ctx = useContext(AuthCtx);
+  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
+  return ctx;
+}

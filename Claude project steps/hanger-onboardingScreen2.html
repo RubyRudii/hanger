@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HANGER — Onboarding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:           #050918;
+    --surface:      #0B1530;
+    --surface2:     #0F1C3A;
+    --accent:       #C9A84C;
+    --accent-dim:   rgba(201,168,76,0.13);
+    --accent-ring:  rgba(201,168,76,0.28);
+    --royal:        #1A3A8F;
+    --royal-bright: #2952CC;
+    --royal-dim:    rgba(41,82,204,0.18);
+    --white:        #FFFFFF;
+    --gold-light:   #F0D98A;
+    --text-mid:     rgba(255,255,255,0.58);
+    --text-dim:     rgba(255,255,255,0.30);
+    --border:       rgba(255,255,255,0.07);
+    --border-mid:   rgba(255,255,255,0.11);
+    --border-gold:  rgba(201,168,76,0.22);
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--white);
+    overflow: hidden;
+  }
+
+  /* ── Grid ─────────────────────────────────────────────────────── */
+  .grid {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      linear-gradient(rgba(41,82,204,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(41,82,204,0.06) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+
+  /* ── Corner brackets ──────────────────────────────────────────── */
+  .corner {
+    position: fixed; width: 36px; height: 36px;
+    pointer-events: none; z-index: 2;
+  }
+  .corner-tl { top: 20px; left: 20px; border-top: 1px solid var(--border-gold); border-left: 1px solid var(--border-gold); }
+  .corner-tr { top: 20px; right: 20px; border-top: 1px solid var(--border-gold); border-right: 1px solid var(--border-gold); }
+  .corner-bl { bottom: 20px; left: 20px; border-bottom: 1px solid var(--border-gold); border-left: 1px solid var(--border-gold); }
+  .corner-br { bottom: 20px; right: 20px; border-bottom: 1px solid var(--border-gold); border-right: 1px solid var(--border-gold); }
+
+  /* ── Layout shell ─────────────────────────────────────────────── */
+  .shell {
+    position: relative; z-index: 1;
+    height: 100vh;
+    display: flex; flex-direction: column;
+    padding: 0 32px 40px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  /* ── Top bar ──────────────────────────────────────────────────── */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 28px 0 0;
+  }
+  .logo-sm {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px; letter-spacing: 4px; color: var(--accent);
+  }
+  .skip-btn {
+    font-size: 12px; font-weight: 300; color: var(--text-dim);
+    background: none; border: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; letter-spacing: 1px;
+    transition: color 0.15s;
+  }
+  .skip-btn:hover { color: var(--text-mid); }
+
+  /* ── Progress dots ────────────────────────────────────────────── */
+  .progress {
+    display: flex; gap: 6px; margin-top: 24px;
+  }
+  .dot {
+    height: 3px; border-radius: 2px;
+    background: var(--border-mid);
+    transition: all 0.45s cubic-bezier(0.34,1.56,0.64,1);
+    flex: 1;
+  }
+  .dot.active {
+    background: var(--accent);
+    flex: 2.8;
+  }
+  .dot.done { background: rgba(201,168,76,0.35); }
+
+  /* ── Slides viewport ──────────────────────────────────────────── */
+  .slides-viewport {
+    flex: 1;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ── Each slide ───────────────────────────────────────────────── */
+  .slide {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s cubic-bezier(0.22,1,0.36,1),
+                transform 0.5s cubic-bezier(0.22,1,0.36,1);
+    pointer-events: none;
+  }
+  .slide.active {
+    opacity: 1; transform: translateX(0);
+    pointer-events: auto;
+  }
+  .slide.exit {
+    opacity: 0; transform: translateX(-60px);
+  }
+
+  /* ── Visual illustration area ─────────────────────────────────── */
+  .visual {
+    width: 100%; height: 210px;
+    border-radius: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border-gold);
+    margin-bottom: 36px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+
+  /* Slide 1 — AI Judge visual */
+  .visual-1 { background: linear-gradient(135deg, #0B1530 60%, #0F1C3A 100%); }
+  .score-ring {
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    border: 3px solid var(--royal-bright);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+    position: relative;
+  }
+  .score-ring::before {
+    content: '';
+    position: absolute; inset: -8px; border-radius: 50%;
+    border: 1px solid var(--accent-ring);
+  }
+  .score-ring::after {
+    content: '';
+    position: absolute; inset: -18px; border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.1);
+  }
+  .score-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px; color: var(--gold-light); line-height: 1;
+    letter-spacing: 2px;
+  }
+  .score-label {
+    font-size: 9px; letter-spacing: 2px; color: var(--text-dim); font-weight: 300;
+  }
+  .score-bars {
+    position: absolute; right: 22px; top: 50%; transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 7px;
+  }
+  .sbar {
+    display: flex; align-items: center; gap: 6px;
+  }
+  .sbar-label { font-size: 8px; color: var(--text-dim); width: 42px; letter-spacing: 0.5px; }
+  .sbar-track { width: 48px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .sbar-fill { height: 100%; border-radius: 2px; background: var(--accent); }
+  .stars {
+    position: absolute; top: 14px; left: 18px;
+    display: flex; gap: 3px;
+  }
+  .star {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: rgba(201,168,76,0.25);
+  }
+  .star.lit { background: var(--accent); }
+
+  /* Slide 2 — Community visual */
+  .visual-2 { background: var(--surface); }
+  .community-grid {
+    width: 100%; height: 100%;
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1px; background: var(--border);
+  }
+  .cg-cell {
+    background: var(--surface);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 5px;
+  }
+  .cg-kit {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .cg-score {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px; color: var(--accent); letter-spacing: 1px;
+  }
+  .cg-user { font-size: 8px; color: var(--text-dim); letter-spacing: 0.5px; }
+  .cg-rank-badge {
+    position: absolute; top: 10px; right: 10px;
+    font-family: 'Bebas Neue', sans-serif; font-size: 11px;
+    letter-spacing: 1.5px; color: var(--gold-light);
+    background: var(--royal);
+    border: 1px solid var(--accent-ring);
+    padding: 3px 8px; border-radius: 20px;
+  }
+
+  /* Slide 3 — Backlog visual */
+  .visual-3 { background: var(--surface); flex-direction: column; gap: 0; padding: 0; }
+  .backlog-list { width: 100%; }
+  .bl-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .bl-row:last-child { border-bottom: none; }
+  .bl-box {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: var(--surface2); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .bl-info { flex: 1; }
+  .bl-name { font-size: 12px; font-weight: 500; color: var(--white); }
+  .bl-grade { font-size: 9px; color: var(--text-dim); letter-spacing: 1px; margin-top: 1px; }
+  .bl-status {
+    font-size: 9px; font-weight: 500; letter-spacing: 1px;
+    padding: 3px 8px; border-radius: 20px;
+  }
+  .s-owned    { background: rgba(41,82,204,0.2);  color: #7FA4FF; border: 1px solid rgba(41,82,204,0.3); }
+  .s-building { background: rgba(201,168,76,0.15); color: var(--accent); border: 1px solid var(--border-gold); }
+  .s-wish     { background: rgba(255,255,255,0.05); color: var(--text-mid); border: 1px solid var(--border); }
+
+  /* ── Text content ─────────────────────────────────────────────── */
+  .slide-step {
+    font-size: 10px; letter-spacing: 3px; color: var(--accent);
+    font-weight: 500; margin-bottom: 10px;
+  }
+  .slide-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(34px, 7vw, 46px);
+    letter-spacing: 2px; line-height: 1.05;
+    color: var(--white); margin-bottom: 14px;
+  }
+  .slide-title span { color: var(--accent); }
+  .slide-body {
+    font-size: 14px; font-weight: 300; color: var(--text-mid);
+    line-height: 1.72; max-width: 400px;
+  }
+
+  /* ── Feature pills ────────────────────────────────────────────── */
+  .pills {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px;
+  }
+  .pill {
+    font-size: 11px; font-weight: 400; letter-spacing: 0.5px;
+    padding: 5px 12px; border-radius: 20px;
+    border: 1px solid var(--border-gold);
+    color: var(--accent); background: var(--accent-dim);
+  }
+
+  /* ── Bottom controls ──────────────────────────────────────────── */
+  .controls {
+    display: flex; align-items: center; gap: 14px;
+    margin-top: 36px;
+  }
+  .btn-next {
+    flex: 1;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    background: var(--royal-bright);
+    border: 1px solid rgba(201,168,76,0.38);
+    border-radius: 30px;
+    padding: 15px 32px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 500; letter-spacing: 2px;
+    color: var(--gold-light);
+    cursor: pointer;
+    transition: opacity 0.18s, transform 0.15s, border-color 0.2s;
+  }
+  .btn-next:hover { opacity: 0.88; transform: translateY(-1px); border-color: rgba(201,168,76,0.65); }
+  .btn-next:active { transform: scale(0.975); }
+  .btn-next .arrow { color: var(--accent); font-size: 16px; }
+
+  .btn-back {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: transparent;
+    border: 1px solid var(--border-mid);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    flex-shrink: 0;
+  }
+  .btn-back:hover { border-color: var(--border-gold); background: rgba(201,168,76,0.05); }
+  .btn-back svg { width: 16px; height: 16px; }
+  .btn-back.hidden { opacity: 0; pointer-events: none; }
+
+  /* ── Final CTA (slide 3 only) ─────────────────────────────────── */
+  .btn-finish {
+    flex: 1;
+    background: var(--accent);
+    border: none; border-radius: 30px;
+    padding: 15px 32px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 500; letter-spacing: 2px;
+    color: #0A0F1E;
+    cursor: pointer;
+    transition: opacity 0.18s, transform 0.15s;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .btn-finish:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn-finish:active { transform: scale(0.975); }
+
+  /* ── Animated entrance ────────────────────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .shell { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) both; }
+
+  /* ── Pulse on score ring ──────────────────────────────────────── */
+  @keyframes ringPulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(41,82,204,0.3); }
+    50%      { box-shadow: 0 0 0 10px rgba(41,82,204,0); }
+  }
+  .score-ring { animation: ringPulse 2.8s ease-in-out infinite; }
+
+  /* ── Bar fill animation ───────────────────────────────────────── */
+  @keyframes barGrow {
+    from { width: 0; }
+  }
+  .slide.active .sbar-fill { animation: barGrow 0.8s cubic-bezier(0.22,1,0.36,1) 0.3s both; }
+</style>
+</head>
+<body>
+
+<div class="grid"></div>
+<div class="corner corner-tl"></div>
+<div class="corner corner-tr"></div>
+<div class="corner corner-bl"></div>
+<div class="corner corner-br"></div>
+
+<div class="shell">
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="logo-sm">HANGER</div>
+    <button class="skip-btn" onclick="goToApp()">SKIP →</button>
+  </div>
+
+  <!-- Progress dots -->
+  <div class="progress">
+    <div class="dot active" id="dot-0"></div>
+    <div class="dot" id="dot-1"></div>
+    <div class="dot" id="dot-2"></div>
+  </div>
+
+  <!-- Slides -->
+  <div class="slides-viewport">
+
+    <!-- ── Slide 1: AI Judge ── -->
+    <div class="slide active" id="slide-0">
+      <div class="visual visual-1">
+        <div class="stars">
+          <div class="star lit"></div><div class="star lit"></div>
+          <div class="star lit"></div><div class="star"></div><div class="star"></div>
+        </div>
+        <div class="score-ring">
+          <div class="score-num">91</div>
+          <div class="score-label">AI SCORE</div>
+        </div>
+        <div class="score-bars">
+          <div class="sbar">
+            <div class="sbar-label">Panel line</div>
+            <div class="sbar-track"><div class="sbar-fill" style="width:92%"></div></div>
+          </div>
+          <div class="sbar">
+            <div class="sbar-label">Paint</div>
+            <div class="sbar-track"><div class="sbar-fill" style="width:85%"></div></div>
+          </div>
+          <div class="sbar">
+            <div class="sbar-label">Pose</div>
+            <div class="sbar-track"><div class="sbar-fill" style="width:89%"></div></div>
+          </div>
+          <div class="sbar">
+            <div class="sbar-label">Weather</div>
+            <div class="sbar-track"><div class="sbar-fill" style="width:78%"></div></div>
+          </div>
+          <div class="sbar">
+            <div class="sbar-label">Polish</div>
+            <div class="sbar-track"><div class="sbar-fill" style="width:94%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-step">01 / 03</div>
+      <div class="slide-title">AI judges<br>your <span>builds</span></div>
+      <div class="slide-body">
+        Upload photos of your finished kit and our AI grades it across panel lining, weathering, paint finish, and composition — just like a real competition judge.
+      </div>
+      <div class="pills">
+        <div class="pill">Panel lining</div>
+        <div class="pill">Weathering</div>
+        <div class="pill">Paint finish</div>
+        <div class="pill">Composition</div>
+      </div>
+    </div>
+
+    <!-- ── Slide 2: Community ── -->
+    <div class="slide" id="slide-1">
+      <div class="visual visual-2" style="padding:0;overflow:hidden;position:relative;">
+        <div class="community-grid">
+          <div class="cg-cell">
+            <div class="cg-kit">⚪</div>
+            <div class="cg-score">94</div>
+            <div class="cg-user">@zeropilot</div>
+          </div>
+          <div class="cg-cell">
+            <div class="cg-kit">🔵</div>
+            <div class="cg-score">89</div>
+            <div class="cg-user">@msbuilder</div>
+          </div>
+          <div class="cg-cell">
+            <div class="cg-kit">🔴</div>
+            <div class="cg-score">91</div>
+            <div class="cg-user">@redcomet</div>
+          </div>
+          <div class="cg-cell">
+            <div class="cg-kit">🟡</div>
+            <div class="cg-score">82</div>
+            <div class="cg-user">@gundamkid</div>
+          </div>
+          <div class="cg-cell">
+            <div class="cg-kit">⚫</div>
+            <div class="cg-score">87</div>
+            <div class="cg-user">@plamo_uk</div>
+          </div>
+          <div class="cg-cell">
+            <div class="cg-kit">🟢</div>
+            <div class="cg-score">96</div>
+            <div class="cg-user">@gn_drive</div>
+          </div>
+        </div>
+        <div class="cg-rank-badge">WEEKLY #1</div>
+      </div>
+
+      <div class="slide-step">02 / 03</div>
+      <div class="slide-title">Compete<br>with the <span>world</span></div>
+      <div class="slide-body">
+        Browse builds from Gunpla builders everywhere. Like, comment, and climb the weekly leaderboard. Your score is your rank — earn it.
+      </div>
+      <div class="pills">
+        <div class="pill">Weekly rankings</div>
+        <div class="pill">Global feed</div>
+        <div class="pill">Builder profiles</div>
+      </div>
+    </div>
+
+    <!-- ── Slide 3: Backlog ── -->
+    <div class="slide" id="slide-2">
+      <div class="visual visual-3">
+        <div class="backlog-list">
+          <div class="bl-row">
+            <div class="bl-box">📦</div>
+            <div class="bl-info">
+              <div class="bl-name">Hi-Nu Gundam Ver. Ka</div>
+              <div class="bl-grade">MG · MASTER GRADE</div>
+            </div>
+            <div class="bl-status s-building">BUILDING</div>
+          </div>
+          <div class="bl-row">
+            <div class="bl-box">📦</div>
+            <div class="bl-info">
+              <div class="bl-name">Zaku II Ver. 2.0</div>
+              <div class="bl-grade">MG · MASTER GRADE</div>
+            </div>
+            <div class="bl-status s-owned">OWNED</div>
+          </div>
+          <div class="bl-row">
+            <div class="bl-box">📦</div>
+            <div class="bl-info">
+              <div class="bl-name">Barbatos 6th Form</div>
+              <div class="bl-grade">MG · MASTER GRADE</div>
+            </div>
+            <div class="bl-status s-wish">WISHLIST</div>
+          </div>
+          <div class="bl-row">
+            <div class="bl-box">📦</div>
+            <div class="bl-info">
+              <div class="bl-name">Strike Freedom</div>
+              <div class="bl-grade">RG · REAL GRADE</div>
+            </div>
+            <div class="bl-status s-owned">OWNED</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-step">03 / 03</div>
+      <div class="slide-title">Track your<br><span>shame pile</span></div>
+      <div class="slide-body">
+        Every builder has a backlog. Track what you own, what you're building, and what's on your wishlist — all in one place. No kit left behind.
+      </div>
+      <div class="pills">
+        <div class="pill">Owned</div>
+        <div class="pill">Building</div>
+        <div class="pill">Wishlist</div>
+        <div class="pill">Completed</div>
+      </div>
+    </div>
+
+  </div><!-- /slides-viewport -->
+
+  <!-- Bottom controls -->
+  <div class="controls">
+    <button class="btn-back hidden" id="btn-back" onclick="prevSlide()">
+      <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 12L6 8L10 4" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <button class="btn-next" id="btn-next" onclick="nextSlide()">
+      <span id="btn-label">NEXT</span>
+      <span class="arrow" id="btn-arrow">→</span>
+    </button>
+  </div>
+
+</div><!-- /shell -->
+
+<script>
+  let current = 0;
+  const total = 3;
+
+  function updateDots(from, to) {
+    for (let i = 0; i < total; i++) {
+      const d = document.getElementById('dot-' + i);
+      d.className = 'dot';
+      if (i < to) d.classList.add('done');
+      if (i === to) d.classList.add('active');
+    }
+  }
+
+  function updateControls(idx) {
+    const back = document.getElementById('btn-back');
+    const next = document.getElementById('btn-next');
+    const label = document.getElementById('btn-label');
+    const arrow = document.getElementById('btn-arrow');
+
+    back.classList.toggle('hidden', idx === 0);
+
+    if (idx === total - 1) {
+      next.className = 'btn-finish';
+      next.onclick = goToApp;
+      label.textContent = "LET'S BUILD";
+      arrow.textContent = '✦';
+    } else {
+      next.className = 'btn-next';
+      next.onclick = nextSlide;
+      label.textContent = 'NEXT';
+      arrow.textContent = '→';
+    }
+  }
+
+  function goTo(idx) {
+    const slides = document.querySelectorAll('.slide');
+
+    // Exit current
+    slides[current].classList.remove('active');
+    slides[current].classList.add('exit');
+
+    setTimeout(() => {
+      slides[current].classList.remove('exit');
+    }, 500);
+
+    current = idx;
+
+    // Enter new
+    setTimeout(() => {
+      slides[current].classList.add('active');
+    }, 50);
+
+    updateDots(0, current);
+    updateControls(current);
+  }
+
+  function nextSlide() {
+    if (current < total - 1) goTo(current + 1);
+  }
+
+  function prevSlide() {
+    if (current > 0) goTo(current - 1);
+  }
+
+  function goToApp() {
+    alert("🎉 Onboarding complete!\n\nNext: ask Claude to build the Home Feed screen.");
+  }
+
+  // Swipe support for touch screens
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) dx < 0 ? nextSlide() : prevSlide();
+  });
+
+  // Keyboard arrow support
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') nextSlide();
+    if (e.key === 'ArrowLeft')  prevSlide();
+  });
+</script>
+</body>
+</html>

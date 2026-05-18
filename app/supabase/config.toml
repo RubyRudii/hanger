@@ -1,0 +1,4 @@
+project_id = "hanger"
+
+[functions.judge]
+verify_jwt = true
