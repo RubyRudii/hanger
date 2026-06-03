@@ -1,65 +1,77 @@
 import { Tabs } from 'expo-router';
-import Svg, { Circle, Line, Path, Rect } from 'react-native-svg';
-import { colors, fonts } from '@/lib/theme';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Svg, { Circle, Path, Rect } from 'react-native-svg';
+
+const C = {
+  bg: 'rgba(5,9,24,0.92)',
+  accent: '#C9A84C',
+  inactive: 'rgba(201,168,76,0.45)',
+  borderGold: 'rgba(201,168,76,0.22)',
+};
 
 function FeedIcon({ color }: { color: string }) {
   return (
-    <Svg width={20} height={20} viewBox="0 0 18 18" fill="none">
-      <Rect x={2} y={8} width={6} height={8} rx={1.5} fill={color} />
-      <Rect x={10} y={4} width={6} height={12} rx={1.5} fill={color} />
+    <Svg width={20} height={20} viewBox="0 0 20 20" fill="none">
+      <Rect x={3} y={9} width={6} height={9} rx={1.5} stroke={color} strokeWidth={1.5} />
+      <Rect x={11} y={4} width={6} height={14} rx={1.5} stroke={color} strokeWidth={1.5} />
     </Svg>
   );
 }
-function HangarIcon({ color }: { color: string }) {
-  return (
-    <Svg width={20} height={20} viewBox="0 0 18 18" fill="none">
-      <Rect x={2} y={2} width={6} height={6} rx={1.5} fill={color} />
-      <Rect x={10} y={2} width={6} height={6} rx={1.5} fill={color} />
-      <Rect x={2} y={10} width={6} height={6} rx={1.5} fill={color} />
-      <Rect x={10} y={10} width={6} height={6} rx={1.5} fill={color} />
-    </Svg>
-  );
-}
+
 function JudgeIcon({ color }: { color: string }) {
   return (
-    <Svg width={20} height={20} viewBox="0 0 18 18" fill="none">
-      <Circle cx={9} cy={9} r={7} stroke={color} strokeWidth={1.5} />
-      <Line x1={9} y1={5} x2={9} y2={9} stroke={color} strokeWidth={1.5} strokeLinecap="round" />
-      <Line x1={9} y1={9} x2={12} y2={11} stroke={color} strokeWidth={1.5} strokeLinecap="round" />
+    <Svg width={20} height={20} viewBox="0 0 20 20" fill="none">
+      <Path d="M10 2L11.5 7.5L17 9L11.5 10.5L10 16L8.5 10.5L3 9L8.5 7.5L10 2Z" fill={color} />
+      <Path d="M15 14L15.7 16.3L18 17L15.7 17.7L15 20L14.3 17.7L12 17L14.3 16.3L15 14Z" fill={color} opacity={0.7} />
     </Svg>
   );
 }
+
+function HangarIcon({ color }: { color: string }) {
+  return (
+    <Svg width={20} height={20} viewBox="0 0 20 20" fill="none">
+      <Rect x={3} y={3} width={6} height={6} rx={1.5} stroke={color} strokeWidth={1.5} />
+      <Rect x={11} y={3} width={6} height={6} rx={1.5} stroke={color} strokeWidth={1.5} />
+      <Rect x={3} y={11} width={6} height={6} rx={1.5} stroke={color} strokeWidth={1.5} />
+      <Rect x={11} y={11} width={6} height={6} rx={1.5} stroke={color} strokeWidth={1.5} />
+    </Svg>
+  );
+}
+
 function ProfileIcon({ color }: { color: string }) {
   return (
-    <Svg width={20} height={20} viewBox="0 0 18 18" fill="none">
-      <Circle cx={9} cy={7} r={3.5} stroke={color} strokeWidth={1.5} />
-      <Path d="M2 16c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke={color} strokeWidth={1.5} strokeLinecap="round" />
+    <Svg width={20} height={20} viewBox="0 0 20 20" fill="none">
+      <Circle cx={10} cy={7} r={3.5} stroke={color} strokeWidth={1.5} />
+      <Path d="M3 18c0-3.5 3.1-6 7-6s7 2.5 7 6" stroke={color} strokeWidth={1.5} strokeLinecap="round" />
     </Svg>
   );
 }
 
 export default function TabsLayout() {
+  const insets = useSafeAreaInsets();
+  const bottomGap = Math.max(insets.bottom, 12);
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: true,
         tabBarStyle: {
-          backgroundColor: colors.surfaceDeep,
-          borderTopColor: 'rgba(255,255,255,0.06)',
-          borderTopWidth: 0.5,
-          height: 70,
-          paddingTop: 8,
-          paddingBottom: 14,
+          backgroundColor: C.bg,
+          borderTopColor: C.borderGold,
+          borderTopWidth: 1,
+          height: 70 + bottomGap,
+          paddingTop: 10,
+          paddingBottom: bottomGap + 10,
         },
-        tabBarActiveTintColor: colors.accent,
-        tabBarInactiveTintColor: colors.textFaint,
-        tabBarLabelStyle: { fontSize: 9, letterSpacing: 1, fontFamily: fonts.bodyMedium },
+        tabBarItemStyle: { paddingVertical: 2 },
+        tabBarActiveTintColor: C.accent,
+        tabBarInactiveTintColor: C.inactive,
+        tabBarLabelStyle: { fontSize: 10, letterSpacing: 1.5, fontFamily: 'DMSans_500Medium', marginTop: 4 },
       }}
     >
       <Tabs.Screen name="feed" options={{ title: 'FEED', tabBarIcon: ({ color }) => <FeedIcon color={color} /> }} />
-      <Tabs.Screen name="hangar" options={{ title: 'HANGAR', tabBarIcon: ({ color }) => <HangarIcon color={color} /> }} />
       <Tabs.Screen name="judge" options={{ title: 'JUDGE', tabBarIcon: ({ color }) => <JudgeIcon color={color} /> }} />
+      <Tabs.Screen name="hangar" options={{ title: 'HANGAR', tabBarIcon: ({ color }) => <HangarIcon color={color} /> }} />
       <Tabs.Screen name="profile" options={{ title: 'PROFILE', tabBarIcon: ({ color }) => <ProfileIcon color={color} /> }} />
     </Tabs>
   );

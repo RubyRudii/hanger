@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { ActivityIndicator, View } from 'react-native';
 import { useFonts, BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue';
 import { DMSans_300Light, DMSans_400Regular, DMSans_500Medium } from '@expo-google-fonts/dm-sans';
+import { JetBrainsMono_400Regular, JetBrainsMono_500Medium } from '@expo-google-fonts/jetbrains-mono';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
@@ -47,6 +48,8 @@ export default function RootLayout() {
     DMSans_300Light,
     DMSans_400Regular,
     DMSans_500Medium,
+    JetBrainsMono_400Regular,
+    JetBrainsMono_500Medium,
   });
   const [fontTimeout, setFontTimeout] = useState(false);
 
