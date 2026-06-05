@@ -1,16 +1,10 @@
+import { useMemo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Tabs, router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
-
-const C = {
-  bg: 'rgba(5,9,24,0.92)',
-  accent: '#C9A84C',
-  goldLight: '#F0D98A',
-  inactive: 'rgba(201,168,76,0.45)',
-  borderGold: 'rgba(201,168,76,0.22)',
-  royalBright: '#2952CC',
-};
+import { useTheme } from '@/context/ThemeContext';
+import { Palette } from '@/lib/theme';
 
 function FeedIcon({ color }: { color: string }) {
   return (
@@ -52,10 +46,13 @@ function ProfileIcon({ color }: { color: string }) {
 
 export default function TabsLayout() {
   const insets = useSafeAreaInsets();
+  const { colors: C } = useTheme();
+  const styles = useMemo(() => makeStyles(C), [C]);
   const bottomGap = Math.max(insets.bottom, 12);
   const tabBarHeight = 70 + bottomGap;
   const fabSize = 64;
   const fabOverlap = 22;
+  const inactive = C.accent + '73';
 
   return (
     <View style={{ flex: 1 }}>
@@ -64,7 +61,7 @@ export default function TabsLayout() {
           headerShown: false,
           tabBarShowLabel: true,
           tabBarStyle: {
-            backgroundColor: C.bg,
+            backgroundColor: C.tabBg,
             borderTopColor: C.borderGold,
             borderTopWidth: 1,
             height: tabBarHeight,
@@ -73,7 +70,7 @@ export default function TabsLayout() {
           },
           tabBarItemStyle: { paddingVertical: 2 },
           tabBarActiveTintColor: C.accent,
-          tabBarInactiveTintColor: C.inactive,
+          tabBarInactiveTintColor: inactive,
           tabBarLabelStyle: { fontSize: 10, letterSpacing: 1.5, fontFamily: 'DMSans_500Medium', marginTop: 4 },
         }}
       >
@@ -121,23 +118,25 @@ export default function TabsLayout() {
   );
 }
 
-const styles = StyleSheet.create({
-  fab: {
-    position: 'absolute',
-    alignSelf: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: C.accent,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 12,
-    elevation: 12,
-  },
-  fabInner: {
-    backgroundColor: C.royalBright,
-    borderWidth: 2,
-    borderColor: C.accent,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+function makeStyles(C: Palette) {
+  return StyleSheet.create({
+    fab: {
+      position: 'absolute',
+      alignSelf: 'center',
+      alignItems: 'center',
+      justifyContent: 'center',
+      shadowColor: C.accent,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.4,
+      shadowRadius: 12,
+      elevation: 12,
+    },
+    fabInner: {
+      backgroundColor: C.royalBright,
+      borderWidth: 2,
+      borderColor: C.accent,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+  });
+}

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -25,27 +25,8 @@ import Svg, {
   Stop,
 } from 'react-native-svg';
 import { DbBuild, fetchBuild, fetchMyBuilds } from '@/api/builds';
-
-const C = {
-  bg: '#050918',
-  surface: '#0B1530',
-  surface2: '#0F1C3A',
-  accent: '#C9A84C',
-  accentDim: 'rgba(201,168,76,0.13)',
-  accentRing: 'rgba(201,168,76,0.28)',
-  royal: '#1A3A8F',
-  royalBright: '#2952CC',
-  royalSoft: 'rgba(41,82,204,0.18)',
-  white: '#FFFFFF',
-  goldLight: '#F0D98A',
-  greenHud: '#4ADE80',
-  textMid: 'rgba(255,255,255,0.62)',
-  textDim: 'rgba(255,255,255,0.32)',
-  textFaint: 'rgba(255,255,255,0.18)',
-  border: 'rgba(255,255,255,0.06)',
-  borderMid: 'rgba(255,255,255,0.10)',
-  borderGold: 'rgba(201,168,76,0.22)',
-};
+import { useTheme } from '@/context/ThemeContext';
+import { Palette } from '@/lib/theme';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -80,6 +61,8 @@ function ymdhm(iso: string) {
 
 export default function Debrief() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { colors: C } = useTheme();
+  const styles = useMemo(() => makeStyles(C), [C]);
   const [build, setBuild] = useState<DbBuild | null>(null);
   const [prevScore, setPrevScore] = useState<number | null>(null);
   const [totalXp, setTotalXp] = useState(0);
@@ -411,7 +394,7 @@ export default function Debrief() {
               <Svg width={14} height={14} viewBox="0 0 14 14">
                 <Path
                   d="M7 1V9M7 1L4 4M7 1L10 4M2 9V12C2 12.55 2.45 13 3 13H11C11.55 13 12 12.55 12 12V9"
-                  stroke="#0A0F1E"
+                  stroke={C.onAccent}
                   strokeWidth={1.5}
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -451,9 +434,11 @@ function CatRow({
   icon: 'lines' | 'check' | 'star' | 'wave' | 'bigstar';
   last?: boolean;
 }) {
+  const { colors: C } = useTheme();
+  const styles = useMemo(() => makeStyles(C), [C]);
   return (
     <View style={[styles.catRow, last && { borderBottomWidth: 0 }]}>
-      <View style={styles.catIcon}>{renderCatIcon(icon)}</View>
+      <View style={styles.catIcon}>{renderCatIcon(icon, C)}</View>
       <View style={{ flex: 1 }}>
         <Text style={styles.catName}>{label}</Text>
         <View style={styles.catTrack}>
@@ -470,7 +455,7 @@ function CatRow({
   );
 }
 
-function renderCatIcon(kind: 'lines' | 'check' | 'star' | 'wave' | 'bigstar') {
+function renderCatIcon(kind: 'lines' | 'check' | 'star' | 'wave' | 'bigstar', C: Palette) {
   if (kind === 'lines') {
     return (
       <Svg width={14} height={14} viewBox="0 0 14 14">
@@ -508,8 +493,9 @@ function renderCatIcon(kind: 'lines' | 'check' | 'star' | 'wave' | 'bigstar') {
   );
 }
 
-const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: C.bg },
+function makeStyles(C: Palette) {
+  return StyleSheet.create({
+    root: { flex: 1, backgroundColor: C.bg },
   notFound: { color: C.textDim, fontFamily: 'DMSans_300Light', fontSize: 13 },
 
   header: {
@@ -522,7 +508,7 @@ const styles = StyleSheet.create({
     backgroundColor: C.surface, borderWidth: 1, borderColor: C.borderMid,
     alignItems: 'center', justifyContent: 'center',
   },
-  headerTitle: { fontFamily: 'BebasNeue_400Regular', fontSize: 18, letterSpacing: 3, color: C.white },
+  headerTitle: { fontFamily: 'BebasNeue_400Regular', fontSize: 18, letterSpacing: 3, color: C.text },
   headerSub: { fontSize: 10, letterSpacing: 1.5, color: C.textDim, marginTop: 3, fontFamily: 'DMSans_500Medium' },
 
   classified: {
@@ -546,14 +532,14 @@ const styles = StyleSheet.create({
   },
   heroGlow: { position: 'absolute', top: -100, right: -60, width: 280, height: 280, borderRadius: 140, backgroundColor: 'rgba(201,168,76,0.10)' },
   heroTop: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16 },
-  kitName: { fontSize: 17, color: C.white, fontFamily: 'DMSans_500Medium', marginBottom: 4 },
+  kitName: { fontSize: 17, color: C.text, fontFamily: 'DMSans_500Medium', marginBottom: 4 },
   kitMeta: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 10, letterSpacing: 1.5, color: C.textDim },
   verdictStamp: {
     backgroundColor: C.accent,
     paddingHorizontal: 12, paddingVertical: 5, borderRadius: 4,
-    borderWidth: 1.5, borderColor: '#0A0F1E',
+    borderWidth: 1.5, borderColor: C.onAccent,
   },
-  verdictStampText: { fontFamily: 'BebasNeue_400Regular', fontSize: 11, letterSpacing: 2, color: '#0A0F1E' },
+  verdictStampText: { fontFamily: 'BebasNeue_400Regular', fontSize: 11, letterSpacing: 2, color: C.onAccent },
 
   heroPhotoWrap: { width: '100%', height: 180, borderRadius: 12, overflow: 'hidden', marginBottom: 16, backgroundColor: C.surface2 },
   heroPhoto: { width: '100%', height: '100%' },
@@ -566,7 +552,7 @@ const styles = StyleSheet.create({
   gradeLetter: { fontFamily: 'BebasNeue_400Regular', fontSize: 11, letterSpacing: 1.5, color: C.accent, marginTop: 4 },
   scoreSummary: { flex: 1, minWidth: 0 },
   scoreSummaryLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 9, letterSpacing: 1.5, color: C.accent, marginBottom: 8 },
-  scoreSummaryText: { fontFamily: 'BebasNeue_400Regular', fontSize: 26, letterSpacing: 1, color: C.white, lineHeight: 28, marginBottom: 8 },
+  scoreSummaryText: { fontFamily: 'BebasNeue_400Regular', fontSize: 26, letterSpacing: 1, color: C.text, lineHeight: 28, marginBottom: 8 },
   scoreRank: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   rankDelta: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 10 },
   rankVs: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 10, color: C.textMid, letterSpacing: 0.5 },
@@ -583,7 +569,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1, borderBottomColor: C.border, borderStyle: 'dashed',
   },
   catIcon: { width: 28, height: 28, borderRadius: 8, backgroundColor: C.surface2, borderWidth: 1, borderColor: C.borderMid, alignItems: 'center', justifyContent: 'center' },
-  catName: { fontSize: 12, color: C.white, fontFamily: 'DMSans_500Medium', marginBottom: 4 },
+  catName: { fontSize: 12, color: C.text, fontFamily: 'DMSans_500Medium', marginBottom: 4 },
   catTrack: { width: '100%', height: 4, backgroundColor: C.border, borderRadius: 2, overflow: 'hidden' },
   catFill: { height: '100%', backgroundColor: C.accent, borderRadius: 2 },
   catScore: { fontFamily: 'BebasNeue_400Regular', fontSize: 18, color: C.accent, letterSpacing: 1, width: 32, textAlign: 'right' },
@@ -605,7 +591,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.5, borderColor: C.accent,
     alignItems: 'center', justifyContent: 'center',
   },
-  pilotName: { fontSize: 13, color: C.white, fontFamily: 'DMSans_500Medium' },
+  pilotName: { fontSize: 13, color: C.text, fontFamily: 'DMSans_500Medium' },
   pilotRank: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 9, letterSpacing: 1.5, color: C.accent, marginTop: 2 },
   pilotCallsign: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 9, color: C.textDim, letterSpacing: 0.5, marginTop: 1 },
   debriefBody: { fontSize: 13, color: C.textMid, lineHeight: 22, fontFamily: 'DMSans_300Light', fontStyle: 'italic' },
@@ -645,10 +631,11 @@ const styles = StyleSheet.create({
     flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
     backgroundColor: C.accent, borderRadius: 30, paddingVertical: 14, paddingHorizontal: 20,
   },
-  btnShareText: { fontFamily: 'DMSans_500Medium', fontSize: 12, letterSpacing: 2, color: '#0A0F1E' },
+  btnShareText: { fontFamily: 'DMSans_500Medium', fontSize: 12, letterSpacing: 2, color: C.onAccent },
   btnRebuild: {
     flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
     borderWidth: 1, borderColor: C.borderGold, borderRadius: 30, paddingVertical: 14, paddingHorizontal: 20,
   },
   btnRebuildText: { fontFamily: 'DMSans_500Medium', fontSize: 12, letterSpacing: 2, color: C.goldLight },
-});
+  });
+}

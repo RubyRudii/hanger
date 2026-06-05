@@ -1,27 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Easing, Pressable, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
-
-const C = {
-  bg: '#050918',
-  surface: '#0B1530',
-  surface2: '#0F1C3A',
-  accent: '#C9A84C',
-  goldLight: '#F0D98A',
-  royal: '#1A3A8F',
-  royalBright: '#2952CC',
-  white: '#FFFFFF',
-  textMid: 'rgba(255,255,255,0.58)',
-  textDim: 'rgba(255,255,255,0.30)',
-  border: 'rgba(255,255,255,0.07)',
-  borderMid: 'rgba(255,255,255,0.11)',
-  borderGold: 'rgba(201,168,76,0.22)',
-  accentRing: 'rgba(201,168,76,0.28)',
-  accentDim: 'rgba(201,168,76,0.13)',
-  gridLine: 'rgba(41,82,204,0.06)',
-};
+import { useTheme } from '@/context/ThemeContext';
+import { Palette } from '@/lib/theme';
 
 type Slide = { id: number; step: string; titleA: string; titleAccent: string; titleB: string; body: string; pills: string[]; visual: 'judge' | 'community' | 'backlog' };
 
@@ -59,6 +42,8 @@ const SLIDES: Slide[] = [
 ];
 
 export default function Onboarding() {
+  const { colors: C } = useTheme();
+  const styles = useMemo(() => makeStyles(C), [C]);
   const [current, setCurrent] = useState(0);
   const slideX = useRef(new Animated.Value(0)).current;
   const slideOp = useRef(new Animated.Value(1)).current;
@@ -159,7 +144,7 @@ export default function Onboarding() {
           {current > 0 ? (
             <Pressable style={styles.btnBack} onPress={back}>
               <Svg width={16} height={16} viewBox="0 0 16 16">
-                <Path d="M10 12L6 8L10 4" stroke="rgba(255,255,255,0.5)" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+                <Path d="M10 12L6 8L10 4" stroke={C.textMid} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
               </Svg>
             </Pressable>
           ) : (
@@ -179,6 +164,8 @@ export default function Onboarding() {
 }
 
 function JudgeVisual() {
+  const { colors: C } = useTheme();
+  const styles = useMemo(() => makeStyles(C), [C]);
   const pulse = useRef(new Animated.Value(0)).current;
   const barAnim = useRef(new Animated.Value(0)).current;
 
@@ -233,6 +220,8 @@ function JudgeVisual() {
 }
 
 function CommunityVisual() {
+  const { colors: C } = useTheme();
+  const styles = useMemo(() => makeStyles(C), [C]);
   const cells = [
     { kit: '⚪', score: 94, user: '@zeropilot' },
     { kit: '🔵', score: 89, user: '@msbuilder' },
@@ -262,6 +251,8 @@ function CommunityVisual() {
 }
 
 function BacklogVisual() {
+  const { colors: C } = useTheme();
+  const styles = useMemo(() => makeStyles(C), [C]);
   const rows = [
     { name: 'Hi-Nu Gundam Ver. Ka', grade: 'MG · MASTER GRADE', status: 'BUILDING', kind: 'building' as const },
     { name: 'Zaku II Ver. 2.0', grade: 'MG · MASTER GRADE', status: 'OWNED', kind: 'owned' as const },
@@ -291,7 +282,7 @@ function BacklogVisual() {
               style={[
                 styles.blStatusText,
                 r.kind === 'building' && { color: C.accent },
-                r.kind === 'owned' && { color: '#7FA4FF' },
+                r.kind === 'owned' && { color: C.blueHud },
                 r.kind === 'wish' && { color: C.textMid },
               ]}
             >
@@ -304,149 +295,146 @@ function BacklogVisual() {
   );
 }
 
-const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: C.bg, overflow: 'hidden' },
-  shell: { flex: 1, paddingHorizontal: 28, paddingBottom: 28, maxWidth: 520, alignSelf: 'center', width: '100%' },
+function makeStyles(C: Palette) {
+  return StyleSheet.create({
+    root: { flex: 1, backgroundColor: C.bg, overflow: 'hidden' },
+    shell: { flex: 1, paddingHorizontal: 28, paddingBottom: 28, maxWidth: 520, alignSelf: 'center', width: '100%' },
 
-  corner: { position: 'absolute', width: 36, height: 36, borderColor: C.borderGold },
-  cornerTL: { top: 20, left: 20, borderTopWidth: 1, borderLeftWidth: 1 },
-  cornerTR: { top: 20, right: 20, borderTopWidth: 1, borderRightWidth: 1 },
-  cornerBL: { bottom: 20, left: 20, borderBottomWidth: 1, borderLeftWidth: 1 },
-  cornerBR: { bottom: 20, right: 20, borderBottomWidth: 1, borderRightWidth: 1 },
+    corner: { position: 'absolute', width: 36, height: 36, borderColor: C.borderGold },
+    cornerTL: { top: 20, left: 20, borderTopWidth: 1, borderLeftWidth: 1 },
+    cornerTR: { top: 20, right: 20, borderTopWidth: 1, borderRightWidth: 1 },
+    cornerBL: { bottom: 20, left: 20, borderBottomWidth: 1, borderLeftWidth: 1 },
+    cornerBR: { bottom: 20, right: 20, borderBottomWidth: 1, borderRightWidth: 1 },
 
-  topbar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8 },
-  logoSm: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 4, color: C.accent },
-  skipBtn: { fontSize: 12, color: C.textDim, fontFamily: 'DMSans_300Light', letterSpacing: 1 },
+    topbar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8 },
+    logoSm: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 4, color: C.accent },
+    skipBtn: { fontSize: 12, color: C.textDim, fontFamily: 'DMSans_300Light', letterSpacing: 1 },
 
-  progress: { flexDirection: 'row', gap: 6, marginTop: 24 },
-  dot: { height: 3, borderRadius: 2, backgroundColor: C.borderMid, flex: 1 },
-  dotActive: { backgroundColor: C.accent, flex: 2.8 },
-  dotDone: { backgroundColor: 'rgba(201,168,76,0.35)' },
+    progress: { flexDirection: 'row', gap: 6, marginTop: 24 },
+    dot: { height: 3, borderRadius: 2, backgroundColor: C.borderMid, flex: 1 },
+    dotActive: { backgroundColor: C.accent, flex: 2.8 },
+    dotDone: { backgroundColor: C.accentRing },
 
-  viewport: { flex: 1, justifyContent: 'center', overflow: 'hidden' },
-  slide: { width: '100%' },
+    viewport: { flex: 1, justifyContent: 'center', overflow: 'hidden' },
+    slide: { width: '100%' },
 
-  visual: {
-    width: '100%',
-    height: 210,
-    borderRadius: 20,
-    backgroundColor: C.surface,
-    borderWidth: 1,
-    borderColor: C.borderGold,
-    marginBottom: 28,
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
-    position: 'relative',
-  },
-  visualGradient: { backgroundColor: C.surface },
+    visual: {
+      width: '100%',
+      height: 210,
+      borderRadius: 20,
+      backgroundColor: C.surface,
+      borderWidth: 1,
+      borderColor: C.borderGold,
+      marginBottom: 28,
+      alignItems: 'center',
+      justifyContent: 'center',
+      overflow: 'hidden',
+      position: 'relative',
+    },
+    visualGradient: { backgroundColor: C.surface },
 
-  // Judge visual
-  stars: { position: 'absolute', top: 14, left: 18, flexDirection: 'row', gap: 3 },
-  star: { width: 5, height: 5, borderRadius: 3, backgroundColor: 'rgba(201,168,76,0.25)' },
-  starLit: { backgroundColor: C.accent },
+    stars: { position: 'absolute', top: 14, left: 18, flexDirection: 'row', gap: 3 },
+    star: { width: 5, height: 5, borderRadius: 3, backgroundColor: C.accentDim },
+    starLit: { backgroundColor: C.accent },
 
-  ringWrap: { width: 140, height: 140, alignItems: 'center', justifyContent: 'center', position: 'absolute', left: 32, top: 35 },
-  ringOuterFaint: { position: 'absolute', width: 146, height: 146, borderRadius: 73, borderWidth: 1, borderColor: 'rgba(201,168,76,0.10)' },
-  ringOuter: { position: 'absolute', width: 126, height: 126, borderRadius: 63, borderWidth: 1, borderColor: C.accentRing },
-  scoreRing: {
-    width: 110, height: 110, borderRadius: 55,
-    borderWidth: 3, borderColor: C.royalBright,
-    alignItems: 'center', justifyContent: 'center',
-    backgroundColor: 'transparent',
-  },
-  scoreNum: { fontFamily: 'BebasNeue_400Regular', fontSize: 42, color: C.goldLight, lineHeight: 42, letterSpacing: 2 },
-  scoreLabel: { fontSize: 9, letterSpacing: 2, color: C.textDim, fontFamily: 'DMSans_300Light', marginTop: 2 },
+    ringWrap: { width: 140, height: 140, alignItems: 'center', justifyContent: 'center', position: 'absolute', left: 32, top: 35 },
+    ringOuterFaint: { position: 'absolute', width: 146, height: 146, borderRadius: 73, borderWidth: 1, borderColor: C.accentSoft },
+    ringOuter: { position: 'absolute', width: 126, height: 126, borderRadius: 63, borderWidth: 1, borderColor: C.accentRing },
+    scoreRing: {
+      width: 110, height: 110, borderRadius: 55,
+      borderWidth: 3, borderColor: C.royalBright,
+      alignItems: 'center', justifyContent: 'center',
+      backgroundColor: 'transparent',
+    },
+    scoreNum: { fontFamily: 'BebasNeue_400Regular', fontSize: 42, color: C.goldLight, lineHeight: 42, letterSpacing: 2 },
+    scoreLabel: { fontSize: 9, letterSpacing: 2, color: C.textDim, fontFamily: 'DMSans_300Light', marginTop: 2 },
 
-  scoreBars: { position: 'absolute', right: 16, top: 30, gap: 7 },
-  sbar: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  sbarLabel: { fontSize: 9, color: C.textDim, width: 44, fontFamily: 'DMSans_300Light' },
-  sbarTrack: { width: 56, height: 3, backgroundColor: C.border, borderRadius: 2, overflow: 'hidden' },
-  sbarFill: { height: '100%', borderRadius: 2, backgroundColor: C.accent },
+    scoreBars: { position: 'absolute', right: 16, top: 30, gap: 7 },
+    sbar: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+    sbarLabel: { fontSize: 9, color: C.textDim, width: 44, fontFamily: 'DMSans_300Light' },
+    sbarTrack: { width: 56, height: 3, backgroundColor: C.border, borderRadius: 2, overflow: 'hidden' },
+    sbarFill: { height: '100%', borderRadius: 2, backgroundColor: C.accent },
 
-  // Community visual
-  cgGrid: {
-    flex: 1, width: '100%',
-    flexDirection: 'row', flexWrap: 'wrap',
-  },
-  cgCell: {
-    width: '33.33%', height: '50%',
-    alignItems: 'center', justifyContent: 'center',
-    backgroundColor: C.surface,
-    borderRightWidth: 1, borderBottomWidth: 1, borderColor: C.border,
-    gap: 5,
-  },
-  cgKit: {
-    width: 44, height: 44, borderRadius: 10,
-    backgroundColor: C.surface2,
-    borderWidth: 1, borderColor: C.border,
-    alignItems: 'center', justifyContent: 'center',
-  },
-  cgScore: { fontFamily: 'BebasNeue_400Regular', fontSize: 14, color: C.accent, letterSpacing: 1 },
-  cgUser: { fontSize: 9, color: C.textDim, fontFamily: 'DMSans_300Light' },
-  cgRankBadge: {
-    position: 'absolute', top: 10, right: 10,
-    backgroundColor: C.royal,
-    borderWidth: 1, borderColor: C.accentRing,
-    paddingHorizontal: 8, paddingVertical: 3, borderRadius: 20,
-  },
-  cgRankBadgeText: { fontFamily: 'BebasNeue_400Regular', fontSize: 11, letterSpacing: 1.5, color: C.goldLight },
+    cgGrid: {
+      flex: 1, width: '100%',
+      flexDirection: 'row', flexWrap: 'wrap',
+    },
+    cgCell: {
+      width: '33.33%', height: '50%',
+      alignItems: 'center', justifyContent: 'center',
+      backgroundColor: C.surface,
+      borderRightWidth: 1, borderBottomWidth: 1, borderColor: C.border,
+      gap: 5,
+    },
+    cgKit: {
+      width: 44, height: 44, borderRadius: 10,
+      backgroundColor: C.surface2,
+      borderWidth: 1, borderColor: C.border,
+      alignItems: 'center', justifyContent: 'center',
+    },
+    cgScore: { fontFamily: 'BebasNeue_400Regular', fontSize: 14, color: C.accent, letterSpacing: 1 },
+    cgUser: { fontSize: 9, color: C.textDim, fontFamily: 'DMSans_300Light' },
+    cgRankBadge: {
+      position: 'absolute', top: 10, right: 10,
+      backgroundColor: C.royal,
+      borderWidth: 1, borderColor: C.accentRing,
+      paddingHorizontal: 8, paddingVertical: 3, borderRadius: 20,
+    },
+    cgRankBadgeText: { fontFamily: 'BebasNeue_400Regular', fontSize: 11, letterSpacing: 1.5, color: C.goldLight },
 
-  // Backlog visual
-  blRow: {
-    flexDirection: 'row', alignItems: 'center', gap: 12,
-    paddingHorizontal: 16, paddingVertical: 10,
-    borderBottomWidth: 1, borderBottomColor: C.border,
-    width: '100%',
-  },
-  blBox: {
-    width: 36, height: 36, borderRadius: 8,
-    backgroundColor: C.surface2,
-    borderWidth: 1, borderColor: C.border,
-    alignItems: 'center', justifyContent: 'center',
-  },
-  blName: { fontSize: 12, color: C.white, fontFamily: 'DMSans_500Medium' },
-  blGrade: { fontSize: 9, color: C.textDim, letterSpacing: 1, marginTop: 1, fontFamily: 'DMSans_300Light' },
-  blStatus: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 20, borderWidth: 1 },
-  blStatusText: { fontSize: 9, fontFamily: 'DMSans_500Medium', letterSpacing: 1 },
-  sBuilding: { backgroundColor: 'rgba(201,168,76,0.15)', borderColor: C.borderGold },
-  sOwned: { backgroundColor: 'rgba(41,82,204,0.20)', borderColor: 'rgba(41,82,204,0.30)' },
-  sWish: { backgroundColor: 'rgba(255,255,255,0.05)', borderColor: C.border },
+    blRow: {
+      flexDirection: 'row', alignItems: 'center', gap: 12,
+      paddingHorizontal: 16, paddingVertical: 10,
+      borderBottomWidth: 1, borderBottomColor: C.border,
+      width: '100%',
+    },
+    blBox: {
+      width: 36, height: 36, borderRadius: 8,
+      backgroundColor: C.surface2,
+      borderWidth: 1, borderColor: C.border,
+      alignItems: 'center', justifyContent: 'center',
+    },
+    blName: { fontSize: 12, color: C.text, fontFamily: 'DMSans_500Medium' },
+    blGrade: { fontSize: 9, color: C.textDim, letterSpacing: 1, marginTop: 1, fontFamily: 'DMSans_300Light' },
+    blStatus: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 20, borderWidth: 1 },
+    blStatusText: { fontSize: 9, fontFamily: 'DMSans_500Medium', letterSpacing: 1 },
+    sBuilding: { backgroundColor: C.accentDim, borderColor: C.borderGold },
+    sOwned: { backgroundColor: C.royalSoft, borderColor: 'rgba(41,82,204,0.30)' },
+    sWish: { backgroundColor: C.border, borderColor: C.border },
 
-  // Slide text
-  slideStep: { fontSize: 10, letterSpacing: 3, color: C.accent, fontFamily: 'DMSans_500Medium', marginBottom: 8 },
-  slideTitle: { fontFamily: 'BebasNeue_400Regular', fontSize: 42, letterSpacing: 2, lineHeight: 44, color: C.white, marginBottom: 12 },
-  slideTitleAccent: { color: C.accent },
-  slideBody: { fontSize: 14, color: C.textMid, lineHeight: 23, fontFamily: 'DMSans_300Light' },
+    slideStep: { fontSize: 10, letterSpacing: 3, color: C.accent, fontFamily: 'DMSans_500Medium', marginBottom: 8 },
+    slideTitle: { fontFamily: 'BebasNeue_400Regular', fontSize: 42, letterSpacing: 2, lineHeight: 44, color: C.text, marginBottom: 12 },
+    slideTitleAccent: { color: C.accent },
+    slideBody: { fontSize: 14, color: C.textMid, lineHeight: 23, fontFamily: 'DMSans_300Light' },
 
-  pills: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 16 },
-  pill: {
-    paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20,
-    borderWidth: 1, borderColor: C.borderGold,
-    backgroundColor: C.accentDim,
-  },
-  pillText: { fontSize: 11, color: C.accent, fontFamily: 'DMSans_400Regular' },
+    pills: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 16 },
+    pill: {
+      paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20,
+      borderWidth: 1, borderColor: C.borderGold,
+      backgroundColor: C.accentDim,
+    },
+    pillText: { fontSize: 11, color: C.accent, fontFamily: 'DMSans_400Regular' },
 
-  // Bottom controls
-  controls: { flexDirection: 'row', alignItems: 'center', gap: 14, marginTop: 24 },
-  btnBack: {
-    width: 48, height: 48, borderRadius: 24,
-    borderWidth: 1, borderColor: C.borderMid,
-    alignItems: 'center', justifyContent: 'center',
-  },
-  btnNext: {
-    flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    backgroundColor: C.royalBright,
-    borderWidth: 1, borderColor: 'rgba(201,168,76,0.38)',
-    borderRadius: 30, paddingVertical: 15, paddingHorizontal: 24,
-  },
-  btnNextText: { fontSize: 13, letterSpacing: 2, color: C.goldLight, fontFamily: 'DMSans_500Medium' },
-  btnNextArrow: { fontSize: 16, color: C.accent, fontFamily: 'DMSans_500Medium' },
-  btnFinish: {
-    flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    backgroundColor: C.accent,
-    borderRadius: 30, paddingVertical: 15, paddingHorizontal: 24,
-  },
-  btnFinishText: { fontSize: 13, letterSpacing: 2, color: '#0A0F1E', fontFamily: 'DMSans_500Medium' },
-  btnFinishArrow: { fontSize: 16, color: '#0A0F1E', fontFamily: 'DMSans_500Medium' },
-});
+    controls: { flexDirection: 'row', alignItems: 'center', gap: 14, marginTop: 24 },
+    btnBack: {
+      width: 48, height: 48, borderRadius: 24,
+      borderWidth: 1, borderColor: C.borderMid,
+      alignItems: 'center', justifyContent: 'center',
+    },
+    btnNext: {
+      flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+      backgroundColor: C.royalBright,
+      borderWidth: 1, borderColor: 'rgba(201,168,76,0.38)',
+      borderRadius: 30, paddingVertical: 15, paddingHorizontal: 24,
+    },
+    btnNextText: { fontSize: 13, letterSpacing: 2, color: C.goldLight, fontFamily: 'DMSans_500Medium' },
+    btnNextArrow: { fontSize: 16, color: C.accent, fontFamily: 'DMSans_500Medium' },
+    btnFinish: {
+      flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+      backgroundColor: C.accent,
+      borderRadius: 30, paddingVertical: 15, paddingHorizontal: 24,
+    },
+    btnFinishText: { fontSize: 13, letterSpacing: 2, color: C.onAccent, fontFamily: 'DMSans_500Medium' },
+    btnFinishArrow: { fontSize: 16, color: C.onAccent, fontFamily: 'DMSans_500Medium' },
+  });
+}

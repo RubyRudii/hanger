@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -20,29 +20,9 @@ import Svg, { Circle, Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
 import { createBuild, uploadPhoto } from '@/api/builds';
 import { judgeBuild } from '@/api/judge';
 import { hasAccess, useAuth } from '@/context/AuthContext';
+import { useTheme } from '@/context/ThemeContext';
+import { Palette } from '@/lib/theme';
 import { Paywall } from '@/components/Paywall';
-
-const C = {
-  bg: '#050918',
-  surface: '#0B1530',
-  surface2: '#0F1C3A',
-  surface3: '#142447',
-  accent: '#C9A84C',
-  accentDim: 'rgba(201,168,76,0.13)',
-  accentRing: 'rgba(201,168,76,0.28)',
-  royal: '#1A3A8F',
-  royalBright: '#2952CC',
-  royalSoft: 'rgba(41,82,204,0.18)',
-  white: '#FFFFFF',
-  goldLight: '#F0D98A',
-  greenHud: '#4ADE80',
-  textMid: 'rgba(255,255,255,0.62)',
-  textDim: 'rgba(255,255,255,0.32)',
-  textFaint: 'rgba(255,255,255,0.18)',
-  border: 'rgba(255,255,255,0.06)',
-  borderMid: 'rgba(255,255,255,0.10)',
-  borderGold: 'rgba(201,168,76,0.22)',
-};
 
 const GRADES = [
   { value: 'HG', label: 'HG — High Grade' },
@@ -83,6 +63,8 @@ export default function JudgeScreen() {
 
 function Judge() {
   const { session, profile } = useAuth();
+  const { colors: C } = useTheme();
+  const styles = useMemo(() => makeStyles(C), [C]);
   const [photo, setPhoto] = useState<ImagePicker.ImagePickerAsset | null>(null);
   const [kitName, setKitName] = useState('');
   const [grade, setGrade] = useState('MG');
@@ -477,7 +459,9 @@ function Judge() {
   );
 }
 
-function Field({ label, required, focused, children }: { label: string; required?: boolean; focused?: boolean; children: React.ReactNode }) {
+function Field({ label, required, children }: { label: string; required?: boolean; focused?: boolean; children: React.ReactNode }) {
+  const { colors: C } = useTheme();
+  const styles = useMemo(() => makeStyles(C), [C]);
   return (
     <View style={{ marginBottom: 12 }}>
       <View style={styles.fieldLabelRow}>
@@ -491,6 +475,8 @@ function Field({ label, required, focused, children }: { label: string; required
 }
 
 function MsRow({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
+  const { colors: C } = useTheme();
+  const styles = useMemo(() => makeStyles(C), [C]);
   return (
     <View style={styles.msRow}>
       <Text style={styles.msRowLabel}>{label}</Text>
@@ -514,6 +500,8 @@ function SelectSheet({
   onSelect: (v: string) => void;
   onClose: () => void;
 }) {
+  const { colors: C } = useTheme();
+  const styles = useMemo(() => makeStyles(C), [C]);
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <Pressable style={styles.sheetBackdrop} onPress={onClose}>
@@ -535,7 +523,8 @@ function SelectSheet({
   );
 }
 
-const styles = StyleSheet.create({
+function makeStyles(C: Palette) {
+  return StyleSheet.create({
   root: { flex: 1, backgroundColor: C.bg },
 
   scanLine: {
@@ -553,7 +542,7 @@ const styles = StyleSheet.create({
     backgroundColor: C.surface, borderWidth: 1, borderColor: C.borderMid,
     alignItems: 'center', justifyContent: 'center',
   },
-  headerTitle: { fontFamily: 'BebasNeue_400Regular', fontSize: 18, letterSpacing: 3, color: C.white },
+  headerTitle: { fontFamily: 'BebasNeue_400Regular', fontSize: 18, letterSpacing: 3, color: C.text },
   headerSub: { fontSize: 10, letterSpacing: 1.5, color: C.textDim, marginTop: 3, fontFamily: 'DMSans_500Medium' },
   headerStatus: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   statusDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: C.greenHud },
@@ -567,7 +556,7 @@ const styles = StyleSheet.create({
   },
   introGlow: { position: 'absolute', top: 0, right: 0, width: 120, height: 120, borderRadius: 60, backgroundColor: 'rgba(201,168,76,0.10)' },
   introEyebrow: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 10, letterSpacing: 2, color: C.accent, marginBottom: 6 },
-  introTitle: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 1.5, color: C.white, marginBottom: 8 },
+  introTitle: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 1.5, color: C.text, marginBottom: 8 },
   introBody: { fontSize: 12, color: C.textMid, lineHeight: 19, fontFamily: 'DMSans_300Light' },
 
   section: { paddingHorizontal: 20, paddingTop: 16 },
@@ -599,7 +588,7 @@ const styles = StyleSheet.create({
     alignItems: 'center', justifyContent: 'center',
     marginBottom: 14,
   },
-  uploadTitle: { fontSize: 14, color: C.white, fontFamily: 'DMSans_500Medium', marginBottom: 4 },
+  uploadTitle: { fontSize: 14, color: C.text, fontFamily: 'DMSans_500Medium', marginBottom: 4 },
   uploadHint: { fontSize: 11, color: C.textDim, fontFamily: 'DMSans_300Light' },
 
   photoStrip: { flexDirection: 'row', gap: 8, marginTop: 12 },
@@ -630,13 +619,13 @@ const styles = StyleSheet.create({
     backgroundColor: C.surface,
     borderWidth: 1, borderColor: C.borderMid, borderRadius: 10,
     paddingHorizontal: 14, paddingVertical: 11,
-    fontSize: 13, color: C.white, fontFamily: 'DMSans_400Regular',
+    fontSize: 13, color: C.text, fontFamily: 'DMSans_400Regular',
   },
   inputFocus: { borderColor: C.borderGold, backgroundColor: C.surface2 },
 
   row2: { flexDirection: 'row', gap: 10 },
   selectInput: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  selectValue: { color: C.white, fontSize: 13, fontFamily: 'DMSans_400Regular', flex: 1 },
+  selectValue: { color: C.text, fontSize: 13, fontFamily: 'DMSans_400Regular', flex: 1 },
   selectChev: { color: C.accent, fontSize: 12 },
 
   msSheet: {
@@ -697,8 +686,9 @@ const styles = StyleSheet.create({
     backgroundColor: C.royal,
     alignItems: 'center', justifyContent: 'center',
   },
-  reviewStatus: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 3, color: C.white, marginBottom: 8 },
+  reviewStatus: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 3, color: C.text, marginBottom: 8 },
   reviewSubstatus: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, letterSpacing: 1.5, color: C.accent, textAlign: 'center', minHeight: 16 },
   reviewProgress: { width: 220, height: 3, backgroundColor: C.border, borderRadius: 2, marginTop: 20, overflow: 'hidden' },
   reviewProgressFill: { height: '100%', backgroundColor: C.accent, borderRadius: 2 },
-});
+  });
+}

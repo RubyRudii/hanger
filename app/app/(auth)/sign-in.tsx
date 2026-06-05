@@ -1,26 +1,16 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Circle, Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
 import { useAuth } from '@/context/AuthContext';
-
-const C = {
-  bg: '#050918',
-  surface: '#0B1530',
-  accent: '#C9A84C',
-  goldLight: '#F0D98A',
-  royalBright: '#2952CC',
-  white: '#FFFFFF',
-  textMid: 'rgba(255,255,255,0.58)',
-  textDim: 'rgba(255,255,255,0.30)',
-  borderMid: 'rgba(255,255,255,0.11)',
-  borderGold: 'rgba(201,168,76,0.22)',
-  borderGoldFocus: 'rgba(201,168,76,0.55)',
-};
+import { useTheme } from '@/context/ThemeContext';
+import { Palette } from '@/lib/theme';
 
 export default function SignIn() {
   const { signIn } = useAuth();
+  const { colors: C } = useTheme();
+  const styles = useMemo(() => makeStyles(C), [C]);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -42,8 +32,8 @@ export default function SignIn() {
         <Svg width="100%" height="100%">
           <Defs>
             <Pattern id="g" patternUnits="userSpaceOnUse" width={30} height={30}>
-              <Line x1="0" y1="0" x2="30" y2="0" stroke="rgba(41,82,204,0.06)" strokeWidth={1} />
-              <Line x1="0" y1="0" x2="0" y2="30" stroke="rgba(41,82,204,0.06)" strokeWidth={1} />
+              <Line x1="0" y1="0" x2="30" y2="0" stroke={C.gridLine} strokeWidth={1} />
+              <Line x1="0" y1="0" x2="0" y2="30" stroke={C.gridLine} strokeWidth={1} />
             </Pattern>
           </Defs>
           <Rect width="100%" height="100%" fill="url(#g)" />
@@ -91,11 +81,7 @@ export default function SignIn() {
               onFocus={() => setFocused('password')}
               onBlur={() => setFocused(null)}
             />
-            <Pressable
-              style={styles.eyeBtn}
-              onPress={() => setShowPassword((v) => !v)}
-              hitSlop={10}
-            >
+            <Pressable style={styles.eyeBtn} onPress={() => setShowPassword((v) => !v)} hitSlop={10}>
               <Svg width={18} height={18} viewBox="0 0 24 24" fill="none">
                 <Path
                   d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"
@@ -145,64 +131,66 @@ export default function SignIn() {
   );
 }
 
-const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: C.bg },
-  shell: { flex: 1, paddingHorizontal: 28, paddingTop: 24, paddingBottom: 32, alignItems: 'center', justifyContent: 'center' },
+function makeStyles(C: Palette) {
+  return StyleSheet.create({
+    root: { flex: 1, backgroundColor: C.bg },
+    shell: { flex: 1, paddingHorizontal: 28, paddingTop: 24, paddingBottom: 32, alignItems: 'center', justifyContent: 'center' },
 
-  corner: { position: 'absolute', width: 36, height: 36, borderColor: C.borderGold },
-  cornerTL: { top: 20, left: 20, borderTopWidth: 1, borderLeftWidth: 1 },
-  cornerTR: { top: 20, right: 20, borderTopWidth: 1, borderRightWidth: 1 },
-  cornerBL: { bottom: 20, left: 20, borderBottomWidth: 1, borderLeftWidth: 1 },
-  cornerBR: { bottom: 20, right: 20, borderBottomWidth: 1, borderRightWidth: 1 },
+    corner: { position: 'absolute', width: 36, height: 36, borderColor: C.borderGold },
+    cornerTL: { top: 20, left: 20, borderTopWidth: 1, borderLeftWidth: 1 },
+    cornerTR: { top: 20, right: 20, borderTopWidth: 1, borderRightWidth: 1 },
+    cornerBL: { bottom: 20, left: 20, borderBottomWidth: 1, borderLeftWidth: 1 },
+    cornerBR: { bottom: 20, right: 20, borderBottomWidth: 1, borderRightWidth: 1 },
 
-  brandRow: { alignItems: 'center', marginBottom: 24 },
-  logoMark: { fontFamily: 'BebasNeue_400Regular', fontSize: 32, letterSpacing: 6, color: C.accent },
+    brandRow: { alignItems: 'center', marginBottom: 24 },
+    logoMark: { fontFamily: 'BebasNeue_400Regular', fontSize: 32, letterSpacing: 6, color: C.accent },
 
-  card: {
-    width: '100%',
-    maxWidth: 360,
-    backgroundColor: C.surface,
-    borderWidth: 1,
-    borderColor: C.borderGold,
-    borderRadius: 20,
-    paddingHorizontal: 24,
-    paddingVertical: 28,
-  },
-  title: { fontFamily: 'BebasNeue_400Regular', fontSize: 32, letterSpacing: 4, color: C.white, textAlign: 'center' },
-  sub: { fontSize: 12, color: C.textDim, textAlign: 'center', marginTop: 4, fontFamily: 'DMSans_300Light' },
+    card: {
+      width: '100%',
+      maxWidth: 360,
+      backgroundColor: C.surface,
+      borderWidth: 1,
+      borderColor: C.borderGold,
+      borderRadius: 20,
+      paddingHorizontal: 24,
+      paddingVertical: 28,
+    },
+    title: { fontFamily: 'BebasNeue_400Regular', fontSize: 32, letterSpacing: 4, color: C.text, textAlign: 'center' },
+    sub: { fontSize: 12, color: C.textDim, textAlign: 'center', marginTop: 4, fontFamily: 'DMSans_300Light' },
 
-  label: { fontSize: 10, letterSpacing: 1.5, color: C.textDim, fontFamily: 'DMSans_500Medium', marginBottom: 6 },
-  input: {
-    backgroundColor: 'rgba(255,255,255,0.04)',
-    borderWidth: 1,
-    borderColor: C.borderMid,
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    fontSize: 14,
-    color: C.white,
-    fontFamily: 'DMSans_400Regular',
-  },
-  inputFocus: { borderColor: C.borderGoldFocus },
-  passwordWrap: { position: 'relative', justifyContent: 'center' },
-  passwordInput: { paddingRight: 44 },
-  eyeBtn: { position: 'absolute', right: 12, alignItems: 'center', justifyContent: 'center', padding: 4 },
+    label: { fontSize: 10, letterSpacing: 1.5, color: C.textDim, fontFamily: 'DMSans_500Medium', marginBottom: 6 },
+    input: {
+      backgroundColor: C.surface2,
+      borderWidth: 1,
+      borderColor: C.borderMid,
+      borderRadius: 10,
+      paddingHorizontal: 14,
+      paddingVertical: 12,
+      fontSize: 14,
+      color: C.text,
+      fontFamily: 'DMSans_400Regular',
+    },
+    inputFocus: { borderColor: C.borderGoldFocus },
+    passwordWrap: { position: 'relative', justifyContent: 'center' },
+    passwordInput: { paddingRight: 44 },
+    eyeBtn: { position: 'absolute', right: 12, alignItems: 'center', justifyContent: 'center', padding: 4 },
 
-  btn: {
-    marginTop: 24,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: C.royalBright,
-    borderWidth: 1,
-    borderColor: 'rgba(201,168,76,0.4)',
-    borderRadius: 30,
-    paddingVertical: 14,
-  },
-  btnText: { fontSize: 13, letterSpacing: 2, color: C.goldLight, fontFamily: 'DMSans_500Medium' },
-  btnArrow: { fontSize: 16, color: C.accent, fontFamily: 'DMSans_500Medium' },
+    btn: {
+      marginTop: 24,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: C.royalBright,
+      borderWidth: 1,
+      borderColor: 'rgba(201,168,76,0.4)',
+      borderRadius: 30,
+      paddingVertical: 14,
+    },
+    btnText: { fontSize: 13, letterSpacing: 2, color: C.goldLight, fontFamily: 'DMSans_500Medium' },
+    btnArrow: { fontSize: 16, color: C.accent, fontFamily: 'DMSans_500Medium' },
 
-  altText: { textAlign: 'center', fontSize: 12, color: C.textMid, fontFamily: 'DMSans_300Light' },
+    altText: { textAlign: 'center', fontSize: 12, color: C.textMid, fontFamily: 'DMSans_300Light' },
 
-  footer: { marginTop: 28, fontSize: 9, letterSpacing: 3, color: C.textDim, fontFamily: 'DMSans_500Medium' },
-});
+    footer: { marginTop: 28, fontSize: 9, letterSpacing: 3, color: C.textDim, fontFamily: 'DMSans_500Medium' },
+  });
+}

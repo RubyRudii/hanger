@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -15,27 +15,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
 import { deleteKit, Kit, listKits } from '@/api/kits';
 import { useAuth } from '@/context/AuthContext';
+import { useTheme } from '@/context/ThemeContext';
+import { Palette } from '@/lib/theme';
 
-const C = {
-  bg: '#050918',
-  surface: '#0B1530',
-  surface2: '#0F1C3A',
-  accent: '#C9A84C',
-  accentDim: 'rgba(201,168,76,0.13)',
-  accentRing: 'rgba(201,168,76,0.28)',
-  goldLight: '#F0D98A',
-  white: '#FFFFFF',
-  textMid: 'rgba(255,255,255,0.62)',
-  textDim: 'rgba(255,255,255,0.32)',
-  textFaint: 'rgba(255,255,255,0.18)',
-  border: 'rgba(255,255,255,0.06)',
-  borderMid: 'rgba(255,255,255,0.10)',
-  borderGold: 'rgba(201,168,76,0.22)',
-  royalBright: '#2952CC',
-  blueHud: '#7FA4FF',
-};
-
-function gradeColor(grade: string) {
+function gradeColor(grade: string, C: Palette) {
   const up = grade.toUpperCase();
   if (up === 'MG') return { color: C.accent, border: C.borderGold };
   if (up === 'RG') return { color: C.blueHud, border: 'rgba(41,82,204,0.4)' };
@@ -54,6 +37,8 @@ function timeAgoShort(iso: string) {
 
 export default function Hangar() {
   const { session } = useAuth();
+  const { colors: C } = useTheme();
+  const styles = useMemo(() => makeStyles(C), [C]);
   const [kits, setKits] = useState<Kit[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -110,8 +95,8 @@ export default function Hangar() {
         <Svg width="100%" height="100%">
           <Defs>
             <Pattern id="g" patternUnits="userSpaceOnUse" width={32} height={32}>
-              <Line x1="0" y1="0" x2="32" y2="0" stroke="rgba(41,82,204,0.05)" strokeWidth={1} />
-              <Line x1="0" y1="0" x2="0" y2="32" stroke="rgba(41,82,204,0.05)" strokeWidth={1} />
+              <Line x1="0" y1="0" x2="32" y2="0" stroke={C.gridLine} strokeWidth={1} />
+              <Line x1="0" y1="0" x2="0" y2="32" stroke={C.gridLine} strokeWidth={1} />
             </Pattern>
           </Defs>
           <Rect width="100%" height="100%" fill="url(#g)" />
@@ -197,7 +182,9 @@ export default function Hangar() {
 }
 
 function KitRow({ kit, onLongPress }: { kit: Kit; onLongPress: () => void }) {
-  const pip = gradeColor(kit.grade);
+  const { colors: C } = useTheme();
+  const styles = useMemo(() => makeStyles(C), [C]);
+  const pip = gradeColor(kit.grade, C);
   return (
     <Pressable style={styles.kitRow} onLongPress={onLongPress}>
       <View style={styles.kitThumb}>
@@ -224,63 +211,65 @@ function KitRow({ kit, onLongPress }: { kit: Kit; onLongPress: () => void }) {
   );
 }
 
-const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: C.bg },
-  loading: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+function makeStyles(C: Palette) {
+  return StyleSheet.create({
+    root: { flex: 1, backgroundColor: C.bg },
+    loading: { flex: 1, alignItems: 'center', justifyContent: 'center' },
 
-  header: {
-    paddingHorizontal: 20, paddingVertical: 14,
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    borderBottomWidth: 1, borderBottomColor: C.border,
-  },
-  headerTitle: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 3, color: C.white, lineHeight: 22 },
-  headerSub: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 10, letterSpacing: 1.5, color: C.textDim, marginTop: 3 },
-  addBtn: {
-    flexDirection: 'row', alignItems: 'center', gap: 6,
-    backgroundColor: 'rgba(41,82,204,0.4)',
-    borderWidth: 1, borderColor: C.borderGold,
-    borderRadius: 20, paddingHorizontal: 12, paddingVertical: 7,
-  },
-  addBtnText: { fontFamily: 'DMSans_500Medium', fontSize: 10, letterSpacing: 1.5, color: C.goldLight },
+    header: {
+      paddingHorizontal: 20, paddingVertical: 14,
+      flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+      borderBottomWidth: 1, borderBottomColor: C.border,
+    },
+    headerTitle: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 3, color: C.text, lineHeight: 22 },
+    headerSub: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 10, letterSpacing: 1.5, color: C.textDim, marginTop: 3 },
+    addBtn: {
+      flexDirection: 'row', alignItems: 'center', gap: 6,
+      backgroundColor: C.royalSoft,
+      borderWidth: 1, borderColor: C.borderGold,
+      borderRadius: 20, paddingHorizontal: 12, paddingVertical: 7,
+    },
+    addBtnText: { fontFamily: 'DMSans_500Medium', fontSize: 10, letterSpacing: 1.5, color: C.goldLight },
 
-  statsCard: {
-    marginTop: 16, marginBottom: 16,
-    backgroundColor: C.surface,
-    borderWidth: 1, borderColor: C.borderGold, borderRadius: 16,
-    paddingVertical: 14,
-    flexDirection: 'row', alignItems: 'center',
-    overflow: 'hidden', position: 'relative',
-  },
-  statsCardGlow: { position: 'absolute', top: -80, right: -60, width: 240, height: 240, borderRadius: 120, backgroundColor: 'rgba(201,168,76,0.08)' },
-  statCell: { flex: 1, alignItems: 'center' },
-  statDivider: { width: 1, height: 32, backgroundColor: C.border },
-  statNum: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 1, color: C.white, lineHeight: 22 },
-  statLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 8, letterSpacing: 1.5, color: C.textDim, marginTop: 5 },
+    statsCard: {
+      marginTop: 16, marginBottom: 16,
+      backgroundColor: C.surface,
+      borderWidth: 1, borderColor: C.borderGold, borderRadius: 16,
+      paddingVertical: 14,
+      flexDirection: 'row', alignItems: 'center',
+      overflow: 'hidden', position: 'relative',
+    },
+    statsCardGlow: { position: 'absolute', top: -80, right: -60, width: 240, height: 240, borderRadius: 120, backgroundColor: C.accentSoft },
+    statCell: { flex: 1, alignItems: 'center' },
+    statDivider: { width: 1, height: 32, backgroundColor: C.border },
+    statNum: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 1, color: C.text, lineHeight: 22 },
+    statLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 8, letterSpacing: 1.5, color: C.textDim, marginTop: 5 },
 
-  kitRow: {
-    backgroundColor: C.surface,
-    borderWidth: 1, borderColor: C.border, borderRadius: 14,
-    padding: 14,
-    flexDirection: 'row', alignItems: 'center', gap: 12,
-  },
-  kitThumb: {
-    width: 54, height: 54, borderRadius: 10,
-    backgroundColor: C.surface2,
-    borderWidth: 1, borderColor: C.borderMid,
-    alignItems: 'center', justifyContent: 'center',
-    overflow: 'hidden',
-  },
-  kitName: { fontSize: 14, color: C.white, fontFamily: 'DMSans_500Medium', marginBottom: 4 },
-  kitMetaRow: { flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap' },
-  kitGradePip: { paddingHorizontal: 6, paddingVertical: 2, borderWidth: 1, borderRadius: 3, backgroundColor: 'rgba(5,9,24,0.85)' },
-  kitGradePipText: { fontFamily: 'BebasNeue_400Regular', fontSize: 9, letterSpacing: 1 },
-  kitMeta: { fontSize: 11, color: C.textMid, fontFamily: 'DMSans_400Regular' },
-  kitMetaDim: { fontSize: 11, color: C.textDim, fontFamily: 'JetBrainsMono_400Regular' },
-  kitNotes: { fontSize: 11, color: C.textMid, fontFamily: 'DMSans_300Light', marginTop: 6, lineHeight: 16 },
+    kitRow: {
+      backgroundColor: C.surface,
+      borderWidth: 1, borderColor: C.border, borderRadius: 14,
+      padding: 14,
+      flexDirection: 'row', alignItems: 'center', gap: 12,
+    },
+    kitThumb: {
+      width: 54, height: 54, borderRadius: 10,
+      backgroundColor: C.surface2,
+      borderWidth: 1, borderColor: C.borderMid,
+      alignItems: 'center', justifyContent: 'center',
+      overflow: 'hidden',
+    },
+    kitName: { fontSize: 14, color: C.text, fontFamily: 'DMSans_500Medium', marginBottom: 4 },
+    kitMetaRow: { flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap' },
+    kitGradePip: { paddingHorizontal: 6, paddingVertical: 2, borderWidth: 1, borderRadius: 3, backgroundColor: C.bg },
+    kitGradePipText: { fontFamily: 'BebasNeue_400Regular', fontSize: 9, letterSpacing: 1 },
+    kitMeta: { fontSize: 11, color: C.textMid, fontFamily: 'DMSans_400Regular' },
+    kitMetaDim: { fontSize: 11, color: C.textDim, fontFamily: 'JetBrainsMono_400Regular' },
+    kitNotes: { fontSize: 11, color: C.textMid, fontFamily: 'DMSans_300Light', marginTop: 6, lineHeight: 16 },
 
-  empty: { paddingHorizontal: 32, paddingVertical: 50, alignItems: 'center', gap: 12 },
-  emptyTitle: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 3, color: C.textMid },
-  emptyText: { color: C.textDim, textAlign: 'center', fontFamily: 'DMSans_300Light', fontSize: 13, lineHeight: 21 },
-  cta: { backgroundColor: C.accent, paddingHorizontal: 18, paddingVertical: 10, borderRadius: 12, marginTop: 6 },
-  ctaText: { color: '#0A0F1E', fontFamily: 'DMSans_500Medium', fontSize: 12, letterSpacing: 1.5 },
-});
+    empty: { paddingHorizontal: 32, paddingVertical: 50, alignItems: 'center', gap: 12 },
+    emptyTitle: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 3, color: C.textMid },
+    emptyText: { color: C.textDim, textAlign: 'center', fontFamily: 'DMSans_300Light', fontSize: 13, lineHeight: 21 },
+    cta: { backgroundColor: C.accent, paddingHorizontal: 18, paddingVertical: 10, borderRadius: 12, marginTop: 6 },
+    ctaText: { color: C.onAccent, fontFamily: 'DMSans_500Medium', fontSize: 12, letterSpacing: 1.5 },
+  });
+}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -16,26 +16,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Defs, Line, Pattern, Rect } from 'react-native-svg';
 import { createKit, uploadKitPhoto } from '@/api/kits';
 import { useAuth } from '@/context/AuthContext';
-
-const C = {
-  bg: '#050918',
-  surface: '#0B1530',
-  surface2: '#0F1C3A',
-  accent: '#C9A84C',
-  accentRing: 'rgba(201,168,76,0.28)',
-  goldLight: '#F0D98A',
-  white: '#FFFFFF',
-  textMid: 'rgba(255,255,255,0.62)',
-  textDim: 'rgba(255,255,255,0.32)',
-  border: 'rgba(255,255,255,0.06)',
-  borderMid: 'rgba(255,255,255,0.10)',
-  borderGold: 'rgba(201,168,76,0.22)',
-};
+import { useTheme } from '@/context/ThemeContext';
+import { Palette } from '@/lib/theme';
 
 const GRADES = ['HG', 'MG', 'RG', 'PG', 'FM', 'SD', 'Other'];
 
 export default function AddKitModal() {
   const { session } = useAuth();
+  const { colors: C } = useTheme();
+  const styles = useMemo(() => makeStyles(C), [C]);
   const [name, setName] = useState('');
   const [grade, setGrade] = useState('MG');
   const [series, setSeries] = useState('');
@@ -89,8 +78,8 @@ export default function AddKitModal() {
         <Svg width="100%" height="100%">
           <Defs>
             <Pattern id="ga" patternUnits="userSpaceOnUse" width={32} height={32}>
-              <Line x1="0" y1="0" x2="32" y2="0" stroke="rgba(41,82,204,0.05)" strokeWidth={1} />
-              <Line x1="0" y1="0" x2="0" y2="32" stroke="rgba(41,82,204,0.05)" strokeWidth={1} />
+              <Line x1="0" y1="0" x2="32" y2="0" stroke={C.gridLine} strokeWidth={1} />
+              <Line x1="0" y1="0" x2="0" y2="32" stroke={C.gridLine} strokeWidth={1} />
             </Pattern>
           </Defs>
           <Rect width="100%" height="100%" fill="url(#ga)" />
@@ -166,34 +155,36 @@ export default function AddKitModal() {
   );
 }
 
-const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: C.bg },
-  header: {
-    paddingHorizontal: 20, paddingVertical: 14,
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    borderBottomWidth: 1, borderBottomColor: C.border,
-  },
-  cancel: { fontFamily: 'DMSans_500Medium', fontSize: 12, letterSpacing: 1.5, color: C.textMid },
-  saveLink: { fontFamily: 'DMSans_500Medium', fontSize: 12, letterSpacing: 1.5, color: C.accent },
-  title: { fontFamily: 'BebasNeue_400Regular', fontSize: 18, letterSpacing: 3, color: C.white },
-  sub: { fontFamily: 'DMSans_300Light', fontSize: 12, color: C.textDim, marginBottom: 16 },
+function makeStyles(C: Palette) {
+  return StyleSheet.create({
+    root: { flex: 1, backgroundColor: C.bg },
+    header: {
+      paddingHorizontal: 20, paddingVertical: 14,
+      flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+      borderBottomWidth: 1, borderBottomColor: C.border,
+    },
+    cancel: { fontFamily: 'DMSans_500Medium', fontSize: 12, letterSpacing: 1.5, color: C.textMid },
+    saveLink: { fontFamily: 'DMSans_500Medium', fontSize: 12, letterSpacing: 1.5, color: C.accent },
+    title: { fontFamily: 'BebasNeue_400Regular', fontSize: 18, letterSpacing: 3, color: C.text },
+    sub: { fontFamily: 'DMSans_300Light', fontSize: 12, color: C.textDim, marginBottom: 16 },
 
-  photoPicker: { width: '100%', height: 180, borderRadius: 14, overflow: 'hidden', marginBottom: 16, backgroundColor: C.surface2, borderWidth: 1, borderColor: C.borderMid, borderStyle: 'dashed' },
-  photoPreview: { width: '100%', height: '100%' },
-  photoPlaceholder: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 8 },
-  photoHint: { color: C.textDim, fontSize: 12, fontFamily: 'DMSans_300Light' },
+    photoPicker: { width: '100%', height: 180, borderRadius: 14, overflow: 'hidden', marginBottom: 16, backgroundColor: C.surface2, borderWidth: 1, borderColor: C.borderMid, borderStyle: 'dashed' },
+    photoPreview: { width: '100%', height: '100%' },
+    photoPlaceholder: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 8 },
+    photoHint: { color: C.textDim, fontSize: 12, fontFamily: 'DMSans_300Light' },
 
-  fieldLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 9, letterSpacing: 1.5, color: C.accent, marginBottom: 6, marginTop: 4 },
-  input: {
-    backgroundColor: C.surface,
-    borderWidth: 1, borderColor: C.borderMid, borderRadius: 10,
-    paddingHorizontal: 14, paddingVertical: 12,
-    fontSize: 13, color: C.white, fontFamily: 'DMSans_400Regular',
-    marginBottom: 12,
-  },
-  chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 12 },
-  chip: { paddingHorizontal: 14, paddingVertical: 8, borderWidth: 1, borderColor: C.borderMid, borderRadius: 10, backgroundColor: C.surface },
-  chipActive: { backgroundColor: C.accent, borderColor: C.accent },
-  chipText: { fontSize: 12, color: C.textMid, fontFamily: 'DMSans_500Medium' },
-  chipTextActive: { color: '#0A0F1E' },
-});
+    fieldLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 9, letterSpacing: 1.5, color: C.accent, marginBottom: 6, marginTop: 4 },
+    input: {
+      backgroundColor: C.surface,
+      borderWidth: 1, borderColor: C.borderMid, borderRadius: 10,
+      paddingHorizontal: 14, paddingVertical: 12,
+      fontSize: 13, color: C.text, fontFamily: 'DMSans_400Regular',
+      marginBottom: 12,
+    },
+    chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 12 },
+    chip: { paddingHorizontal: 14, paddingVertical: 8, borderWidth: 1, borderColor: C.borderMid, borderRadius: 10, backgroundColor: C.surface },
+    chipActive: { backgroundColor: C.accent, borderColor: C.accent },
+    chipText: { fontSize: 12, color: C.textMid, fontFamily: 'DMSans_500Medium' },
+    chipTextActive: { color: C.onAccent },
+  });
+}

@@ -8,10 +8,11 @@ import { JetBrainsMono_400Regular, JetBrainsMono_500Medium } from '@expo-google-
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
-import { colors } from '@/lib/theme';
+import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 
 function AuthGate() {
   const { session, loading } = useAuth();
+  const { colors: C } = useTheme();
   const segments = useSegments();
   const router = useRouter();
 
@@ -26,20 +27,34 @@ function AuthGate() {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.bg, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator color={colors.accent} />
+      <View style={{ flex: 1, backgroundColor: C.bg, alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator color={C.accent} />
       </View>
     );
   }
 
   return (
-    <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg } }}>
+    <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: C.bg } }}>
       <Stack.Screen name="index" />
       <Stack.Screen name="(auth)" />
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="build/[id]" options={{ presentation: 'card' }} />
       <Stack.Screen name="add-kit" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
     </Stack>
+  );
+}
+
+function ThemedShell() {
+  const { mode, colors: C } = useTheme();
+  return (
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor: C.bg }}>
+      <SafeAreaProvider>
+        <AuthProvider>
+          <StatusBar style={mode === 'light' ? 'dark' : 'light'} />
+          <AuthGate />
+        </AuthProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
 
@@ -62,20 +77,15 @@ export default function RootLayout() {
   const ready = fontsLoaded || !!fontError || fontTimeout;
   if (!ready) {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.bg, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator color={colors.accent} />
+      <View style={{ flex: 1, backgroundColor: '#050918', alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator color="#C9A84C" />
       </View>
     );
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1, backgroundColor: colors.bg }}>
-      <SafeAreaProvider>
-        <AuthProvider>
-          <StatusBar style="light" />
-          <AuthGate />
-        </AuthProvider>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <ThemeProvider>
+      <ThemedShell />
+    </ThemeProvider>
   );
 }
