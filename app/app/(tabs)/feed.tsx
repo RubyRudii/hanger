@@ -121,7 +121,6 @@ export default function Feed() {
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <Text style={styles.logo}>HANGER</Text>
-            <View style={styles.liveDot} />
           </View>
           <View style={styles.headerRight}>
             <Pressable style={styles.iconBtn}>

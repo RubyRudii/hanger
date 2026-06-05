@@ -7,7 +7,18 @@ type Profile = {
   handle: string | null;
   display_name: string | null;
   joined_year: number | null;
+  is_premium: boolean;
+  premium_until: string | null;
+  is_admin: boolean;
 };
+
+export function hasAccess(profile: Profile | null): boolean {
+  if (!profile) return false;
+  if (profile.is_admin) return true;
+  if (!profile.is_premium) return false;
+  if (!profile.premium_until) return true;
+  return new Date(profile.premium_until) > new Date();
+}
 
 type AuthState = {
   session: Session | null;

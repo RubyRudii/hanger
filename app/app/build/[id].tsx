@@ -237,10 +237,7 @@ export default function Debrief() {
         <ScrollView contentContainerStyle={{ paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
           {/* Classified banner */}
           <View style={styles.classified}>
-            <View style={styles.classifiedLeft}>
-              <View style={styles.classifiedDot} />
-              <Text style={styles.classifiedText}>OFFICIAL DEBRIEF</Text>
-            </View>
+            <Text style={styles.classifiedText}>OFFICIAL DEBRIEF</Text>
             <Text style={styles.classifiedId}>// PR-{build.id.slice(0, 8).toUpperCase()}</Text>
           </View>
 

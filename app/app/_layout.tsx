@@ -38,6 +38,7 @@ function AuthGate() {
       <Stack.Screen name="(auth)" />
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="build/[id]" options={{ presentation: 'card' }} />
+      <Stack.Screen name="add-kit" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
     </Stack>
   );
 }

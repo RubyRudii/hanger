@@ -19,7 +19,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Circle, Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
 import { createBuild, uploadPhoto } from '@/api/builds';
 import { judgeBuild } from '@/api/judge';
-import { useAuth } from '@/context/AuthContext';
+import { hasAccess, useAuth } from '@/context/AuthContext';
+import { Paywall } from '@/components/Paywall';
 
 const C = {
   bg: '#050918',
@@ -74,7 +75,13 @@ function today() {
   return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
 }
 
-export default function Judge() {
+export default function JudgeScreen() {
+  const { profile } = useAuth();
+  if (!hasAccess(profile)) return <Paywall />;
+  return <Judge />;
+}
+
+function Judge() {
   const { session, profile } = useAuth();
   const [photo, setPhoto] = useState<ImagePicker.ImagePickerAsset | null>(null);
   const [kitName, setKitName] = useState('');
@@ -229,10 +236,6 @@ export default function Judge() {
           <View style={{ flex: 1 }}>
             <Text style={styles.headerTitle}>PILOT REVIEW</Text>
             <Text style={styles.headerSub}>SUBMIT BUILD FOR EVALUATION</Text>
-          </View>
-          <View style={styles.headerStatus}>
-            <View style={styles.statusDot} />
-            <Text style={styles.headerStatusText}>ONLINE</Text>
           </View>
         </View>
 
