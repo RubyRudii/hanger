@@ -9,7 +9,7 @@ import { Palette } from '@/lib/theme';
 
 const TERMS_URL = 'https://rubyrudii.github.io/hanger/terms.html';
 const PRIVACY_URL = 'https://rubyrudii.github.io/hanger/privacy.html';
-const SUPPORT_EMAIL = 'support@hanger.app';
+const SUPPORT_EMAIL = 'hangerapp.support@gmail.com';
 
 const MANAGE_SUB_URL = Platform.select({
   ios: 'https://apps.apple.com/account/subscriptions',
