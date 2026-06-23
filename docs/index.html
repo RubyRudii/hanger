@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hanger — Legal</title>
+<style>
+  :root {
+    --bg: #050918;
+    --surface: #0B1530;
+    --accent: #C9A84C;
+    --gold-light: #F0D98A;
+    --royal: #2952CC;
+    --text-mid: rgba(255, 255, 255, 0.65);
+    --text-dim: rgba(255, 255, 255, 0.35);
+    --border: rgba(201, 168, 76, 0.22);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px 36px;
+    max-width: 440px;
+    width: 100%;
+    text-align: center;
+  }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    letter-spacing: 8px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .sub {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+  }
+  .links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .link {
+    display: block;
+    padding: 14px 20px;
+    background: var(--royal);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--gold-light);
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 2px;
+    font-size: 13px;
+    transition: opacity 0.15s;
+  }
+  .link:hover { opacity: 0.85; }
+  .footer {
+    margin-top: 32px;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">HANGER</div>
+    <div class="sub">GUNPLA BUILDER COMMUNITY</div>
+    <div class="links">
+      <a class="link" href="terms.html">TERMS OF USE</a>
+      <a class="link" href="privacy.html">PRIVACY POLICY</a>
+    </div>
+    <div class="footer">support@hanger.app</div>
+  </div>
+</body>
+</html>

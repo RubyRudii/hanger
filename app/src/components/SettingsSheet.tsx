@@ -7,8 +7,8 @@ import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
 import { Palette } from '@/lib/theme';
 
-const TERMS_URL = 'https://hanger.app/terms';
-const PRIVACY_URL = 'https://hanger.app/privacy';
+const TERMS_URL = 'https://rubyrudii.github.io/hanger/terms.html';
+const PRIVACY_URL = 'https://rubyrudii.github.io/hanger/privacy.html';
 const SUPPORT_EMAIL = 'support@hanger.app';
 
 const MANAGE_SUB_URL = Platform.select({
