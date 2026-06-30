@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, Alert, Linking, Modal, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Constants from 'expo-constants';
+import * as Sentry from '@sentry/react-native';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { deleteAccount } from '@/api/account';
 import { useAuth } from '@/context/AuthContext';
@@ -127,6 +128,16 @@ export function SettingsSheet({ visible, onClose }: { visible: boolean; onClose:
             <Row label="Privacy Policy" onPress={() => openExternal(PRIVACY_URL)} />
             <Row label="Contact support" onPress={() => openExternal(`mailto:${SUPPORT_EMAIL}`)} />
             <Row label="Version" caption={version} />
+            {__DEV__ ? (
+              <Row
+                label="Send test crash to Sentry"
+                caption="Dev only — verifies error reporting"
+                onPress={() => {
+                  Sentry.captureException(new Error('Manual Sentry test from Settings'));
+                  Alert.alert('Sent', 'Check your Sentry dashboard in a few seconds.');
+                }}
+              />
+            ) : null}
 
             <Text style={styles.sectionLabel}>// ACCOUNT</Text>
             <Pressable style={styles.signOutBtn} onPress={onSignOut}>

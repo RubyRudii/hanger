@@ -1,6 +1,8 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { Session } from '@supabase/supabase-js';
+import * as Sentry from '@sentry/react-native';
 import { supabase } from '@/lib/supabase';
+import { clearPushToken, registerPushToken } from '@/lib/notifications';
 
 export type Profile = {
   id: string;
@@ -55,8 +57,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
       setSession(s);
-      if (s?.user) loadProfile(s.user.id);
-      else setProfile(null);
+      if (s?.user) {
+        loadProfile(s.user.id);
+        // Fire-and-forget push token registration; failures are non-fatal.
+        registerPushToken(s.user.id).catch(() => {});
+        Sentry.setUser({ id: s.user.id });
+      } else {
+        setProfile(null);
+        Sentry.setUser(null);
+      }
     });
     return () => sub.subscription.unsubscribe();
   }, []);
@@ -77,6 +86,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function signOut() {
+    if (session?.user) {
+      await clearPushToken(session.user.id).catch(() => {});
+    }
     await supabase.auth.signOut();
   }
 

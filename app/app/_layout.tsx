@@ -7,8 +7,17 @@ import { DMSans_300Light, DMSans_400Regular, DMSans_500Medium } from '@expo-goog
 import { JetBrainsMono_400Regular, JetBrainsMono_500Medium } from '@expo-google-fonts/jetbrains-mono';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import * as Sentry from '@sentry/react-native';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { ThemeProvider, useTheme } from '@/context/ThemeContext';
+
+Sentry.init({
+  dsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
+  enabled: !!process.env.EXPO_PUBLIC_SENTRY_DSN,
+  debug: false,
+  tracesSampleRate: __DEV__ ? 1.0 : 0.2,
+  attachScreenshot: false,
+});
 
 function AuthGate() {
   const { session, loading } = useAuth();
@@ -59,7 +68,7 @@ function ThemedShell() {
   );
 }
 
-export default function RootLayout() {
+function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
     BebasNeue_400Regular,
     DMSans_300Light,
@@ -90,3 +99,5 @@ export default function RootLayout() {
     </ThemeProvider>
   );
 }
+
+export default Sentry.wrap(RootLayout);
