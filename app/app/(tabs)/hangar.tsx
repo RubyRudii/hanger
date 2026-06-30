@@ -200,8 +200,7 @@ function KitRow({ kit, onLongPress }: { kit: Kit; onLongPress: () => void }) {
           <View style={[styles.kitGradePip, { borderColor: pip.border }]}>
             <Text style={[styles.kitGradePipText, { color: pip.color }]}>{kit.grade.toUpperCase()}</Text>
           </View>
-          {kit.series ? <Text style={styles.kitMeta}>{kit.series}</Text> : null}
-          <Text style={styles.kitMetaDim}>· {timeAgoShort(kit.created_at)}</Text>
+<Text style={styles.kitMetaDim}>· {timeAgoShort(kit.created_at)}</Text>
         </View>
         {kit.notes ? (
           <Text style={styles.kitNotes} numberOfLines={2}>{kit.notes}</Text>

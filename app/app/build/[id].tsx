@@ -328,9 +328,9 @@ export default function Debrief() {
                   </Svg>
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.pilotName}>Captain R. Amada</Text>
+                  <Text style={styles.pilotName}>Captain N. Vega</Text>
                   <Text style={styles.pilotRank}>SENIOR PILOT · INSTRUCTOR</Text>
-                  <Text style={styles.pilotCallsign}>// CALLSIGN: WHITE DINGO</Text>
+                  <Text style={styles.pilotCallsign}>// CALLSIGN: NIGHT TIGER</Text>
                 </View>
               </View>
               <Text style={styles.debriefBody}>

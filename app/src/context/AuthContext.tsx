@@ -2,11 +2,13 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 import { Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 
-type Profile = {
+export type Profile = {
   id: string;
   handle: string | null;
   display_name: string | null;
   joined_year: number | null;
+  bio: string | null;
+  avatar_url: string | null;
   is_premium: boolean;
   premium_until: string | null;
   is_admin: boolean;

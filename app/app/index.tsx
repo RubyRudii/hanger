@@ -79,7 +79,7 @@ export default function Splash() {
       <SafeAreaView style={styles.page}>
         <Animated.View style={[styles.logoBlock, { opacity: logoOp, transform: [{ translateY: logoY }] }]}>
           <Text style={styles.logoText}>HANGER</Text>
-          <Text style={styles.logoSub}>GUNPLA BUILDER COMMUNITY</Text>
+          <Text style={styles.logoSub}>MECHA BUILDER COMMUNITY</Text>
         </Animated.View>
 
         <Animated.View style={[styles.taglineBlock, { opacity: taglineOp, transform: [{ translateY: taglineY }] }]}>
@@ -89,7 +89,7 @@ export default function Splash() {
           </Text>
           <Animated.View style={[styles.divider, { opacity: dividerOp }]} />
           <Text style={styles.taglineSub}>
-            The first community built for serious Gunpla builders.{'\n'}
+            The first community built for serious mech builders.{'\n'}
             AI scoring. Real feedback. Global rankings.
           </Text>
         </Animated.View>

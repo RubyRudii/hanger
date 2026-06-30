@@ -329,18 +329,6 @@ function Judge() {
               </View>
             </View>
 
-            <Field label="SERIES / TIMELINE" focused={focused === 'series'}>
-              <TextInput
-                style={[styles.input, focused === 'series' && styles.inputFocus]}
-                placeholder="e.g. Universal Century, Gundam Wing"
-                placeholderTextColor={C.textDim}
-                value={series}
-                onChangeText={setSeries}
-                onFocus={() => setFocused('series')}
-                onBlur={() => setFocused(null)}
-              />
-            </Field>
-
             <Field label="MODIFICATIONS APPLIED">
               <Pressable style={[styles.input, styles.selectInput]} onPress={() => setShowMods(true)}>
                 <Text style={styles.selectValue} numberOfLines={1}>{mods}</Text>

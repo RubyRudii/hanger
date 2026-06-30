@@ -25,7 +25,7 @@ const SLIDES: Slide[] = [
     titleA: 'Compete',
     titleAccent: 'world',
     titleB: 'with the',
-    body: 'Browse builds from Gunpla builders everywhere. Like, comment, and climb the weekly leaderboard. Your score is your rank — earn it.',
+    body: 'Browse builds from mech modelers everywhere. Like, comment, and climb the weekly leaderboard. Your score is your rank — earn it.',
     pills: ['Weekly rankings', 'Global feed', 'Builder profiles'],
     visual: 'community',
   },

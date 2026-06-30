@@ -15,6 +15,7 @@ import { router, useFocusEffect } from 'expo-router';
 import Svg, { Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { fetchFeed, fetchMyBuilds, fetchTopThisWeek } from '@/api/builds';
+import { fetchMyLikedBuildIds, likeBuild, unlikeBuild } from '@/api/likes';
 import { BuildSummary } from '@/components/BuildCard';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
@@ -50,18 +51,21 @@ export default function Feed() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [filter, setFilter] = useState<Filter>('ALL');
+  const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
 
   const load = useCallback(async () => {
     try {
-      const [f, t, mine] = await Promise.all([
+      const [f, t, mine, liked] = await Promise.all([
         fetchFeed(),
         fetchTopThisWeek(),
         session ? fetchMyBuilds(session.user.id) : Promise.resolve([]),
+        session ? fetchMyLikedBuildIds(session.user.id) : Promise.resolve(new Set<string>()),
       ]);
       setFeed(f);
       setChampion(t[0] ?? null);
       setMyCount(mine.length);
       setMyAvg(mine.length ? Math.round(mine.reduce((s, b) => s + b.score, 0) / mine.length) : 0);
+      setLikedIds(liked);
     } catch (e) {
       console.warn('feed load failed', e);
     } finally {
@@ -69,6 +73,32 @@ export default function Feed() {
       setRefreshing(false);
     }
   }, [session]);
+
+  async function onToggleLike(build: BuildSummary) {
+    if (!session) return;
+    const liked = likedIds.has(build.id);
+    // Optimistic update
+    setLikedIds((prev) => {
+      const next = new Set(prev);
+      if (liked) next.delete(build.id);
+      else next.add(build.id);
+      return next;
+    });
+    const bump = (target: BuildSummary | null) =>
+      target && target.id === build.id
+        ? { ...target, like_count: Math.max(0, target.like_count + (liked ? -1 : 1)) }
+        : target;
+    setFeed((prev) => prev.map((b) => bump(b) ?? b));
+    setChampion((prev) => bump(prev));
+    try {
+      if (liked) await unlikeBuild(session.user.id, build.id);
+      else await likeBuild(session.user.id, build.id);
+    } catch (e: any) {
+      // Roll back on error
+      console.warn('toggle like failed', e?.message ?? e);
+      load();
+    }
+  }
 
   useFocusEffect(
     useCallback(() => {
@@ -200,6 +230,12 @@ export default function Feed() {
                             <Text style={styles.featuredScore}>{champion.score}</Text>
                             <Text style={styles.featuredScoreLabel}>PILOT SCORE</Text>
                           </View>
+                          <Pressable hitSlop={6} onPress={() => onToggleLike(champion)} style={styles.likeBtn}>
+                            <Heart filled={likedIds.has(champion.id)} color={likedIds.has(champion.id) ? C.like : C.textMid} />
+                            <Text style={[styles.likeCount, likedIds.has(champion.id) && { color: C.like }]}>
+                              {champion.like_count}
+                            </Text>
+                          </Pressable>
                         </View>
                       </View>
                     </Pressable>
@@ -239,7 +275,14 @@ export default function Feed() {
                 </View>
               </View>
             }
-            renderItem={({ item, index }) => <FeedCard build={item} index={index} />}
+            renderItem={({ item, index }) => (
+              <FeedCard
+                build={item}
+                index={index}
+                liked={likedIds.has(item.id)}
+                onToggleLike={() => onToggleLike(item)}
+              />
+            )}
             ListEmptyComponent={
               <View style={styles.emptyWrap}>
                 <Text style={styles.emptyText}>
@@ -254,22 +297,58 @@ export default function Feed() {
   );
 }
 
-function FeedCard({ build, index }: { build: BuildSummary; index: number }) {
+function FeedCard({
+  build,
+  index,
+  liked,
+  onToggleLike,
+}: {
+  build: BuildSummary;
+  index: number;
+  liked: boolean;
+  onToggleLike: () => void;
+}) {
   const { colors: C } = useTheme();
   const styles = useMemo(() => makeStyles(C), [C]);
   const op = useRef(new Animated.Value(0)).current;
   const ty = useRef(new Animated.Value(12)).current;
+  const lastTap = useRef(0);
+  const pulse = useRef(new Animated.Value(0)).current;
+
   useEffect(() => {
     Animated.parallel([
       Animated.timing(op, { toValue: 1, duration: 360, delay: 50 * index, useNativeDriver: true }),
       Animated.timing(ty, { toValue: 0, duration: 360, delay: 50 * index, useNativeDriver: true }),
     ]).start();
   }, []);
+
+  function handlePress() {
+    const now = Date.now();
+    if (now - lastTap.current < 280) {
+      // Double tap → like (Instagram-style: only adds a like, never unlikes)
+      lastTap.current = 0;
+      if (!liked) {
+        onToggleLike();
+      }
+      pulse.setValue(0);
+      Animated.sequence([
+        Animated.timing(pulse, { toValue: 1, duration: 180, useNativeDriver: true }),
+        Animated.timing(pulse, { toValue: 0, duration: 420, delay: 100, useNativeDriver: true }),
+      ]).start();
+    } else {
+      lastTap.current = now;
+      setTimeout(() => {
+        if (lastTap.current === now) router.push(`/build/${build.id}`);
+      }, 280);
+    }
+  }
+
   const pip = gradePipColor(build.grade, C);
+  const pulseScale = pulse.interpolate({ inputRange: [0, 1], outputRange: [0.4, 1.2] });
 
   return (
     <Animated.View style={{ opacity: op, transform: [{ translateY: ty }], paddingHorizontal: 20 }}>
-      <Pressable style={styles.feedCard} onPress={() => router.push(`/build/${build.id}`)}>
+      <Pressable style={styles.feedCard} onPress={handlePress}>
         <View style={styles.feedImg}>
           {build.photo_url ? (
             <Image source={{ uri: build.photo_url }} style={{ width: '100%', height: '100%' }} />
@@ -279,6 +358,12 @@ function FeedCard({ build, index }: { build: BuildSummary; index: number }) {
           <View style={[styles.gradePip, { borderColor: pip.border }]}>
             <Text style={[styles.gradePipText, { color: pip.color }]}>{build.grade.toUpperCase()}</Text>
           </View>
+          <Animated.View
+            pointerEvents="none"
+            style={[styles.heartPulse, { opacity: pulse, transform: [{ scale: pulseScale }] }]}
+          >
+            <Heart filled color={C.like} size={36} />
+          </Animated.View>
         </View>
         <View style={styles.feedInfo}>
           <Text style={styles.feedName} numberOfLines={1}>
@@ -289,6 +374,12 @@ function FeedCard({ build, index }: { build: BuildSummary; index: number }) {
             <View style={styles.metaDot} />
             <Text style={{ color: C.textDim, fontSize: 11 }}>{timeAgo(build.created_at)}</Text>
           </View>
+          <View style={styles.feedLikeRow}>
+            <Pressable hitSlop={6} onPress={onToggleLike} style={styles.likeBtn}>
+              <Heart filled={liked} color={liked ? C.like : C.textDim} />
+              <Text style={[styles.likeCount, liked && { color: C.like }]}>{build.like_count}</Text>
+            </Pressable>
+          </View>
         </View>
         <View style={styles.feedRight}>
           <Text style={styles.feedScore}>{build.score}</Text>
@@ -296,6 +387,20 @@ function FeedCard({ build, index }: { build: BuildSummary; index: number }) {
       </Pressable>
       <View style={{ height: 10 }} />
     </Animated.View>
+  );
+}
+
+function Heart({ filled, color, size = 20 }: { filled: boolean; color: string; size?: number }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 16 16">
+      <Path
+        d="M8 14s-5.5-3.5-5.5-7.5C2.5 4.5 4 3 6 3c1.2 0 2.2.6 2.5 1 .3-.4 1.3-1 2.5-1 2 0 3.5 1.5 3.5 3.5C13.5 10.5 8 14 8 14z"
+        fill={filled ? color : 'none'}
+        stroke={color}
+        strokeWidth={1.4}
+        strokeLinejoin="round"
+      />
+    </Svg>
   );
 }
 
@@ -417,6 +522,13 @@ function makeStyles(C: Palette) {
     metaDot: { width: 2, height: 2, borderRadius: 1, backgroundColor: C.textFaint },
     feedRight: { alignItems: 'flex-end' },
     feedScore: { fontFamily: 'BebasNeue_400Regular', fontSize: 24, color: C.accent, letterSpacing: 1, lineHeight: 24 },
+    feedLikeRow: { flexDirection: 'row', marginTop: 6 },
+    likeBtn: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 2, paddingRight: 6 },
+    likeCount: { fontSize: 12, color: C.textDim, fontFamily: 'JetBrainsMono_400Regular' },
+    heartPulse: {
+      position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+      alignItems: 'center', justifyContent: 'center',
+    },
 
     emptyWrap: { padding: 40, alignItems: 'center' },
     emptyText: { color: C.textDim, textAlign: 'center', fontFamily: 'DMSans_300Light', fontSize: 13, lineHeight: 20 },

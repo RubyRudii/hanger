@@ -6,4 +6,5 @@ export type BuildSummary = {
   score: number;
   created_at: string;
   builder_handle: string | null;
+  like_count: number;
 };

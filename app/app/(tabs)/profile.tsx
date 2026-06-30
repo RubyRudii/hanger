@@ -116,12 +116,14 @@ export default function Profile() {
         <View style={styles.header}>
           <Text style={styles.headerTitle}>PILOT PROFILE</Text>
           <View style={styles.headerActions}>
-            <Pressable style={styles.iconBtn}>
-              <Svg width={14} height={14} viewBox="0 0 14 14">
-                <Circle cx={11} cy={3} r={2} stroke={C.textMid} strokeWidth={1.2} />
-                <Circle cx={3} cy={7} r={2} stroke={C.textMid} strokeWidth={1.2} />
-                <Circle cx={11} cy={11} r={2} stroke={C.textMid} strokeWidth={1.2} />
-                <Path d="M4.5 6L9.5 4M4.5 8L9.5 10" stroke={C.textMid} strokeWidth={1.2} />
+            <Pressable style={styles.iconBtn} onPress={() => router.push('/edit-profile')}>
+              <Svg width={14} height={14} viewBox="0 0 14 14" fill="none">
+                <Path
+                  d="M9 2.5L11.5 5L4 12.5H1.5V10L9 2.5Z"
+                  stroke={C.textMid}
+                  strokeWidth={1.3}
+                  strokeLinejoin="round"
+                />
               </Svg>
             </Pressable>
             <Pressable style={styles.iconBtn} onPress={() => setSettingsOpen(true)}>
@@ -161,15 +163,19 @@ export default function Profile() {
               </View>
 
               <View style={styles.pilotRow}>
-                <View style={styles.avatarWrap}>
+                <Pressable style={styles.avatarWrap} onPress={() => router.push('/edit-profile')}>
                   <View style={styles.avatarRing} />
                   <View style={styles.avatar}>
-                    <Text style={styles.avatarText}>{initials}</Text>
+                    {profile?.avatar_url ? (
+                      <Image source={{ uri: profile.avatar_url }} style={styles.avatarImg} />
+                    ) : (
+                      <Text style={styles.avatarText}>{initials}</Text>
+                    )}
                     <View style={styles.rankBadge}>
                       <Text style={styles.rankBadgeText}>{rank.short}</Text>
                     </View>
                   </View>
-                </View>
+                </Pressable>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.pilotName}>{profile?.display_name ?? profile?.handle ?? 'Builder'}</Text>
                   <Text style={styles.pilotCallsign}>// @{profile?.handle ?? 'unknown'}</Text>
@@ -182,12 +188,15 @@ export default function Profile() {
                 </View>
               </View>
 
-              <View style={styles.bio}>
-                <Text style={styles.bioText}>
-                  Joined <Text style={{ color: C.goldLight }}>{yearJoined}</Text>. {kits} kits filed, avg score{' '}
-                  <Text style={{ color: C.goldLight }}>{avg || '—'}</Text>. Logged for active duty.
-                </Text>
-              </View>
+              <Pressable style={styles.bio} onPress={() => router.push('/edit-profile')}>
+                {profile?.bio ? (
+                  <Text style={styles.bioText}>{profile.bio}</Text>
+                ) : (
+                  <Text style={[styles.bioText, { fontStyle: 'italic', color: C.textDim }]}>
+                    Add a bio — tell builders what you specialize in.
+                  </Text>
+                )}
+              </Pressable>
 
               <View style={styles.statsRow}>
                 <View style={styles.statCell}>
@@ -446,6 +455,7 @@ function makeStyles(C: Palette) {
       alignItems: 'center', justifyContent: 'center',
       position: 'relative',
     },
+    avatarImg: { width: '100%', height: '100%' },
     avatarText: { fontFamily: 'BebasNeue_400Regular', fontSize: 30, letterSpacing: 2, color: C.goldLight },
     rankBadge: {
       position: 'absolute', bottom: -6, right: -8,

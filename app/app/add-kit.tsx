@@ -131,15 +131,6 @@ export default function AddKitModal() {
             ))}
           </View>
 
-          <Text style={styles.fieldLabel}>▸ SERIES (optional)</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="e.g. Universal Century, 0083"
-            placeholderTextColor={C.textDim}
-            value={series}
-            onChangeText={setSeries}
-          />
-
           <Text style={styles.fieldLabel}>▸ NOTES (optional)</Text>
           <TextInput
             style={[styles.input, { height: 90, textAlignVertical: 'top' }]}
