@@ -11,6 +11,7 @@ export type Profile = {
   joined_year: number | null;
   bio: string | null;
   avatar_url: string | null;
+  push_enabled: boolean;
   is_premium: boolean;
   premium_until: string | null;
   is_admin: boolean;

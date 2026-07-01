@@ -5,11 +5,14 @@ import {
   Animated,
   Easing,
   Image,
+  KeyboardAvoidingView,
+  Platform,
   Pressable,
   ScrollView,
   Share,
   StyleSheet,
   Text,
+  TextInput,
   View,
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -25,8 +28,21 @@ import Svg, {
   Stop,
 } from 'react-native-svg';
 import { DbBuild, fetchBuild, fetchMyBuilds } from '@/api/builds';
+import { addComment, Comment, deleteComment, fetchComments } from '@/api/comments';
+import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
 import { Palette } from '@/lib/theme';
+
+const COMMENT_LIMIT = 500;
+
+function timeAgo(iso: string) {
+  const d = (Date.now() - new Date(iso).getTime()) / 1000;
+  if (d < 60) return 'just now';
+  if (d < 3600) return `${Math.floor(d / 60)}m ago`;
+  if (d < 86400) return `${Math.floor(d / 3600)}h ago`;
+  if (d < 604800) return `${Math.floor(d / 86400)}d ago`;
+  return `${Math.floor(d / 604800)}w ago`;
+}
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -61,12 +77,17 @@ function ymdhm(iso: string) {
 
 export default function Debrief() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { session } = useAuth();
   const { colors: C } = useTheme();
   const styles = useMemo(() => makeStyles(C), [C]);
   const [build, setBuild] = useState<DbBuild | null>(null);
   const [prevScore, setPrevScore] = useState<number | null>(null);
   const [totalXp, setTotalXp] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [commentText, setCommentText] = useState('');
+  const [posting, setPosting] = useState(false);
+  const scrollRef = useRef<ScrollView | null>(null);
 
   // Animated values
   const ringFill = useRef(new Animated.Value(0)).current;
@@ -85,12 +106,13 @@ export default function Debrief() {
         const b = await fetchBuild(id);
         setBuild(b);
         if (b) {
-          const mine = await fetchMyBuilds(b.user_id);
+          const [mine, cs] = await Promise.all([fetchMyBuilds(b.user_id), fetchComments(b.id)]);
           const earlier = mine
             .filter((m) => m.id !== b.id && new Date(m.created_at) < new Date(b.created_at))
             .sort((a, z) => +new Date(z.created_at) - +new Date(a.created_at));
           setPrevScore(earlier[0]?.score ?? null);
           setTotalXp(mine.reduce((s, m) => s + m.score * 10, 0));
+          setComments(cs);
         }
       } catch (e) {
         console.warn('build load failed', e);
@@ -99,6 +121,41 @@ export default function Debrief() {
       }
     })();
   }, [id]);
+
+  async function onPostComment() {
+    if (!session || !build) return;
+    const text = commentText.trim();
+    if (!text) return;
+    setPosting(true);
+    try {
+      const created = await addComment(session.user.id, build.id, text);
+      setComments((prev) => [...prev, created]);
+      setCommentText('');
+    } catch (e: any) {
+      Alert.alert('Could not post', e?.message ?? 'Something went wrong.');
+    } finally {
+      setPosting(false);
+    }
+  }
+
+  function onLongPressComment(c: Comment) {
+    if (!session || c.user_id !== session.user.id) return;
+    Alert.alert('Delete comment?', c.body.length > 60 ? c.body.slice(0, 60) + '…' : c.body, [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await deleteComment(c.id);
+            setComments((prev) => prev.filter((x) => x.id !== c.id));
+          } catch (e: any) {
+            Alert.alert('Failed', e?.message ?? 'Could not delete.');
+          }
+        },
+      },
+    ]);
+  }
 
   useEffect(() => {
     if (!build) return;
@@ -217,7 +274,14 @@ export default function Debrief() {
           </Pressable>
         </View>
 
-        <ScrollView contentContainerStyle={{ paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          ref={scrollRef}
+          contentContainerStyle={{ paddingBottom: 40 }}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive"
+          automaticallyAdjustKeyboardInsets
+        >
           {/* Classified banner */}
           <View style={styles.classified}>
             <Text style={styles.classifiedText}>OFFICIAL DEBRIEF</Text>
@@ -386,6 +450,89 @@ export default function Debrief() {
                 </Text>
               </View>
             </View>
+          </View>
+
+          {/* Comments */}
+          <View style={styles.section}>
+            <View style={styles.eyebrowRow}>
+              <View style={styles.eyebrowDash} />
+              <Text style={styles.sectionEyebrow}>
+                COMMENTS {comments.length > 0 ? `· ${comments.length}` : ''}
+              </Text>
+            </View>
+
+            {comments.length === 0 ? (
+              <Text style={styles.commentsEmpty}>
+                No comments yet — be the first.
+              </Text>
+            ) : (
+              <View style={styles.commentsList}>
+                {comments.map((c) => {
+                  const mine = session?.user.id === c.user_id;
+                  return (
+                    <Pressable
+                      key={c.id}
+                      onLongPress={() => onLongPressComment(c)}
+                      style={styles.commentRow}
+                    >
+                      <View style={styles.commentAvatar}>
+                        {c.author_avatar ? (
+                          <Image source={{ uri: c.author_avatar }} style={styles.commentAvatarImg} />
+                        ) : (
+                          <Text style={styles.commentAvatarInitials}>
+                            {(c.author_handle ?? '?').slice(0, 2).toUpperCase()}
+                          </Text>
+                        )}
+                      </View>
+                      <View style={{ flex: 1 }}>
+                        <View style={styles.commentMeta}>
+                          <Text style={styles.commentHandle}>
+                            @{c.author_handle ?? 'unknown'}
+                          </Text>
+                          <Text style={styles.commentTime}>· {timeAgo(c.created_at)}</Text>
+                          {mine ? <Text style={styles.commentMine}>· you</Text> : null}
+                        </View>
+                        <Text style={styles.commentBody}>{c.body}</Text>
+                      </View>
+                    </Pressable>
+                  );
+                })}
+              </View>
+            )}
+
+            {session ? (
+              <View style={styles.commentInputRow}>
+                <TextInput
+                  style={styles.commentInput}
+                  placeholder="Add a comment…"
+                  placeholderTextColor={C.textDim}
+                  value={commentText}
+                  onChangeText={setCommentText}
+                  maxLength={COMMENT_LIMIT}
+                  multiline
+                  onFocus={() => {
+                    setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 150);
+                  }}
+                />
+                <Pressable
+                  onPress={onPostComment}
+                  disabled={posting || !commentText.trim()}
+                  style={({ pressed }) => [
+                    styles.commentPostBtn,
+                    (!commentText.trim() || posting) && { opacity: 0.4 },
+                    pressed && { opacity: 0.75 },
+                  ]}
+                >
+                  {posting ? (
+                    <ActivityIndicator color={C.onAccent} size="small" />
+                  ) : (
+                    <Text style={styles.commentPostText}>POST</Text>
+                  )}
+                </Pressable>
+              </View>
+            ) : (
+              <Text style={styles.commentsEmpty}>Sign in to comment.</Text>
+            )}
           </View>
 
           {/* Actions */}
@@ -637,5 +784,43 @@ function makeStyles(C: Palette) {
     borderWidth: 1, borderColor: C.borderGold, borderRadius: 30, paddingVertical: 14, paddingHorizontal: 20,
   },
   btnRebuildText: { fontFamily: 'DMSans_500Medium', fontSize: 12, letterSpacing: 2, color: C.goldLight },
+
+  commentsEmpty: { fontSize: 12, color: C.textDim, fontFamily: 'DMSans_300Light', paddingVertical: 12 },
+  commentsList: { gap: 12, marginBottom: 12 },
+  commentRow: { flexDirection: 'row', gap: 10, paddingVertical: 8 },
+  commentAvatar: {
+    width: 32, height: 32, borderRadius: 16,
+    backgroundColor: C.royalBright,
+    borderWidth: 1, borderColor: C.accentRing,
+    alignItems: 'center', justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  commentAvatarImg: { width: '100%', height: '100%' },
+  commentAvatarInitials: { fontFamily: 'BebasNeue_400Regular', fontSize: 12, letterSpacing: 1, color: C.goldLight },
+  commentMeta: { flexDirection: 'row', alignItems: 'baseline', gap: 4, marginBottom: 2 },
+  commentHandle: { fontSize: 12, color: C.accent, fontFamily: 'DMSans_500Medium' },
+  commentTime: { fontSize: 10, color: C.textDim, fontFamily: 'JetBrainsMono_400Regular' },
+  commentMine: { fontSize: 10, color: C.textDim, fontFamily: 'JetBrainsMono_400Regular' },
+  commentBody: { fontSize: 13, color: C.textMid, lineHeight: 19, fontFamily: 'DMSans_300Light' },
+
+  commentInputRow: {
+    flexDirection: 'row', alignItems: 'flex-end', gap: 8,
+    marginTop: 8,
+    backgroundColor: C.surface,
+    borderWidth: 1, borderColor: C.borderMid, borderRadius: 12,
+    padding: 8,
+  },
+  commentInput: {
+    flex: 1, minHeight: 32, maxHeight: 120,
+    color: C.text, fontFamily: 'DMSans_400Regular', fontSize: 13,
+    paddingHorizontal: 6, paddingVertical: 6,
+  },
+  commentPostBtn: {
+    paddingHorizontal: 14, paddingVertical: 8,
+    backgroundColor: C.accent, borderRadius: 8,
+    alignItems: 'center', justifyContent: 'center',
+    minWidth: 60,
+  },
+  commentPostText: { fontFamily: 'DMSans_500Medium', fontSize: 11, letterSpacing: 1.5, color: C.onAccent },
   });
 }

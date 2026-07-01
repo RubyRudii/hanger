@@ -19,6 +19,7 @@ const CORS = {
 
 type Input =
   | { kind: 'like'; build_id: string }
+  | { kind: 'comment'; build_id: string; body: string }
   | { kind: 'raw'; recipient_id: string; title: string; body: string; data?: Record<string, unknown> };
 
 function jsonResponse(body: unknown, status = 200) {
@@ -100,6 +101,41 @@ Deno.serve(async (req) => {
       'New like on your build',
       `@${handle} liked ${build.kit_name}`,
       { kind: 'like', build_id: build.id },
+    );
+    return jsonResponse({ ok: true });
+  }
+
+  if (input.kind === 'comment') {
+    const { data: build, error: bErr } = await admin
+      .from('builds')
+      .select('id, user_id, kit_name')
+      .eq('id', input.build_id)
+      .maybeSingle();
+    if (bErr || !build) return jsonResponse({ error: 'build not found' }, 404);
+    if (build.user_id === actorId) return jsonResponse({ ok: true, skipped: 'self' });
+
+    const { data: owner } = await admin
+      .from('profiles')
+      .select('push_token, push_enabled')
+      .eq('id', build.user_id)
+      .maybeSingle();
+    if (!owner?.push_enabled || !owner.push_token) {
+      return jsonResponse({ ok: true, skipped: 'no token' });
+    }
+
+    const { data: actor } = await admin
+      .from('profiles')
+      .select('handle')
+      .eq('id', actorId)
+      .maybeSingle();
+    const handle = actor?.handle ?? 'someone';
+
+    const snippet = (input.body ?? '').slice(0, 120);
+    await sendExpoPush(
+      owner.push_token,
+      `@${handle} commented on ${build.kit_name}`,
+      snippet,
+      { kind: 'comment', build_id: build.id },
     );
     return jsonResponse({ ok: true });
   }

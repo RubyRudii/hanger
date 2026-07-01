@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, Linking, Modal, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator, Alert, Linking, Modal, Platform, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import Constants from 'expo-constants';
 import * as Sentry from '@sentry/react-native';
 import Svg, { Circle, Path } from 'react-native-svg';
@@ -7,6 +7,7 @@ import { deleteAccount } from '@/api/account';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
 import { Palette } from '@/lib/theme';
+import { supabase } from '@/lib/supabase';
 
 const TERMS_URL = 'https://rubyrudii.github.io/hanger/terms.html';
 const PRIVACY_URL = 'https://rubyrudii.github.io/hanger/privacy.html';
@@ -20,9 +21,29 @@ const MANAGE_SUB_URL = Platform.select({
 
 export function SettingsSheet({ visible, onClose }: { visible: boolean; onClose: () => void }) {
   const { mode, setMode, colors: C } = useTheme();
-  const { signOut } = useAuth();
+  const { signOut, profile, refreshProfile } = useAuth();
   const styles = useMemo(() => makeStyles(C), [C]);
   const [deleting, setDeleting] = useState(false);
+  const [pushOn, setPushOn] = useState(profile?.push_enabled ?? true);
+
+  useEffect(() => {
+    setPushOn(profile?.push_enabled ?? true);
+  }, [profile?.push_enabled]);
+
+  async function togglePush(next: boolean) {
+    if (!profile) return;
+    setPushOn(next);
+    const { error } = await supabase
+      .from('profiles')
+      .update({ push_enabled: next })
+      .eq('id', profile.id);
+    if (error) {
+      setPushOn(!next);
+      Alert.alert('Could not save', error.message);
+    } else {
+      refreshProfile().catch(() => {});
+    }
+  }
 
   const version = (Constants.expoConfig?.version as string | undefined) ?? '0.1.0';
 
@@ -119,6 +140,21 @@ export function SettingsSheet({ visible, onClose }: { visible: boolean; onClose:
               </Pressable>
             </View>
 
+            <Text style={styles.sectionLabel}>// NOTIFICATIONS</Text>
+            <View style={styles.switchRow}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.rowLabel}>Push notifications</Text>
+                <Text style={styles.rowCaption}>Likes, comments, and weekly leaderboard pings</Text>
+              </View>
+              <Switch
+                value={pushOn}
+                onValueChange={togglePush}
+                trackColor={{ false: C.borderMid, true: C.accent }}
+                thumbColor={C.surface}
+                ios_backgroundColor={C.borderMid}
+              />
+            </View>
+
             <Text style={styles.sectionLabel}>// SUBSCRIPTION</Text>
             <Row label="Manage subscription" caption="Opens your store account" onPress={onManageSub} />
             <Row label="Restore purchases" caption="Re-sync an existing subscription" onPress={onRestorePurchases} />
@@ -187,6 +223,11 @@ function makeStyles(C: Palette) {
     title: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 3, color: C.accent, marginBottom: 12 },
 
     sectionLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 9, letterSpacing: 1.5, color: C.textDim, marginTop: 18, marginBottom: 10 },
+    switchRow: {
+      flexDirection: 'row', alignItems: 'center', gap: 12,
+      paddingVertical: 12, paddingHorizontal: 4,
+      borderBottomWidth: 1, borderBottomColor: C.border,
+    },
     toggleRow: { flexDirection: 'row', gap: 8, backgroundColor: C.surface2, borderRadius: 14, padding: 4, borderWidth: 1, borderColor: C.borderMid },
     toggleOption: {
       flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
