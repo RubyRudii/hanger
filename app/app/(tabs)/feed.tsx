@@ -397,7 +397,7 @@ function FeedCard({
               <Text style={styles.feedUser}>{build.builder_handle ? `@${build.builder_handle}` : 'Anonymous'}</Text>
             </Pressable>
             <View style={styles.metaDot} />
-            <Text style={{ color: C.textDim, fontSize: 11 }}>{timeAgo(build.created_at)}</Text>
+            <Text style={{ color: C.textDim, fontSize: 13 }}>{timeAgo(build.created_at)}</Text>
           </View>
           <View style={styles.feedLikeRow}>
             <Pressable hitSlop={6} onPress={onToggleLike} style={styles.likeBtn}>
@@ -459,7 +459,7 @@ function makeStyles(C: Palette) {
       borderWidth: 1.5, borderColor: C.accentRing,
       alignItems: 'center', justifyContent: 'center',
     },
-    avatarText: { fontFamily: 'BebasNeue_400Regular', fontSize: 13, letterSpacing: 1, color: C.goldLight },
+    avatarText: { fontFamily: 'BebasNeue_400Regular', fontSize: 15, letterSpacing: 1, color: C.goldLight },
 
     statsStrip: {
       flexDirection: 'row',
@@ -468,12 +468,12 @@ function makeStyles(C: Palette) {
     },
     statCell: { flex: 1, paddingVertical: 14, paddingHorizontal: 12, backgroundColor: C.bg, alignItems: 'center' },
     statNum: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 1.5, color: C.text, lineHeight: 22 },
-    statLabel: { fontSize: 9, letterSpacing: 2, color: C.textDim, marginTop: 4, fontFamily: 'DMSans_500Medium' },
+    statLabel: { fontSize: 11, letterSpacing: 2, color: C.textDim, marginTop: 4, fontFamily: 'DMSans_500Medium' },
 
     section: { paddingHorizontal: 20, paddingTop: 24 },
     sectionHead: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 14 },
-    sectionTitle: { fontSize: 11, letterSpacing: 3, color: C.textMid, fontFamily: 'DMSans_500Medium' },
-    sectionMore: { fontSize: 11, letterSpacing: 1.5, color: C.accent, fontFamily: 'DMSans_500Medium' },
+    sectionTitle: { fontSize: 13, letterSpacing: 3, color: C.textMid, fontFamily: 'DMSans_500Medium' },
+    sectionMore: { fontSize: 13, letterSpacing: 1.5, color: C.accent, fontFamily: 'DMSans_500Medium' },
 
     featured: {
       backgroundColor: C.surface,
@@ -496,7 +496,7 @@ function makeStyles(C: Palette) {
       paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20,
       zIndex: 1,
     },
-    crownBadgeText: { fontFamily: 'BebasNeue_400Regular', fontSize: 10, letterSpacing: 1.5, color: C.goldLight },
+    crownBadgeText: { fontFamily: 'BebasNeue_400Regular', fontSize: 12, letterSpacing: 1.5, color: C.goldLight },
     featuredRank: { fontFamily: 'BebasNeue_400Regular', fontSize: 52, color: C.accentDim, width: 44, lineHeight: 52 },
     featuredImg: {
       width: 72, height: 72, borderRadius: 14,
@@ -506,18 +506,18 @@ function makeStyles(C: Palette) {
       overflow: 'hidden',
     },
     featuredInfo: { flex: 1, minWidth: 0, paddingRight: 60 },
-    featuredName: { fontSize: 15, color: C.text, fontFamily: 'DMSans_500Medium', marginBottom: 4 },
-    featuredMeta: { fontSize: 11, color: C.textDim, marginBottom: 8, fontFamily: 'DMSans_300Light' },
+    featuredName: { fontSize: 17, color: C.text, fontFamily: 'DMSans_500Medium', marginBottom: 4 },
+    featuredMeta: { fontSize: 13, color: C.textDim, marginBottom: 8, fontFamily: 'DMSans_300Light' },
     featuredBottom: { flexDirection: 'row', alignItems: 'center', gap: 12 },
     featuredScore: { fontFamily: 'BebasNeue_400Regular', fontSize: 28, color: C.accent, letterSpacing: 1.5, lineHeight: 28 },
-    featuredScoreLabel: { fontSize: 8, letterSpacing: 1.5, color: C.textDim, marginTop: 2, fontFamily: 'DMSans_500Medium' },
+    featuredScoreLabel: { fontSize: 11, letterSpacing: 1.5, color: C.textDim, marginTop: 2, fontFamily: 'DMSans_500Medium' },
 
     filterPill: {
       paddingHorizontal: 14, paddingVertical: 6, borderRadius: 20,
       borderWidth: 1, borderColor: C.borderMid,
     },
     filterPillActive: { backgroundColor: C.accent, borderColor: C.accent },
-    filterPillText: { fontSize: 11, color: C.textMid, fontFamily: 'DMSans_500Medium', letterSpacing: 1 },
+    filterPillText: { fontSize: 13, color: C.textMid, fontFamily: 'DMSans_500Medium', letterSpacing: 1 },
     filterPillTextActive: { color: C.onAccent },
 
     feedCard: {
@@ -539,23 +539,23 @@ function makeStyles(C: Palette) {
       borderRadius: 4, borderWidth: 1,
       backgroundColor: C.bg,
     },
-    gradePipText: { fontFamily: 'BebasNeue_400Regular', fontSize: 9, letterSpacing: 1 },
+    gradePipText: { fontFamily: 'BebasNeue_400Regular', fontSize: 11, letterSpacing: 1 },
     feedInfo: { flex: 1, minWidth: 0 },
-    feedName: { fontSize: 14, color: C.text, fontFamily: 'DMSans_500Medium', marginBottom: 3 },
+    feedName: { fontSize: 16, color: C.text, fontFamily: 'DMSans_500Medium', marginBottom: 3 },
     feedMeta: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-    feedUser: { color: C.textMid, fontSize: 11, fontFamily: 'DMSans_400Regular' },
+    feedUser: { color: C.textMid, fontSize: 13, fontFamily: 'DMSans_400Regular' },
     metaDot: { width: 2, height: 2, borderRadius: 1, backgroundColor: C.textFaint },
     feedRight: { alignItems: 'flex-end' },
     feedScore: { fontFamily: 'BebasNeue_400Regular', fontSize: 24, color: C.accent, letterSpacing: 1, lineHeight: 24 },
     feedLikeRow: { flexDirection: 'row', marginTop: 6 },
     likeBtn: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 2, paddingRight: 6 },
-    likeCount: { fontSize: 12, color: C.textDim, fontFamily: 'JetBrainsMono_400Regular' },
+    likeCount: { fontSize: 14, color: C.textDim, fontFamily: 'JetBrainsMono_400Regular' },
     heartPulse: {
       position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
       alignItems: 'center', justifyContent: 'center',
     },
 
     emptyWrap: { padding: 40, alignItems: 'center' },
-    emptyText: { color: C.textDim, textAlign: 'center', fontFamily: 'DMSans_300Light', fontSize: 13, lineHeight: 20 },
+    emptyText: { color: C.textDim, textAlign: 'center', fontFamily: 'DMSans_300Light', fontSize: 15, lineHeight: 20 },
   });
 }

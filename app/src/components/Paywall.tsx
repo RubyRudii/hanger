@@ -57,14 +57,14 @@ export function Paywall({ onClose }: { onClose?: () => void }) {
           </View>
         </View>
 
-        <Text style={styles.eyebrow}>// PILOT'S COMMISSION</Text>
+        <Text style={styles.eyebrow}>PILOT'S COMMISSION</Text>
         <Text style={styles.title}>UNLOCK FULL{'\n'}OPERATIONS</Text>
         <Text style={styles.sub}>
           Hangar logging is free forever. Judge submissions and community feed posting require a pilot's commission.
         </Text>
 
         <View style={styles.trialBanner}>
-          <Text style={styles.trialEyebrow}>// LIMITED-TIME</Text>
+          <Text style={styles.trialEyebrow}>LIMITED-TIME</Text>
           <Text style={styles.trialTitle}>7 DAYS FREE</Text>
           <Text style={styles.trialBody}>Try Judge and the community feed. Cancel anytime before day 7 — no charge.</Text>
         </View>
@@ -124,9 +124,9 @@ function makeStyles(C: Palette) {
       alignItems: 'center', justifyContent: 'center',
     },
 
-    eyebrow: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 10, letterSpacing: 2, color: C.accent, textAlign: 'center', marginTop: 18 },
+    eyebrow: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 12, letterSpacing: 2, color: C.accent, textAlign: 'center', marginTop: 18 },
     title: { fontFamily: 'BebasNeue_400Regular', fontSize: 40, letterSpacing: 2, color: C.text, textAlign: 'center', lineHeight: 42, marginTop: 6 },
-    sub: { fontFamily: 'DMSans_300Light', fontSize: 13, color: C.textMid, textAlign: 'center', lineHeight: 20, marginTop: 14, paddingHorizontal: 8 },
+    sub: { fontFamily: 'DMSans_300Light', fontSize: 15, color: C.textMid, textAlign: 'center', lineHeight: 20, marginTop: 14, paddingHorizontal: 8 },
 
     trialBanner: {
       marginTop: 22,
@@ -137,9 +137,9 @@ function makeStyles(C: Palette) {
       padding: 16,
       alignItems: 'center',
     },
-    trialEyebrow: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 9, letterSpacing: 2, color: C.accent, marginBottom: 4 },
+    trialEyebrow: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, letterSpacing: 2, color: C.accent, marginBottom: 4 },
     trialTitle: { fontFamily: 'BebasNeue_400Regular', fontSize: 26, letterSpacing: 3, color: C.goldLight, marginBottom: 6 },
-    trialBody: { fontFamily: 'DMSans_300Light', fontSize: 12, color: C.textMid, textAlign: 'center', lineHeight: 18 },
+    trialBody: { fontFamily: 'DMSans_300Light', fontSize: 14, color: C.textMid, textAlign: 'center', lineHeight: 18 },
 
     benefits: { marginTop: 24, gap: 12 },
     benefit: {
@@ -149,8 +149,8 @@ function makeStyles(C: Palette) {
       padding: 14,
     },
     benefitIcon: { fontSize: 26 },
-    benefitTitle: { fontFamily: 'DMSans_500Medium', fontSize: 13, color: C.text, marginBottom: 2 },
-    benefitBody: { fontFamily: 'DMSans_300Light', fontSize: 11, color: C.textMid, lineHeight: 16 },
+    benefitTitle: { fontFamily: 'DMSans_500Medium', fontSize: 15, color: C.text, marginBottom: 2 },
+    benefitBody: { fontFamily: 'DMSans_300Light', fontSize: 13, color: C.textMid, lineHeight: 16 },
 
     plans: { flexDirection: 'row', gap: 10, marginTop: 24 },
     plan: {
@@ -161,11 +161,11 @@ function makeStyles(C: Palette) {
     },
     planHighlight: { borderColor: C.accent, backgroundColor: C.surface2 },
     planBadge: { position: 'absolute', top: -10, alignSelf: 'center', backgroundColor: C.accent, paddingHorizontal: 10, paddingVertical: 3, borderRadius: 12 },
-    planBadgeText: { fontFamily: 'BebasNeue_400Regular', fontSize: 10, letterSpacing: 1.5, color: C.onAccent },
-    planName: { fontFamily: 'BebasNeue_400Regular', fontSize: 14, letterSpacing: 2.5, color: C.text, marginBottom: 8 },
+    planBadgeText: { fontFamily: 'BebasNeue_400Regular', fontSize: 12, letterSpacing: 1.5, color: C.onAccent },
+    planName: { fontFamily: 'BebasNeue_400Regular', fontSize: 16, letterSpacing: 2.5, color: C.text, marginBottom: 8 },
     planPrice: { fontFamily: 'BebasNeue_400Regular', fontSize: 28, letterSpacing: 1, color: C.text, lineHeight: 28 },
-    planSub: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 10, color: C.textDim, marginTop: 6, textAlign: 'center' },
+    planSub: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 12, color: C.textDim, marginTop: 6, textAlign: 'center' },
 
-    legal: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 9, color: C.textDim, textAlign: 'center', marginTop: 24, lineHeight: 14 },
+    legal: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 11, color: C.textDim, textAlign: 'center', marginTop: 24, lineHeight: 14 },
   });
 }

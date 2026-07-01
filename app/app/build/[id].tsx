@@ -285,7 +285,7 @@ export default function Debrief() {
           {/* Classified banner */}
           <View style={styles.classified}>
             <Text style={styles.classifiedText}>OFFICIAL DEBRIEF</Text>
-            <Text style={styles.classifiedId}>// PR-{build.id.slice(0, 8).toUpperCase()}</Text>
+            <Text style={styles.classifiedId}>PR-{build.id.slice(0, 8).toUpperCase()}</Text>
           </View>
 
           {/* Hero */}
@@ -342,7 +342,7 @@ export default function Debrief() {
               </View>
 
               <View style={styles.scoreSummary}>
-                <Text style={styles.scoreSummaryLabel}>// ASSESSMENT</Text>
+                <Text style={styles.scoreSummaryLabel}>ASSESSMENT</Text>
                 <Text style={styles.scoreSummaryText}>{a.text}</Text>
                 {diff !== null ? (
                   <View style={styles.scoreRank}>
@@ -394,7 +394,7 @@ export default function Debrief() {
                 <View style={{ flex: 1 }}>
                   <Text style={styles.pilotName}>Captain N. Vega</Text>
                   <Text style={styles.pilotRank}>SENIOR PILOT · INSTRUCTOR</Text>
-                  <Text style={styles.pilotCallsign}>// CALLSIGN: NIGHT TIGER</Text>
+                  <Text style={styles.pilotCallsign}>CALLSIGN: NIGHT TIGER</Text>
                 </View>
               </View>
               <Text style={styles.debriefBody}>
@@ -402,7 +402,7 @@ export default function Debrief() {
                 {build.verdict}
               </Text>
               <View style={styles.signOff}>
-                <Text style={styles.signOffText}>// FILED {ymdhm(build.created_at)}</Text>
+                <Text style={styles.signOffText}>FILED {ymdhm(build.created_at)}</Text>
                 <Text style={styles.signOffText}>SIGNED</Text>
               </View>
             </View>
@@ -441,7 +441,7 @@ export default function Debrief() {
                 </Svg>
               </View>
               <View style={{ flex: 1 }}>
-                <Text style={styles.xpLabel}>// PILOT XP EARNED</Text>
+                <Text style={styles.xpLabel}>PILOT XP EARNED</Text>
                 <Text style={styles.xpAmount}>+ {xpEarned} XP</Text>
                 <Text style={styles.xpDetail}>
                   Rank: <Text style={{ color: C.goldLight, fontFamily: 'DMSans_500Medium' }}>{rank}</Text>
@@ -654,7 +654,7 @@ function renderCatIcon(kind: 'lines' | 'check' | 'star' | 'wave' | 'bigstar', C:
 function makeStyles(C: Palette) {
   return StyleSheet.create({
     root: { flex: 1, backgroundColor: C.bg },
-  notFound: { color: C.textDim, fontFamily: 'DMSans_300Light', fontSize: 13 },
+  notFound: { color: C.textDim, fontFamily: 'DMSans_300Light', fontSize: 15 },
 
   header: {
     paddingHorizontal: 20, paddingVertical: 14,
@@ -667,7 +667,7 @@ function makeStyles(C: Palette) {
     alignItems: 'center', justifyContent: 'center',
   },
   headerTitle: { fontFamily: 'BebasNeue_400Regular', fontSize: 18, letterSpacing: 3, color: C.text },
-  headerSub: { fontSize: 10, letterSpacing: 1.5, color: C.textDim, marginTop: 3, fontFamily: 'DMSans_500Medium' },
+  headerSub: { fontSize: 12, letterSpacing: 1.5, color: C.textDim, marginTop: 3, fontFamily: 'DMSans_500Medium' },
 
   classified: {
     marginHorizontal: 20, marginTop: 16,
@@ -678,8 +678,8 @@ function makeStyles(C: Palette) {
   },
   classifiedLeft: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   classifiedDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: C.greenHud },
-  classifiedText: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 10, letterSpacing: 2, color: C.greenHud },
-  classifiedId: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 10, letterSpacing: 1, color: C.textDim },
+  classifiedText: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 12, letterSpacing: 2, color: C.greenHud },
+  classifiedId: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 12, letterSpacing: 1, color: C.textDim },
 
   hero: {
     marginHorizontal: 20, marginTop: 14,
@@ -691,13 +691,13 @@ function makeStyles(C: Palette) {
   heroGlow: { position: 'absolute', top: -100, right: -60, width: 280, height: 280, borderRadius: 140, backgroundColor: 'rgba(201,168,76,0.10)' },
   heroTop: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16 },
   kitName: { fontSize: 17, color: C.text, fontFamily: 'DMSans_500Medium', marginBottom: 4 },
-  kitMeta: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 10, letterSpacing: 1.5, color: C.textDim },
+  kitMeta: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 12, letterSpacing: 1.5, color: C.textDim },
   verdictStamp: {
     backgroundColor: C.accent,
     paddingHorizontal: 12, paddingVertical: 5, borderRadius: 4,
     borderWidth: 1.5, borderColor: C.onAccent,
   },
-  verdictStampText: { fontFamily: 'BebasNeue_400Regular', fontSize: 11, letterSpacing: 2, color: C.onAccent },
+  verdictStampText: { fontFamily: 'BebasNeue_400Regular', fontSize: 13, letterSpacing: 2, color: C.onAccent },
 
   heroPhotoWrap: { width: '100%', height: 180, borderRadius: 12, overflow: 'hidden', marginBottom: 16, backgroundColor: C.surface2 },
   heroPhoto: { width: '100%', height: '100%' },
@@ -706,19 +706,19 @@ function makeStyles(C: Palette) {
   scoreCircleWrap: { width: 140, height: 140 },
   scoreNumWrap: { position: 'absolute', inset: 0, alignItems: 'center', justifyContent: 'center' },
   scoreBig: { fontFamily: 'BebasNeue_400Regular', fontSize: 52, color: C.goldLight, lineHeight: 52 },
-  scoreOutOf: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 10, color: C.textDim, letterSpacing: 1 },
-  gradeLetter: { fontFamily: 'BebasNeue_400Regular', fontSize: 11, letterSpacing: 1.5, color: C.accent, marginTop: 4 },
+  scoreOutOf: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 12, color: C.textDim, letterSpacing: 1 },
+  gradeLetter: { fontFamily: 'BebasNeue_400Regular', fontSize: 13, letterSpacing: 1.5, color: C.accent, marginTop: 4 },
   scoreSummary: { flex: 1, minWidth: 0 },
-  scoreSummaryLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 9, letterSpacing: 1.5, color: C.accent, marginBottom: 8 },
+  scoreSummaryLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, letterSpacing: 1.5, color: C.accent, marginBottom: 8 },
   scoreSummaryText: { fontFamily: 'BebasNeue_400Regular', fontSize: 26, letterSpacing: 1, color: C.text, lineHeight: 28, marginBottom: 8 },
   scoreRank: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  rankDelta: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 10 },
-  rankVs: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 10, color: C.textMid, letterSpacing: 0.5 },
+  rankDelta: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 12 },
+  rankVs: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 12, color: C.textMid, letterSpacing: 0.5 },
 
   section: { paddingHorizontal: 20, paddingTop: 22 },
   eyebrowRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 12 },
   eyebrowDash: { width: 14, height: 1, backgroundColor: C.accent },
-  sectionEyebrow: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 10, letterSpacing: 2, color: C.accent },
+  sectionEyebrow: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 12, letterSpacing: 2, color: C.accent },
 
   breakdown: { backgroundColor: C.surface, borderWidth: 1, borderColor: C.border, borderRadius: 14, padding: 16 },
   catRow: {
@@ -727,7 +727,7 @@ function makeStyles(C: Palette) {
     borderBottomWidth: 1, borderBottomColor: C.border, borderStyle: 'dashed',
   },
   catIcon: { width: 28, height: 28, borderRadius: 8, backgroundColor: C.surface2, borderWidth: 1, borderColor: C.borderMid, alignItems: 'center', justifyContent: 'center' },
-  catName: { fontSize: 12, color: C.text, fontFamily: 'DMSans_500Medium', marginBottom: 4 },
+  catName: { fontSize: 14, color: C.text, fontFamily: 'DMSans_500Medium', marginBottom: 4 },
   catTrack: { width: '100%', height: 4, backgroundColor: C.border, borderRadius: 2, overflow: 'hidden' },
   catFill: { height: '100%', backgroundColor: C.accent, borderRadius: 2 },
   catScore: { fontFamily: 'BebasNeue_400Regular', fontSize: 18, color: C.accent, letterSpacing: 1, width: 32, textAlign: 'right' },
@@ -749,24 +749,24 @@ function makeStyles(C: Palette) {
     borderWidth: 1.5, borderColor: C.accent,
     alignItems: 'center', justifyContent: 'center',
   },
-  pilotName: { fontSize: 13, color: C.text, fontFamily: 'DMSans_500Medium' },
-  pilotRank: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 9, letterSpacing: 1.5, color: C.accent, marginTop: 2 },
-  pilotCallsign: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 9, color: C.textDim, letterSpacing: 0.5, marginTop: 1 },
-  debriefBody: { fontSize: 13, color: C.textMid, lineHeight: 22, fontFamily: 'DMSans_300Light', fontStyle: 'italic' },
+  pilotName: { fontSize: 15, color: C.text, fontFamily: 'DMSans_500Medium' },
+  pilotRank: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, letterSpacing: 1.5, color: C.accent, marginTop: 2 },
+  pilotCallsign: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 11, color: C.textDim, letterSpacing: 0.5, marginTop: 1 },
+  debriefBody: { fontSize: 15, color: C.textMid, lineHeight: 22, fontFamily: 'DMSans_300Light', fontStyle: 'italic' },
   quoteMark: { fontFamily: 'BebasNeue_400Regular', fontSize: 24, color: C.accentRing },
   signOff: {
     marginTop: 14, paddingTop: 12,
     borderTopWidth: 1, borderTopColor: C.border, borderStyle: 'dashed',
     flexDirection: 'row', justifyContent: 'space-between',
   },
-  signOffText: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 9, letterSpacing: 1, color: C.textDim },
+  signOffText: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 11, letterSpacing: 1, color: C.textDim },
 
   tipsGrid: { flexDirection: 'row', gap: 10 },
   tipCard: { flex: 1, backgroundColor: C.surface, borderWidth: 1, borderRadius: 12, padding: 14 },
   tipEyebrow: { flexDirection: 'row', alignItems: 'center', gap: 5, marginBottom: 8 },
-  tipIcon: { fontSize: 11, fontFamily: 'DMSans_500Medium' },
-  tipEyebrowText: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 9, letterSpacing: 1.5 },
-  tipText: { fontSize: 12, color: C.textMid, lineHeight: 18, fontFamily: 'DMSans_300Light' },
+  tipIcon: { fontSize: 13, fontFamily: 'DMSans_500Medium' },
+  tipEyebrowText: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, letterSpacing: 1.5 },
+  tipText: { fontSize: 14, color: C.textMid, lineHeight: 18, fontFamily: 'DMSans_300Light' },
 
   xpCard: {
     backgroundColor: C.royalSoft,
@@ -780,23 +780,23 @@ function makeStyles(C: Palette) {
     borderWidth: 1.5, borderColor: C.accent,
     alignItems: 'center', justifyContent: 'center',
   },
-  xpLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 9, letterSpacing: 1.5, color: C.accent, marginBottom: 2 },
+  xpLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, letterSpacing: 1.5, color: C.accent, marginBottom: 2 },
   xpAmount: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, color: C.goldLight, lineHeight: 22, letterSpacing: 1.5, marginBottom: 2 },
-  xpDetail: { fontSize: 11, color: C.textMid, fontFamily: 'DMSans_300Light' },
+  xpDetail: { fontSize: 13, color: C.textMid, fontFamily: 'DMSans_300Light' },
 
   actions: { paddingHorizontal: 20, paddingTop: 24, flexDirection: 'row', gap: 10 },
   btnShare: {
     flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
     backgroundColor: C.accent, borderRadius: 30, paddingVertical: 14, paddingHorizontal: 20,
   },
-  btnShareText: { fontFamily: 'DMSans_500Medium', fontSize: 12, letterSpacing: 2, color: C.onAccent },
+  btnShareText: { fontFamily: 'DMSans_500Medium', fontSize: 14, letterSpacing: 2, color: C.onAccent },
   btnRebuild: {
     flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
     borderWidth: 1, borderColor: C.borderGold, borderRadius: 30, paddingVertical: 14, paddingHorizontal: 20,
   },
-  btnRebuildText: { fontFamily: 'DMSans_500Medium', fontSize: 12, letterSpacing: 2, color: C.goldLight },
+  btnRebuildText: { fontFamily: 'DMSans_500Medium', fontSize: 14, letterSpacing: 2, color: C.goldLight },
 
-  commentsEmpty: { fontSize: 13, color: C.textDim, fontFamily: 'DMSans_300Light', paddingVertical: 14 },
+  commentsEmpty: { fontSize: 15, color: C.textDim, fontFamily: 'DMSans_300Light', paddingVertical: 14 },
   commentsList: { gap: 14, marginBottom: 14 },
   commentRow: { flexDirection: 'row', gap: 12, paddingVertical: 10 },
   commentAvatar: {
@@ -807,12 +807,12 @@ function makeStyles(C: Palette) {
     overflow: 'hidden',
   },
   commentAvatarImg: { width: '100%', height: '100%' },
-  commentAvatarInitials: { fontFamily: 'BebasNeue_400Regular', fontSize: 15, letterSpacing: 1, color: C.goldLight },
+  commentAvatarInitials: { fontFamily: 'BebasNeue_400Regular', fontSize: 17, letterSpacing: 1, color: C.goldLight },
   commentMeta: { flexDirection: 'row', alignItems: 'baseline', gap: 5, marginBottom: 3 },
-  commentHandle: { fontSize: 14, color: C.accent, fontFamily: 'DMSans_500Medium' },
-  commentTime: { fontSize: 11, color: C.textDim, fontFamily: 'JetBrainsMono_400Regular' },
-  commentMine: { fontSize: 11, color: C.textDim, fontFamily: 'JetBrainsMono_400Regular' },
-  commentBody: { fontSize: 14, color: C.textMid, lineHeight: 21, fontFamily: 'DMSans_300Light' },
+  commentHandle: { fontSize: 16, color: C.accent, fontFamily: 'DMSans_500Medium' },
+  commentTime: { fontSize: 13, color: C.textDim, fontFamily: 'JetBrainsMono_400Regular' },
+  commentMine: { fontSize: 13, color: C.textDim, fontFamily: 'JetBrainsMono_400Regular' },
+  commentBody: { fontSize: 16, color: C.textMid, lineHeight: 21, fontFamily: 'DMSans_300Light' },
 
   commentInputRow: {
     flexDirection: 'row', alignItems: 'flex-end', gap: 8,
@@ -823,7 +823,7 @@ function makeStyles(C: Palette) {
   },
   commentInput: {
     flex: 1, minHeight: 32, maxHeight: 120,
-    color: C.text, fontFamily: 'DMSans_400Regular', fontSize: 13,
+    color: C.text, fontFamily: 'DMSans_400Regular', fontSize: 15,
     paddingHorizontal: 6, paddingVertical: 6,
   },
   commentPostBtn: {
@@ -832,6 +832,6 @@ function makeStyles(C: Palette) {
     alignItems: 'center', justifyContent: 'center',
     minWidth: 60,
   },
-  commentPostText: { fontFamily: 'DMSans_500Medium', fontSize: 11, letterSpacing: 1.5, color: C.onAccent },
+  commentPostText: { fontFamily: 'DMSans_500Medium', fontSize: 13, letterSpacing: 1.5, color: C.onAccent },
   });
 }

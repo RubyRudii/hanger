@@ -102,7 +102,7 @@ export function SettingsSheet({ visible, onClose }: { visible: boolean; onClose:
           <Text style={styles.title}>SETTINGS</Text>
 
           <ScrollView style={{ maxHeight: 540 }} contentContainerStyle={{ paddingBottom: 4 }}>
-            <Text style={styles.sectionLabel}>// THEME</Text>
+            <Text style={styles.sectionLabel}>THEME</Text>
             <View style={styles.toggleRow}>
               <Pressable
                 style={[styles.toggleOption, mode === 'light' && styles.toggleOptionActive]}
@@ -140,7 +140,7 @@ export function SettingsSheet({ visible, onClose }: { visible: boolean; onClose:
               </Pressable>
             </View>
 
-            <Text style={styles.sectionLabel}>// NOTIFICATIONS</Text>
+            <Text style={styles.sectionLabel}>NOTIFICATIONS</Text>
             <View style={styles.switchRow}>
               <View style={{ flex: 1 }}>
                 <Text style={styles.rowLabel}>Push notifications</Text>
@@ -155,11 +155,11 @@ export function SettingsSheet({ visible, onClose }: { visible: boolean; onClose:
               />
             </View>
 
-            <Text style={styles.sectionLabel}>// SUBSCRIPTION</Text>
+            <Text style={styles.sectionLabel}>SUBSCRIPTION</Text>
             <Row label="Manage subscription" caption="Opens your store account" onPress={onManageSub} />
             <Row label="Restore purchases" caption="Re-sync an existing subscription" onPress={onRestorePurchases} />
 
-            <Text style={styles.sectionLabel}>// ABOUT</Text>
+            <Text style={styles.sectionLabel}>ABOUT</Text>
             <Row label="Terms of Use" onPress={() => openExternal(TERMS_URL)} />
             <Row label="Privacy Policy" onPress={() => openExternal(PRIVACY_URL)} />
             <Row label="Contact support" onPress={() => openExternal(`mailto:${SUPPORT_EMAIL}`)} />
@@ -175,7 +175,7 @@ export function SettingsSheet({ visible, onClose }: { visible: boolean; onClose:
               />
             ) : null}
 
-            <Text style={styles.sectionLabel}>// ACCOUNT</Text>
+            <Text style={styles.sectionLabel}>ACCOUNT</Text>
             <Pressable style={styles.signOutBtn} onPress={onSignOut}>
               <Text style={styles.signOutText}>SIGN OUT</Text>
             </Pressable>
@@ -222,7 +222,7 @@ function makeStyles(C: Palette) {
     handle: { width: 40, height: 4, borderRadius: 2, backgroundColor: C.borderMid, alignSelf: 'center', marginBottom: 16 },
     title: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 3, color: C.accent, marginBottom: 12 },
 
-    sectionLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 9, letterSpacing: 1.5, color: C.textDim, marginTop: 18, marginBottom: 10 },
+    sectionLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, letterSpacing: 1.5, color: C.textDim, marginTop: 18, marginBottom: 10 },
     switchRow: {
       flexDirection: 'row', alignItems: 'center', gap: 12,
       paddingVertical: 12, paddingHorizontal: 4,
@@ -234,7 +234,7 @@ function makeStyles(C: Palette) {
       paddingVertical: 12, borderRadius: 10,
     },
     toggleOptionActive: { backgroundColor: C.accent },
-    toggleText: { fontFamily: 'DMSans_500Medium', fontSize: 12, letterSpacing: 2, color: C.textMid },
+    toggleText: { fontFamily: 'DMSans_500Medium', fontSize: 14, letterSpacing: 2, color: C.textMid },
     toggleTextActive: { color: C.onAccent },
 
     row: {
@@ -243,8 +243,8 @@ function makeStyles(C: Palette) {
       borderWidth: 1, borderColor: C.border, borderRadius: 12,
       backgroundColor: C.surface2, marginBottom: 6,
     },
-    rowLabel: { fontFamily: 'DMSans_500Medium', fontSize: 13, color: C.text, letterSpacing: 0.3 },
-    rowCaption: { fontFamily: 'DMSans_300Light', fontSize: 11, color: C.textDim, marginTop: 2 },
+    rowLabel: { fontFamily: 'DMSans_500Medium', fontSize: 15, color: C.text, letterSpacing: 0.3 },
+    rowCaption: { fontFamily: 'DMSans_300Light', fontSize: 13, color: C.textDim, marginTop: 2 },
     rowChev: { fontFamily: 'DMSans_500Medium', fontSize: 18, color: C.textDim, marginLeft: 8 },
 
     signOutBtn: {
@@ -252,15 +252,15 @@ function makeStyles(C: Palette) {
       paddingVertical: 13, alignItems: 'center',
       marginBottom: 8,
     },
-    signOutText: { fontFamily: 'DMSans_500Medium', fontSize: 12, letterSpacing: 2, color: C.textMid },
+    signOutText: { fontFamily: 'DMSans_500Medium', fontSize: 14, letterSpacing: 2, color: C.textMid },
     deleteBtn: {
       borderWidth: 1, borderColor: C.redHud, borderRadius: 14,
       paddingVertical: 13, alignItems: 'center',
     },
-    deleteText: { fontFamily: 'DMSans_500Medium', fontSize: 12, letterSpacing: 2, color: C.redHud },
-    deleteCaption: { fontFamily: 'DMSans_300Light', fontSize: 10, color: C.textDim, textAlign: 'center', marginTop: 8, lineHeight: 15 },
+    deleteText: { fontFamily: 'DMSans_500Medium', fontSize: 14, letterSpacing: 2, color: C.redHud },
+    deleteCaption: { fontFamily: 'DMSans_300Light', fontSize: 12, color: C.textDim, textAlign: 'center', marginTop: 8, lineHeight: 15 },
 
     cancelBtn: { paddingVertical: 14, alignItems: 'center', marginTop: 12 },
-    cancelText: { fontFamily: 'DMSans_500Medium', fontSize: 11, letterSpacing: 2, color: C.textDim },
+    cancelText: { fontFamily: 'DMSans_500Medium', fontSize: 13, letterSpacing: 2, color: C.textDim },
   });
 }

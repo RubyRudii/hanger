@@ -40,11 +40,6 @@ export default function SignIn() {
         </Svg>
       </View>
 
-      <View style={[styles.corner, styles.cornerTL]} pointerEvents="none" />
-      <View style={[styles.corner, styles.cornerTR]} pointerEvents="none" />
-      <View style={[styles.corner, styles.cornerBL]} pointerEvents="none" />
-      <View style={[styles.corner, styles.cornerBR]} pointerEvents="none" />
-
       <SafeAreaView style={styles.shell}>
         <View style={styles.brandRow}>
           <Text style={styles.logoMark}>HANGER</Text>
@@ -156,9 +151,9 @@ function makeStyles(C: Palette) {
       paddingVertical: 28,
     },
     title: { fontFamily: 'BebasNeue_400Regular', fontSize: 32, letterSpacing: 4, color: C.text, textAlign: 'center' },
-    sub: { fontSize: 12, color: C.textDim, textAlign: 'center', marginTop: 4, fontFamily: 'DMSans_300Light' },
+    sub: { fontSize: 14, color: C.textDim, textAlign: 'center', marginTop: 4, fontFamily: 'DMSans_300Light' },
 
-    label: { fontSize: 10, letterSpacing: 1.5, color: C.textDim, fontFamily: 'DMSans_500Medium', marginBottom: 6 },
+    label: { fontSize: 12, letterSpacing: 1.5, color: C.textDim, fontFamily: 'DMSans_500Medium', marginBottom: 6 },
     input: {
       backgroundColor: C.surface2,
       borderWidth: 1,
@@ -166,7 +161,7 @@ function makeStyles(C: Palette) {
       borderRadius: 10,
       paddingHorizontal: 14,
       paddingVertical: 12,
-      fontSize: 14,
+      fontSize: 16,
       color: C.text,
       fontFamily: 'DMSans_400Regular',
     },
@@ -186,11 +181,11 @@ function makeStyles(C: Palette) {
       borderRadius: 30,
       paddingVertical: 14,
     },
-    btnText: { fontSize: 13, letterSpacing: 2, color: C.goldLight, fontFamily: 'DMSans_500Medium' },
+    btnText: { fontSize: 15, letterSpacing: 2, color: C.goldLight, fontFamily: 'DMSans_500Medium' },
     btnArrow: { fontSize: 16, color: C.accent, fontFamily: 'DMSans_500Medium' },
 
-    altText: { textAlign: 'center', fontSize: 12, color: C.textMid, fontFamily: 'DMSans_300Light' },
+    altText: { textAlign: 'center', fontSize: 14, color: C.textMid, fontFamily: 'DMSans_300Light' },
 
-    footer: { marginTop: 28, fontSize: 9, letterSpacing: 3, color: C.textDim, fontFamily: 'DMSans_500Medium' },
+    footer: { marginTop: 28, fontSize: 11, letterSpacing: 3, color: C.textDim, fontFamily: 'DMSans_500Medium' },
   });
 }

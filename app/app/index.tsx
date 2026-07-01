@@ -71,11 +71,6 @@ export default function Splash() {
       <Animated.View style={[styles.ring, styles.ring2, { opacity: ringOp }]} pointerEvents="none" />
       <Animated.View style={[styles.ring, styles.ring1, { opacity: ringOp }]} pointerEvents="none" />
 
-      <Animated.View style={[styles.corner, styles.cornerTL, { opacity: cornerOp }]} pointerEvents="none" />
-      <Animated.View style={[styles.corner, styles.cornerTR, { opacity: cornerOp }]} pointerEvents="none" />
-      <Animated.View style={[styles.corner, styles.cornerBL, { opacity: cornerOp }]} pointerEvents="none" />
-      <Animated.View style={[styles.corner, styles.cornerBR, { opacity: cornerOp }]} pointerEvents="none" />
-
       <SafeAreaView style={styles.page}>
         <Animated.View style={[styles.logoBlock, { opacity: logoOp, transform: [{ translateY: logoY }] }]}>
           <Text style={styles.logoText}>HANGER</Text>
@@ -169,7 +164,7 @@ function makeStyles(C: Palette) {
       fontSize: 80, letterSpacing: 10, color: C.accent, lineHeight: 84,
     },
     logoSub: {
-      fontSize: 10, letterSpacing: 5, color: C.textDim, marginTop: 6,
+      fontSize: 12, letterSpacing: 5, color: C.textDim, marginTop: 6,
       fontFamily: 'DMSans_300Light',
     },
 
@@ -181,7 +176,7 @@ function makeStyles(C: Palette) {
     taglineAccent: { color: C.accent, fontFamily: 'DMSans_500Medium' },
     divider: { width: 36, height: 2, backgroundColor: C.accent, borderRadius: 1, marginVertical: 18 },
     taglineSub: {
-      fontSize: 13, color: C.textMid, lineHeight: 22,
+      fontSize: 15, color: C.textMid, lineHeight: 22,
       fontFamily: 'DMSans_300Light', textAlign: 'center',
     },
 
@@ -192,11 +187,11 @@ function makeStyles(C: Palette) {
       borderWidth: 1, borderColor: 'rgba(201,168,76,0.4)',
       borderRadius: 30, paddingVertical: 15, paddingHorizontal: 48,
     },
-    btnPrimaryText: { fontSize: 13, letterSpacing: 2.5, color: C.goldLight, fontFamily: 'DMSans_500Medium' },
+    btnPrimaryText: { fontSize: 15, letterSpacing: 2.5, color: C.goldLight, fontFamily: 'DMSans_500Medium' },
     btnArrow: { fontSize: 16, color: C.accent, fontFamily: 'DMSans_500Medium' },
     signInRow: { flexDirection: 'row', alignItems: 'center', marginTop: 14 },
-    signInText: { fontSize: 13, color: C.textDim, fontFamily: 'DMSans_300Light' },
-    signInLink: { fontSize: 13, color: C.textMid, fontFamily: 'DMSans_500Medium', textDecorationLine: 'underline' },
+    signInText: { fontSize: 15, color: C.textDim, fontFamily: 'DMSans_300Light' },
+    signInLink: { fontSize: 15, color: C.textMid, fontFamily: 'DMSans_500Medium', textDecorationLine: 'underline' },
 
     badgeRow: { flexDirection: 'row', marginTop: 48 },
     gradeBadge: {
@@ -205,10 +200,10 @@ function makeStyles(C: Palette) {
       backgroundColor: C.accentSoft, marginHorizontal: 4,
     },
     gradeBadgeText: {
-      fontFamily: 'BebasNeue_400Regular', fontSize: 13, letterSpacing: 2, color: C.textDim,
+      fontFamily: 'BebasNeue_400Regular', fontSize: 15, letterSpacing: 2, color: C.textDim,
     },
 
     version: { position: 'absolute', bottom: 28, alignSelf: 'center' },
-    versionText: { fontSize: 10, letterSpacing: 3, color: C.textDim, fontFamily: 'DMSans_300Light' },
+    versionText: { fontSize: 12, letterSpacing: 3, color: C.textDim, fontFamily: 'DMSans_300Light' },
   });
 }

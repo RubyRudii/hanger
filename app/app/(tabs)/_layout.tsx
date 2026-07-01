@@ -71,7 +71,7 @@ export default function TabsLayout() {
           tabBarItemStyle: { paddingVertical: 2 },
           tabBarActiveTintColor: C.accent,
           tabBarInactiveTintColor: inactive,
-          tabBarLabelStyle: { fontSize: 10, letterSpacing: 1.5, fontFamily: 'DMSans_500Medium', marginTop: 4 },
+          tabBarLabelStyle: { fontSize: 12, letterSpacing: 1.5, fontFamily: 'DMSans_500Medium', marginTop: 4 },
         }}
       >
         <Tabs.Screen name="feed" options={{ title: 'FEED', tabBarIcon: ({ color }) => <FeedIcon color={color} /> }} />

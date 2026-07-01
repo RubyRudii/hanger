@@ -107,7 +107,7 @@ export default function Hangar() {
         <View style={styles.header}>
           <View>
             <Text style={styles.headerTitle}>MY HANGAR</Text>
-            <Text style={styles.headerSub}>// COLLECTION LOG</Text>
+            <Text style={styles.headerSub}>COLLECTION LOG</Text>
           </View>
           <Pressable style={styles.addBtn} onPress={() => router.push('/add-kit')}>
             <Svg width={14} height={14} viewBox="0 0 14 14">
@@ -221,14 +221,14 @@ function makeStyles(C: Palette) {
       borderBottomWidth: 1, borderBottomColor: C.border,
     },
     headerTitle: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 3, color: C.text, lineHeight: 22 },
-    headerSub: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 10, letterSpacing: 1.5, color: C.textDim, marginTop: 3 },
+    headerSub: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 12, letterSpacing: 1.5, color: C.textDim, marginTop: 3 },
     addBtn: {
       flexDirection: 'row', alignItems: 'center', gap: 6,
       backgroundColor: C.royalSoft,
       borderWidth: 1, borderColor: C.borderGold,
       borderRadius: 20, paddingHorizontal: 12, paddingVertical: 7,
     },
-    addBtnText: { fontFamily: 'DMSans_500Medium', fontSize: 10, letterSpacing: 1.5, color: C.goldLight },
+    addBtnText: { fontFamily: 'DMSans_500Medium', fontSize: 12, letterSpacing: 1.5, color: C.goldLight },
 
     statsCard: {
       marginTop: 16, marginBottom: 16,
@@ -242,7 +242,7 @@ function makeStyles(C: Palette) {
     statCell: { flex: 1, alignItems: 'center' },
     statDivider: { width: 1, height: 32, backgroundColor: C.border },
     statNum: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 1, color: C.text, lineHeight: 22 },
-    statLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 8, letterSpacing: 1.5, color: C.textDim, marginTop: 5 },
+    statLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, letterSpacing: 1.5, color: C.textDim, marginTop: 5 },
 
     kitRow: {
       backgroundColor: C.surface,
@@ -257,18 +257,18 @@ function makeStyles(C: Palette) {
       alignItems: 'center', justifyContent: 'center',
       overflow: 'hidden',
     },
-    kitName: { fontSize: 14, color: C.text, fontFamily: 'DMSans_500Medium', marginBottom: 4 },
+    kitName: { fontSize: 16, color: C.text, fontFamily: 'DMSans_500Medium', marginBottom: 4 },
     kitMetaRow: { flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap' },
     kitGradePip: { paddingHorizontal: 6, paddingVertical: 2, borderWidth: 1, borderRadius: 3, backgroundColor: C.bg },
-    kitGradePipText: { fontFamily: 'BebasNeue_400Regular', fontSize: 9, letterSpacing: 1 },
-    kitMeta: { fontSize: 11, color: C.textMid, fontFamily: 'DMSans_400Regular' },
-    kitMetaDim: { fontSize: 11, color: C.textDim, fontFamily: 'JetBrainsMono_400Regular' },
-    kitNotes: { fontSize: 11, color: C.textMid, fontFamily: 'DMSans_300Light', marginTop: 6, lineHeight: 16 },
+    kitGradePipText: { fontFamily: 'BebasNeue_400Regular', fontSize: 11, letterSpacing: 1 },
+    kitMeta: { fontSize: 13, color: C.textMid, fontFamily: 'DMSans_400Regular' },
+    kitMetaDim: { fontSize: 13, color: C.textDim, fontFamily: 'JetBrainsMono_400Regular' },
+    kitNotes: { fontSize: 13, color: C.textMid, fontFamily: 'DMSans_300Light', marginTop: 6, lineHeight: 16 },
 
     empty: { paddingHorizontal: 32, paddingVertical: 50, alignItems: 'center', gap: 12 },
     emptyTitle: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 3, color: C.textMid },
-    emptyText: { color: C.textDim, textAlign: 'center', fontFamily: 'DMSans_300Light', fontSize: 13, lineHeight: 21 },
+    emptyText: { color: C.textDim, textAlign: 'center', fontFamily: 'DMSans_300Light', fontSize: 15, lineHeight: 21 },
     cta: { backgroundColor: C.accent, paddingHorizontal: 18, paddingVertical: 10, borderRadius: 12, marginTop: 6 },
-    ctaText: { color: C.onAccent, fontFamily: 'DMSans_500Medium', fontSize: 12, letterSpacing: 1.5 },
+    ctaText: { color: C.onAccent, fontFamily: 'DMSans_500Medium', fontSize: 14, letterSpacing: 1.5 },
   });
 }

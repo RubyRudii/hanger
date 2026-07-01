@@ -225,7 +225,7 @@ function Judge() {
           {/* Intro */}
           <View style={styles.intro}>
             <View style={styles.introGlow} pointerEvents="none" />
-            <Text style={styles.introEyebrow}>// INCOMING TRANSMISSION</Text>
+            <Text style={styles.introEyebrow}>INCOMING TRANSMISSION</Text>
             <Text style={styles.introTitle}>"Show me what you've built."</Text>
             <Text style={styles.introBody}>
               Submit your finished kit for review by a <Text style={{ color: C.goldLight }}>senior pilot</Text>. They'll evaluate construction, finish, and combat readiness — then file an official debrief on your build.
@@ -353,7 +353,7 @@ function Judge() {
           <View style={styles.section}>
             <View style={styles.msSheet}>
               <View style={styles.msHeader}>
-                <Text style={styles.msTag}>// MS DATA SHEET</Text>
+                <Text style={styles.msTag}>MS DATA SHEET</Text>
                 <Text style={styles.msId}>{reviewId}</Text>
               </View>
               <MsRow label="SUBMITTED BY" value={profile?.handle ? `@${profile.handle}` : '@you'} />
@@ -375,7 +375,7 @@ function Judge() {
               </Svg>
               <Text style={styles.btnSubmitText}>SUBMIT FOR REVIEW</Text>
             </Pressable>
-            <Text style={styles.submitHint}>// TRANSMISSION SECURED · AWAITING UPLINK</Text>
+            <Text style={styles.submitHint}>TRANSMISSION SECURED · AWAITING UPLINK</Text>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -531,10 +531,10 @@ function makeStyles(C: Palette) {
     alignItems: 'center', justifyContent: 'center',
   },
   headerTitle: { fontFamily: 'BebasNeue_400Regular', fontSize: 18, letterSpacing: 3, color: C.text },
-  headerSub: { fontSize: 10, letterSpacing: 1.5, color: C.textDim, marginTop: 3, fontFamily: 'DMSans_500Medium' },
+  headerSub: { fontSize: 12, letterSpacing: 1.5, color: C.textDim, marginTop: 3, fontFamily: 'DMSans_500Medium' },
   headerStatus: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   statusDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: C.greenHud },
-  headerStatusText: { fontSize: 10, letterSpacing: 1.5, color: C.greenHud, fontFamily: 'JetBrainsMono_500Medium' },
+  headerStatusText: { fontSize: 12, letterSpacing: 1.5, color: C.greenHud, fontFamily: 'JetBrainsMono_500Medium' },
 
   intro: {
     marginHorizontal: 20, marginTop: 16, marginBottom: 8,
@@ -543,9 +543,9 @@ function makeStyles(C: Palette) {
     overflow: 'hidden', position: 'relative',
   },
   introGlow: { position: 'absolute', top: 0, right: 0, width: 120, height: 120, borderRadius: 60, backgroundColor: 'rgba(201,168,76,0.10)' },
-  introEyebrow: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 10, letterSpacing: 2, color: C.accent, marginBottom: 6 },
+  introEyebrow: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 12, letterSpacing: 2, color: C.accent, marginBottom: 6 },
   introTitle: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 1.5, color: C.text, marginBottom: 8 },
-  introBody: { fontSize: 12, color: C.textMid, lineHeight: 19, fontFamily: 'DMSans_300Light' },
+  introBody: { fontSize: 14, color: C.textMid, lineHeight: 19, fontFamily: 'DMSans_300Light' },
 
   section: { paddingHorizontal: 20, paddingTop: 16 },
   stepLabel: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 12 },
@@ -554,8 +554,8 @@ function makeStyles(C: Palette) {
     borderWidth: 1, borderColor: C.borderGold,
     paddingHorizontal: 8, paddingVertical: 3, borderRadius: 4,
   },
-  stepNumText: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 10, letterSpacing: 1.5, color: C.accent },
-  stepTitle: { fontSize: 11, letterSpacing: 3, color: C.textMid, fontFamily: 'DMSans_500Medium' },
+  stepNumText: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 12, letterSpacing: 1.5, color: C.accent },
+  stepTitle: { fontSize: 13, letterSpacing: 3, color: C.textMid, fontFamily: 'DMSans_500Medium' },
 
   uploadZone: {
     borderWidth: 1.5, borderColor: C.borderGold, borderStyle: 'dashed',
@@ -576,8 +576,8 @@ function makeStyles(C: Palette) {
     alignItems: 'center', justifyContent: 'center',
     marginBottom: 14,
   },
-  uploadTitle: { fontSize: 14, color: C.text, fontFamily: 'DMSans_500Medium', marginBottom: 4 },
-  uploadHint: { fontSize: 11, color: C.textDim, fontFamily: 'DMSans_300Light' },
+  uploadTitle: { fontSize: 16, color: C.text, fontFamily: 'DMSans_500Medium', marginBottom: 4 },
+  uploadHint: { fontSize: 13, color: C.textDim, fontFamily: 'DMSans_300Light' },
 
   photoStrip: { flexDirection: 'row', gap: 8, marginTop: 12 },
   photoSlot: {
@@ -596,25 +596,25 @@ function makeStyles(C: Palette) {
     borderWidth: 1, borderColor: C.borderGold, borderRadius: 3,
     paddingHorizontal: 5, paddingVertical: 2,
   },
-  photoTagText: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 8, letterSpacing: 1, color: C.accent },
+  photoTagText: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, letterSpacing: 1, color: C.accent },
 
   fieldLabelRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5 },
-  fieldChev: { color: C.accent, fontSize: 8, fontFamily: 'JetBrainsMono_500Medium' },
-  fieldLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 9, letterSpacing: 1.5, color: C.textDim },
-  fieldRequired: { marginLeft: 'auto', color: C.accent, fontFamily: 'JetBrainsMono_400Regular', fontSize: 9, letterSpacing: 1 },
+  fieldChev: { color: C.accent, fontSize: 11, fontFamily: 'JetBrainsMono_500Medium' },
+  fieldLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, letterSpacing: 1.5, color: C.textDim },
+  fieldRequired: { marginLeft: 'auto', color: C.accent, fontFamily: 'JetBrainsMono_400Regular', fontSize: 11, letterSpacing: 1 },
 
   input: {
     backgroundColor: C.surface,
     borderWidth: 1, borderColor: C.borderMid, borderRadius: 10,
     paddingHorizontal: 14, paddingVertical: 11,
-    fontSize: 13, color: C.text, fontFamily: 'DMSans_400Regular',
+    fontSize: 15, color: C.text, fontFamily: 'DMSans_400Regular',
   },
   inputFocus: { borderColor: C.borderGold, backgroundColor: C.surface2 },
 
   row2: { flexDirection: 'row', gap: 10 },
   selectInput: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  selectValue: { color: C.text, fontSize: 13, fontFamily: 'DMSans_400Regular', flex: 1 },
-  selectChev: { color: C.accent, fontSize: 12 },
+  selectValue: { color: C.text, fontSize: 15, fontFamily: 'DMSans_400Regular', flex: 1 },
+  selectChev: { color: C.accent, fontSize: 14 },
 
   msSheet: {
     backgroundColor: C.surface,
@@ -626,11 +626,11 @@ function makeStyles(C: Palette) {
     paddingBottom: 10, marginBottom: 10,
     borderBottomWidth: 1, borderBottomColor: C.border, borderStyle: 'dashed',
   },
-  msTag: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 10, letterSpacing: 2, color: C.accent },
-  msId: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 9, letterSpacing: 1, color: C.textDim },
+  msTag: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 12, letterSpacing: 2, color: C.accent },
+  msId: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 11, letterSpacing: 1, color: C.textDim },
   msRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4 },
-  msRowLabel: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 11, color: C.textDim },
-  msRowValue: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, color: C.goldLight },
+  msRowLabel: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 13, color: C.textDim },
+  msRowValue: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 13, color: C.goldLight },
 
   btnSubmit: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12,
@@ -638,8 +638,8 @@ function makeStyles(C: Palette) {
     borderWidth: 1, borderColor: 'rgba(201,168,76,0.4)',
     borderRadius: 30, paddingVertical: 16,
   },
-  btnSubmitText: { fontFamily: 'DMSans_500Medium', fontSize: 13, letterSpacing: 2.5, color: C.goldLight },
-  submitHint: { textAlign: 'center', fontSize: 10, letterSpacing: 1.5, color: C.textDim, marginTop: 10, fontFamily: 'JetBrainsMono_500Medium' },
+  btnSubmitText: { fontFamily: 'DMSans_500Medium', fontSize: 15, letterSpacing: 2.5, color: C.goldLight },
+  submitHint: { textAlign: 'center', fontSize: 12, letterSpacing: 1.5, color: C.textDim, marginTop: 10, fontFamily: 'JetBrainsMono_500Medium' },
 
   sheetBackdrop: {
     flex: 1, backgroundColor: 'rgba(5,9,24,0.75)',
@@ -657,7 +657,7 @@ function makeStyles(C: Palette) {
     paddingVertical: 14, paddingHorizontal: 12, borderRadius: 10,
   },
   sheetOptionActive: { backgroundColor: C.surface2, borderWidth: 1, borderColor: C.borderGold },
-  sheetOptionText: { color: C.textMid, fontSize: 14, fontFamily: 'DMSans_400Regular' },
+  sheetOptionText: { color: C.textMid, fontSize: 16, fontFamily: 'DMSans_400Regular' },
   sheetOptionTextActive: { color: C.goldLight, fontFamily: 'DMSans_500Medium' },
   sheetCheck: { color: C.accent, fontSize: 16, fontFamily: 'DMSans_500Medium' },
 
@@ -675,7 +675,7 @@ function makeStyles(C: Palette) {
     alignItems: 'center', justifyContent: 'center',
   },
   reviewStatus: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 3, color: C.text, marginBottom: 8 },
-  reviewSubstatus: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, letterSpacing: 1.5, color: C.accent, textAlign: 'center', minHeight: 16 },
+  reviewSubstatus: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 13, letterSpacing: 1.5, color: C.accent, textAlign: 'center', minHeight: 16 },
   reviewProgress: { width: 220, height: 3, backgroundColor: C.border, borderRadius: 2, marginTop: 20, overflow: 'hidden' },
   reviewProgressFill: { height: '100%', backgroundColor: C.accent, borderRadius: 2 },
   });

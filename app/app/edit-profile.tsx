@@ -225,9 +225,9 @@ function makeStyles(C: Palette) {
       flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
       borderBottomWidth: 1, borderBottomColor: C.border,
     },
-    cancel: { fontFamily: 'DMSans_500Medium', fontSize: 12, letterSpacing: 1.5, color: C.textMid },
+    cancel: { fontFamily: 'DMSans_500Medium', fontSize: 14, letterSpacing: 1.5, color: C.textMid },
     title: { fontFamily: 'BebasNeue_400Regular', fontSize: 18, letterSpacing: 3, color: C.text },
-    saveLink: { fontFamily: 'DMSans_500Medium', fontSize: 12, letterSpacing: 1.5, color: C.accent },
+    saveLink: { fontFamily: 'DMSans_500Medium', fontSize: 14, letterSpacing: 1.5, color: C.accent },
 
     avatarBlock: { alignItems: 'center', marginBottom: 28, gap: 10 },
     avatarWrap: { width: 110, height: 110, alignItems: 'center', justifyContent: 'center' },
@@ -248,18 +248,18 @@ function makeStyles(C: Palette) {
       borderWidth: 2, borderColor: C.bg,
       alignItems: 'center', justifyContent: 'center',
     },
-    avatarAction: { fontFamily: 'DMSans_500Medium', fontSize: 11, letterSpacing: 2, color: C.accent },
-    avatarRemove: { fontFamily: 'DMSans_400Regular', fontSize: 11, color: C.textDim },
+    avatarAction: { fontFamily: 'DMSans_500Medium', fontSize: 13, letterSpacing: 2, color: C.accent },
+    avatarRemove: { fontFamily: 'DMSans_400Regular', fontSize: 13, color: C.textDim },
 
-    fieldLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 9, letterSpacing: 1.5, color: C.accent, marginBottom: 6, marginTop: 4 },
+    fieldLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, letterSpacing: 1.5, color: C.accent, marginBottom: 6, marginTop: 4 },
     input: {
       backgroundColor: C.surface,
       borderWidth: 1, borderColor: C.borderMid, borderRadius: 10,
       paddingHorizontal: 14, paddingVertical: 12,
-      fontSize: 14, color: C.text, fontFamily: 'DMSans_400Regular',
+      fontSize: 16, color: C.text, fontFamily: 'DMSans_400Regular',
     },
     inputFocus: { borderColor: C.borderGold },
     bioInput: { minHeight: 90, textAlignVertical: 'top' },
-    helper: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 10, color: C.textDim, marginTop: 6, marginBottom: 12 },
+    helper: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 12, color: C.textDim, marginTop: 6, marginBottom: 12 },
   });
 }

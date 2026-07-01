@@ -153,11 +153,10 @@ export default function Profile() {
         ) : (
           <ScrollView contentContainerStyle={{ paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
             <View style={styles.pilotCard}>
-              <Text style={styles.watermark}>HANGER</Text>
               <View style={styles.pilotCardGlow} pointerEvents="none" />
 
               <View style={styles.idStrip}>
-                <Text style={styles.idStripText}>// PILOT ID</Text>
+                <Text style={styles.idStripText}>PILOT ID</Text>
                 <View style={styles.idDash} />
                 <Text style={styles.idStripText}>{pilotId}</Text>
               </View>
@@ -178,7 +177,7 @@ export default function Profile() {
                 </Pressable>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.pilotName}>{profile?.display_name ?? profile?.handle ?? 'Builder'}</Text>
-                  <Text style={styles.pilotCallsign}>// @{profile?.handle ?? 'unknown'}</Text>
+                  <Text style={styles.pilotCallsign}>@{profile?.handle ?? 'unknown'}</Text>
                   <View style={styles.rankLine}>
                     <Svg width={9} height={9} viewBox="0 0 14 14">
                       <Path d="M7 1L8.5 5L13 5L9.5 7.5L11 12L7 9.5L3 12L4.5 7.5L1 5L5.5 5L7 1Z" fill={C.accent} />
@@ -236,7 +235,7 @@ export default function Profile() {
                 <View style={[styles.rankBarFill, { width: `${rankPct}%` }]} />
               </View>
               <View style={styles.rankProgressFooter}>
-                <Text style={styles.rankFooterText}>// CURRENT RANK</Text>
+                <Text style={styles.rankFooterText}>CURRENT RANK</Text>
                 <Text style={[styles.rankFooterText, { color: C.goldLight }]}>NEXT: {nextRank.name} ▸</Text>
               </View>
             </View>
@@ -377,7 +376,7 @@ function LogTab({ builds }: { builds: BuildSummary[] }) {
     <View style={styles.tabSection}>
       <View style={styles.shelfControls}>
         <Text style={styles.shelfCount}>
-          RECENT <Text style={{ color: C.accent }}>// LAST 30 DAYS</Text>
+          RECENT <Text style={{ color: C.accent }}>LAST 30 DAYS</Text>
         </Text>
       </View>
       {builds.slice(0, 12).map((b) => {
@@ -442,7 +441,7 @@ function makeStyles(C: Palette) {
     },
 
     idStrip: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 16 },
-    idStripText: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 9, letterSpacing: 1.5, color: C.accent },
+    idStripText: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, letterSpacing: 1.5, color: C.accent },
     idDash: { flex: 1, height: 1, backgroundColor: C.accentRing },
 
     pilotRow: { flexDirection: 'row', alignItems: 'center', gap: 16, marginBottom: 16 },
@@ -463,12 +462,12 @@ function makeStyles(C: Palette) {
       paddingHorizontal: 6, paddingVertical: 3, borderRadius: 3,
       borderWidth: 1.5, borderColor: C.bg,
     },
-    rankBadgeText: { fontFamily: 'BebasNeue_400Regular', fontSize: 9, letterSpacing: 0.5, color: C.onAccent },
+    rankBadgeText: { fontFamily: 'BebasNeue_400Regular', fontSize: 11, letterSpacing: 0.5, color: C.onAccent },
 
     pilotName: { fontSize: 22, color: C.text, fontFamily: 'DMSans_500Medium', marginBottom: 4 },
-    pilotCallsign: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 11, color: C.textMid, letterSpacing: 1, marginBottom: 8 },
+    pilotCallsign: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 13, color: C.textMid, letterSpacing: 1, marginBottom: 8 },
     rankLine: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-    rankLineText: { fontSize: 11, color: C.accent, fontFamily: 'DMSans_500Medium', letterSpacing: 1 },
+    rankLineText: { fontSize: 13, color: C.accent, fontFamily: 'DMSans_500Medium', letterSpacing: 1 },
 
     bio: {
       paddingVertical: 12, paddingHorizontal: 14,
@@ -477,7 +476,7 @@ function makeStyles(C: Palette) {
       borderTopRightRadius: 8, borderBottomRightRadius: 8,
       marginBottom: 16,
     },
-    bioText: { fontSize: 12, color: C.textMid, lineHeight: 19, fontFamily: 'DMSans_300Light' },
+    bioText: { fontSize: 14, color: C.textMid, lineHeight: 19, fontFamily: 'DMSans_300Light' },
 
     statsRow: {
       flexDirection: 'row',
@@ -488,7 +487,7 @@ function makeStyles(C: Palette) {
     },
     statCell: { flex: 1, backgroundColor: C.surface, paddingVertical: 12, paddingHorizontal: 8, alignItems: 'center' },
     statNum: { fontFamily: 'BebasNeue_400Regular', fontSize: 20, letterSpacing: 1, color: C.text, lineHeight: 22 },
-    statLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 8, letterSpacing: 1.5, color: C.textDim, marginTop: 5 },
+    statLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, letterSpacing: 1.5, color: C.textDim, marginTop: 5 },
 
     rankProgress: {
       marginHorizontal: 20, marginTop: 16,
@@ -504,12 +503,12 @@ function makeStyles(C: Palette) {
       borderWidth: 1, borderColor: C.borderGold,
       alignItems: 'center', justifyContent: 'center',
     },
-    rankText: { fontFamily: 'BebasNeue_400Regular', fontSize: 14, letterSpacing: 1.5, color: C.text },
-    rankXp: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, color: C.accent },
+    rankText: { fontFamily: 'BebasNeue_400Regular', fontSize: 16, letterSpacing: 1.5, color: C.text },
+    rankXp: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 13, color: C.accent },
     rankBar: { width: '100%', height: 6, backgroundColor: C.border, borderRadius: 3, overflow: 'hidden', marginBottom: 8 },
     rankBarFill: { height: '100%', backgroundColor: C.accent, borderRadius: 3 },
     rankProgressFooter: { flexDirection: 'row', justifyContent: 'space-between' },
-    rankFooterText: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 9, color: C.textDim, letterSpacing: 0.5 },
+    rankFooterText: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 11, color: C.textDim, letterSpacing: 0.5 },
 
     tabs: {
       flexDirection: 'row', gap: 4,
@@ -518,20 +517,20 @@ function makeStyles(C: Palette) {
       marginBottom: 16,
     },
     tab: { flex: 1, alignItems: 'center', paddingVertical: 8, position: 'relative' },
-    tabText: { fontFamily: 'DMSans_500Medium', fontSize: 11, letterSpacing: 1.5, color: C.textDim },
+    tabText: { fontFamily: 'DMSans_500Medium', fontSize: 13, letterSpacing: 1.5, color: C.textDim },
     tabTextActive: { color: C.accent },
     tabIndicator: { position: 'absolute', bottom: -13, left: 0, right: 0, height: 2, backgroundColor: C.accent, borderRadius: 1 },
 
     tabSection: { paddingHorizontal: 20 },
     shelfControls: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 },
-    shelfCount: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 10, letterSpacing: 1.5, color: C.textDim },
+    shelfCount: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 12, letterSpacing: 1.5, color: C.textDim },
     sortBtn: {
       flexDirection: 'row', alignItems: 'center', gap: 5,
       backgroundColor: C.surface,
       borderWidth: 1, borderColor: C.borderMid, borderRadius: 20,
       paddingHorizontal: 10, paddingVertical: 4,
     },
-    sortBtnText: { fontSize: 10, color: C.textMid, fontFamily: 'DMSans_500Medium', letterSpacing: 1 },
+    sortBtnText: { fontSize: 12, color: C.textMid, fontFamily: 'DMSans_500Medium', letterSpacing: 1 },
 
     shelfGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
     kitCard: {
@@ -552,17 +551,17 @@ function makeStyles(C: Palette) {
       backgroundColor: C.bg,
       borderWidth: 1, borderRadius: 3,
     },
-    kitGradePipText: { fontFamily: 'BebasNeue_400Regular', fontSize: 9, letterSpacing: 1 },
+    kitGradePipText: { fontFamily: 'BebasNeue_400Regular', fontSize: 11, letterSpacing: 1 },
     kitScoreBadge: {
       position: 'absolute', top: 8, right: 8,
       backgroundColor: C.bg,
       borderWidth: 1, borderColor: C.borderGold, borderRadius: 4,
       paddingHorizontal: 6, paddingVertical: 2,
     },
-    kitScoreBadgeText: { fontFamily: 'BebasNeue_400Regular', fontSize: 13, letterSpacing: 1, color: C.goldLight },
+    kitScoreBadgeText: { fontFamily: 'BebasNeue_400Regular', fontSize: 15, letterSpacing: 1, color: C.goldLight },
     kitInfo: { paddingHorizontal: 12, paddingVertical: 10 },
-    kitName: { fontSize: 12, color: C.text, fontFamily: 'DMSans_500Medium', marginBottom: 3 },
-    kitMeta: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 9, color: C.textDim, letterSpacing: 0.5 },
+    kitName: { fontSize: 14, color: C.text, fontFamily: 'DMSans_500Medium', marginBottom: 3 },
+    kitMeta: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 11, color: C.textDim, letterSpacing: 0.5 },
 
     achieveGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
     achieveCard: {
@@ -583,7 +582,7 @@ function makeStyles(C: Palette) {
     },
     achieveIconEarned: { backgroundColor: C.royalSoft, borderColor: C.borderGold },
     achieveName: {
-      fontFamily: 'BebasNeue_400Regular', fontSize: 11, letterSpacing: 1,
+      fontFamily: 'BebasNeue_400Regular', fontSize: 13, letterSpacing: 1,
       color: C.text, textAlign: 'center', lineHeight: 12,
     },
 
@@ -598,12 +597,12 @@ function makeStyles(C: Palette) {
       borderWidth: 1, borderColor: C.borderMid,
       alignItems: 'center', justifyContent: 'center',
     },
-    activityText: { fontSize: 12, color: C.textMid, lineHeight: 18, fontFamily: 'DMSans_300Light' },
-    activityTime: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 9, color: C.textDim, letterSpacing: 0.5, marginTop: 3 },
+    activityText: { fontSize: 14, color: C.textMid, lineHeight: 18, fontFamily: 'DMSans_300Light' },
+    activityTime: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 11, color: C.textDim, letterSpacing: 0.5, marginTop: 3 },
 
     empty: { padding: 40, alignItems: 'center', gap: 12 },
-    emptyText: { color: C.textDim, textAlign: 'center', fontFamily: 'DMSans_300Light', fontSize: 13 },
+    emptyText: { color: C.textDim, textAlign: 'center', fontFamily: 'DMSans_300Light', fontSize: 15 },
     cta: { backgroundColor: C.accent, paddingHorizontal: 18, paddingVertical: 10, borderRadius: 12 },
-    ctaText: { color: C.onAccent, fontFamily: 'DMSans_500Medium', fontSize: 12, letterSpacing: 1 },
+    ctaText: { color: C.onAccent, fontFamily: 'DMSans_500Medium', fontSize: 14, letterSpacing: 1 },
   });
 }

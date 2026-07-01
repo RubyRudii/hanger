@@ -91,11 +91,6 @@ export default function Onboarding() {
         </Svg>
       </View>
 
-      <View style={[styles.corner, styles.cornerTL]} pointerEvents="none" />
-      <View style={[styles.corner, styles.cornerTR]} pointerEvents="none" />
-      <View style={[styles.corner, styles.cornerBL]} pointerEvents="none" />
-      <View style={[styles.corner, styles.cornerBR]} pointerEvents="none" />
-
       <SafeAreaView style={styles.shell}>
         <View style={styles.topbar}>
           <Text style={styles.logoSm}>HANGER</Text>
@@ -308,7 +303,7 @@ function makeStyles(C: Palette) {
 
     topbar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8 },
     logoSm: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 4, color: C.accent },
-    skipBtn: { fontSize: 12, color: C.textDim, fontFamily: 'DMSans_300Light', letterSpacing: 1 },
+    skipBtn: { fontSize: 14, color: C.textDim, fontFamily: 'DMSans_300Light', letterSpacing: 1 },
 
     progress: { flexDirection: 'row', gap: 6, marginTop: 24 },
     dot: { height: 3, borderRadius: 2, backgroundColor: C.borderMid, flex: 1 },
@@ -347,11 +342,11 @@ function makeStyles(C: Palette) {
       backgroundColor: 'transparent',
     },
     scoreNum: { fontFamily: 'BebasNeue_400Regular', fontSize: 42, color: C.goldLight, lineHeight: 42, letterSpacing: 2 },
-    scoreLabel: { fontSize: 9, letterSpacing: 2, color: C.textDim, fontFamily: 'DMSans_300Light', marginTop: 2 },
+    scoreLabel: { fontSize: 11, letterSpacing: 2, color: C.textDim, fontFamily: 'DMSans_300Light', marginTop: 2 },
 
     scoreBars: { position: 'absolute', right: 16, top: 30, gap: 7 },
     sbar: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-    sbarLabel: { fontSize: 9, color: C.textDim, width: 44, fontFamily: 'DMSans_300Light' },
+    sbarLabel: { fontSize: 11, color: C.textDim, width: 44, fontFamily: 'DMSans_300Light' },
     sbarTrack: { width: 56, height: 3, backgroundColor: C.border, borderRadius: 2, overflow: 'hidden' },
     sbarFill: { height: '100%', borderRadius: 2, backgroundColor: C.accent },
 
@@ -372,15 +367,15 @@ function makeStyles(C: Palette) {
       borderWidth: 1, borderColor: C.border,
       alignItems: 'center', justifyContent: 'center',
     },
-    cgScore: { fontFamily: 'BebasNeue_400Regular', fontSize: 14, color: C.accent, letterSpacing: 1 },
-    cgUser: { fontSize: 9, color: C.textDim, fontFamily: 'DMSans_300Light' },
+    cgScore: { fontFamily: 'BebasNeue_400Regular', fontSize: 16, color: C.accent, letterSpacing: 1 },
+    cgUser: { fontSize: 11, color: C.textDim, fontFamily: 'DMSans_300Light' },
     cgRankBadge: {
       position: 'absolute', top: 10, right: 10,
       backgroundColor: C.royal,
       borderWidth: 1, borderColor: C.accentRing,
       paddingHorizontal: 8, paddingVertical: 3, borderRadius: 20,
     },
-    cgRankBadgeText: { fontFamily: 'BebasNeue_400Regular', fontSize: 11, letterSpacing: 1.5, color: C.goldLight },
+    cgRankBadgeText: { fontFamily: 'BebasNeue_400Regular', fontSize: 13, letterSpacing: 1.5, color: C.goldLight },
 
     blRow: {
       flexDirection: 'row', alignItems: 'center', gap: 12,
@@ -394,18 +389,18 @@ function makeStyles(C: Palette) {
       borderWidth: 1, borderColor: C.border,
       alignItems: 'center', justifyContent: 'center',
     },
-    blName: { fontSize: 12, color: C.text, fontFamily: 'DMSans_500Medium' },
-    blGrade: { fontSize: 9, color: C.textDim, letterSpacing: 1, marginTop: 1, fontFamily: 'DMSans_300Light' },
+    blName: { fontSize: 14, color: C.text, fontFamily: 'DMSans_500Medium' },
+    blGrade: { fontSize: 11, color: C.textDim, letterSpacing: 1, marginTop: 1, fontFamily: 'DMSans_300Light' },
     blStatus: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 20, borderWidth: 1 },
-    blStatusText: { fontSize: 9, fontFamily: 'DMSans_500Medium', letterSpacing: 1 },
+    blStatusText: { fontSize: 11, fontFamily: 'DMSans_500Medium', letterSpacing: 1 },
     sBuilding: { backgroundColor: C.accentDim, borderColor: C.borderGold },
     sOwned: { backgroundColor: C.royalSoft, borderColor: 'rgba(41,82,204,0.30)' },
     sWish: { backgroundColor: C.border, borderColor: C.border },
 
-    slideStep: { fontSize: 10, letterSpacing: 3, color: C.accent, fontFamily: 'DMSans_500Medium', marginBottom: 8 },
+    slideStep: { fontSize: 12, letterSpacing: 3, color: C.accent, fontFamily: 'DMSans_500Medium', marginBottom: 8 },
     slideTitle: { fontFamily: 'BebasNeue_400Regular', fontSize: 42, letterSpacing: 2, lineHeight: 44, color: C.text, marginBottom: 12 },
     slideTitleAccent: { color: C.accent },
-    slideBody: { fontSize: 14, color: C.textMid, lineHeight: 23, fontFamily: 'DMSans_300Light' },
+    slideBody: { fontSize: 16, color: C.textMid, lineHeight: 23, fontFamily: 'DMSans_300Light' },
 
     pills: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 16 },
     pill: {
@@ -413,7 +408,7 @@ function makeStyles(C: Palette) {
       borderWidth: 1, borderColor: C.borderGold,
       backgroundColor: C.accentDim,
     },
-    pillText: { fontSize: 11, color: C.accent, fontFamily: 'DMSans_400Regular' },
+    pillText: { fontSize: 13, color: C.accent, fontFamily: 'DMSans_400Regular' },
 
     controls: { flexDirection: 'row', alignItems: 'center', gap: 14, marginTop: 24 },
     btnBack: {
@@ -427,14 +422,14 @@ function makeStyles(C: Palette) {
       borderWidth: 1, borderColor: 'rgba(201,168,76,0.38)',
       borderRadius: 30, paddingVertical: 15, paddingHorizontal: 24,
     },
-    btnNextText: { fontSize: 13, letterSpacing: 2, color: C.goldLight, fontFamily: 'DMSans_500Medium' },
+    btnNextText: { fontSize: 15, letterSpacing: 2, color: C.goldLight, fontFamily: 'DMSans_500Medium' },
     btnNextArrow: { fontSize: 16, color: C.accent, fontFamily: 'DMSans_500Medium' },
     btnFinish: {
       flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
       backgroundColor: C.accent,
       borderRadius: 30, paddingVertical: 15, paddingHorizontal: 24,
     },
-    btnFinishText: { fontSize: 13, letterSpacing: 2, color: C.onAccent, fontFamily: 'DMSans_500Medium' },
+    btnFinishText: { fontSize: 15, letterSpacing: 2, color: C.onAccent, fontFamily: 'DMSans_500Medium' },
     btnFinishArrow: { fontSize: 16, color: C.onAccent, fontFamily: 'DMSans_500Medium' },
   });
 }
