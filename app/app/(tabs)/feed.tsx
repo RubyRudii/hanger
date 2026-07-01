@@ -208,12 +208,6 @@ export default function Feed() {
                   {champion ? (
                     <Pressable style={styles.featured} onPress={() => router.push(`/build/${champion.id}`)}>
                       <View style={styles.featuredGlow} pointerEvents="none" />
-                      <View style={styles.crownBadge}>
-                        <Svg width={11} height={11} viewBox="0 0 16 16">
-                          <Path d="M2 5L5 8L8 3L11 8L14 5V12H2V5Z M2 13H14V14H2V13Z" fill={C.goldLight} />
-                        </Svg>
-                        <Text style={styles.crownBadgeText}>WEEKLY #1</Text>
-                      </View>
                       <Text style={styles.featuredRank}>01</Text>
                       <View style={styles.featuredImg}>
                         {champion.photo_url ? (
@@ -223,6 +217,12 @@ export default function Feed() {
                         )}
                       </View>
                       <View style={styles.featuredInfo}>
+                        <View style={styles.crownBadge}>
+                          <Svg width={11} height={11} viewBox="0 0 16 16">
+                            <Path d="M2 5L5 8L8 3L11 8L14 5V12H2V5Z M2 13H14V14H2V13Z" fill="#D4A63C" />
+                          </Svg>
+                          <Text style={styles.crownBadgeText}>WEEKLY #1</Text>
+                        </View>
                         <Text style={styles.featuredName} numberOfLines={1}>
                           {champion.kit_name}
                         </Text>
@@ -489,14 +489,14 @@ function makeStyles(C: Palette) {
       backgroundColor: C.orbHalo,
     },
     crownBadge: {
-      position: 'absolute', top: 14, right: 14,
+      alignSelf: 'flex-start',
       flexDirection: 'row', alignItems: 'center', gap: 5,
-      backgroundColor: C.accentDim,
-      borderWidth: 1, borderColor: C.borderGold,
-      paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20,
-      zIndex: 1,
+      backgroundColor: 'rgba(212, 166, 60, 0.15)',
+      borderWidth: 1, borderColor: 'rgba(212, 166, 60, 0.55)',
+      paddingHorizontal: 8, paddingVertical: 3, borderRadius: 20,
+      marginBottom: 6,
     },
-    crownBadgeText: { fontFamily: 'BebasNeue_400Regular', fontSize: 12, letterSpacing: 1.5, color: C.goldLight },
+    crownBadgeText: { fontFamily: 'BebasNeue_400Regular', fontSize: 11, letterSpacing: 1.5, color: '#B58B24' },
     featuredRank: { fontFamily: 'BebasNeue_400Regular', fontSize: 52, color: C.accentDim, width: 44, lineHeight: 52 },
     featuredImg: {
       width: 72, height: 72, borderRadius: 14,
@@ -505,7 +505,7 @@ function makeStyles(C: Palette) {
       alignItems: 'center', justifyContent: 'center',
       overflow: 'hidden',
     },
-    featuredInfo: { flex: 1, minWidth: 0, paddingRight: 60 },
+    featuredInfo: { flex: 1, minWidth: 0 },
     featuredName: { fontSize: 17, color: C.text, fontFamily: 'DMSans_500Medium', marginBottom: 4 },
     featuredMeta: { fontSize: 13, color: C.textDim, marginBottom: 8, fontFamily: 'DMSans_300Light' },
     featuredBottom: { flexDirection: 'row', alignItems: 'center', gap: 12 },
