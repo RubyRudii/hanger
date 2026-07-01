@@ -16,10 +16,27 @@ function FeedIcon({ color }: { color: string }) {
 }
 
 function JudgeIcon({ color }: { color: string }) {
+  // Mech head — V fin + angular helmet + two eyes + mouth vent.
   return (
-    <Svg width={20} height={20} viewBox="0 0 20 20" fill="none">
-      <Path d="M10 2L11.5 7.5L17 9L11.5 10.5L10 16L8.5 10.5L3 9L8.5 7.5L10 2Z" fill={color} />
-      <Path d="M15 14L15.7 16.3L18 17L15.7 17.7L15 20L14.3 17.7L12 17L14.3 16.3L15 14Z" fill={color} opacity={0.7} />
+    <Svg width={22} height={22} viewBox="0 0 20 20" fill="none">
+      <Path
+        d="M8.5 5 L10 2 L11.5 5 Z"
+        fill={color}
+      />
+      <Path
+        d="M5 5 L15 5 L17 8 L17 14 L15 17 L5 17 L3 14 L3 8 Z"
+        stroke={color}
+        strokeWidth={1.5}
+        strokeLinejoin="round"
+      />
+      <Rect x={5.5} y={9} width={3} height={2} rx={0.4} fill={color} />
+      <Rect x={11.5} y={9} width={3} height={2} rx={0.4} fill={color} />
+      <Path
+        d="M8 14 L12 14"
+        stroke={color}
+        strokeWidth={1.3}
+        strokeLinecap="round"
+      />
     </Svg>
   );
 }
