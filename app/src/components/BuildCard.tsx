@@ -1,5 +1,6 @@
 export type BuildSummary = {
   id: string;
+  user_id: string;
   kit_name: string;
   grade: string;
   photo_url: string | null;

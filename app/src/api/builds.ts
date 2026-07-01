@@ -39,6 +39,7 @@ type DbBuild = {
 function summarize(b: DbBuild): BuildSummary {
   return {
     id: b.id,
+    user_id: b.user_id,
     kit_name: b.kit_name,
     grade: b.grade,
     photo_url: b.photo_url,

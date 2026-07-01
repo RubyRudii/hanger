@@ -15,6 +15,7 @@ import { router, useFocusEffect } from 'expo-router';
 import Svg, { Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { fetchFeed, fetchMyBuilds, fetchTopThisWeek } from '@/api/builds';
+import { fetchMyFollowingIds } from '@/api/follows';
 import { fetchMyLikedBuildIds, likeBuild, unlikeBuild } from '@/api/likes';
 import { BuildSummary } from '@/components/BuildCard';
 import { useAuth } from '@/context/AuthContext';
@@ -52,20 +53,23 @@ export default function Feed() {
   const [refreshing, setRefreshing] = useState(false);
   const [filter, setFilter] = useState<Filter>('ALL');
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
+  const [followingIds, setFollowingIds] = useState<Set<string>>(new Set());
 
   const load = useCallback(async () => {
     try {
-      const [f, t, mine, liked] = await Promise.all([
+      const [f, t, mine, liked, following] = await Promise.all([
         fetchFeed(),
         fetchTopThisWeek(),
         session ? fetchMyBuilds(session.user.id) : Promise.resolve([]),
         session ? fetchMyLikedBuildIds(session.user.id) : Promise.resolve(new Set<string>()),
+        session ? fetchMyFollowingIds(session.user.id) : Promise.resolve(new Set<string>()),
       ]);
       setFeed(f);
       setChampion(t[0] ?? null);
       setMyCount(mine.length);
       setMyAvg(mine.length ? Math.round(mine.reduce((s, b) => s + b.score, 0) / mine.length) : 0);
       setLikedIds(liked);
+      setFollowingIds(following);
     } catch (e) {
       console.warn('feed load failed', e);
     } finally {
@@ -108,7 +112,8 @@ export default function Feed() {
   );
 
   const filtered = feed.filter((b) => {
-    if (filter === 'ALL' || filter === 'FOLLOWING') return true;
+    if (filter === 'ALL') return true;
+    if (filter === 'FOLLOWING') return followingIds.has(b.user_id);
     if (filter === 'TOP RATED') return b.score >= 85;
     return b.grade?.toUpperCase() === filter;
   });
@@ -294,7 +299,13 @@ export default function Feed() {
             ListEmptyComponent={
               <View style={styles.emptyWrap}>
                 <Text style={styles.emptyText}>
-                  No builds yet.{'\n'}Tap JUDGE to submit your first.
+                  {filter === 'FOLLOWING'
+                    ? followingIds.size === 0
+                      ? 'You are not following anyone yet.\nTap an @handle to visit a pilot and follow them.'
+                      : 'None of the pilots you follow have builds yet.'
+                    : filter === 'ALL'
+                    ? 'No builds yet.\nTap JUDGE to submit your first.'
+                    : `No ${filter} builds match your filter.`}
                 </Text>
               </View>
             }
