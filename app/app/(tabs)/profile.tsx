@@ -208,12 +208,12 @@ export default function Profile() {
                   <Text style={styles.statLabel}>AVG</Text>
                 </View>
                 <View style={styles.statCell}>
-                  <Text style={styles.statNum}>0</Text>
+                  <Text style={styles.statNum}>{profile?.follower_count ?? 0}</Text>
                   <Text style={styles.statLabel}>FOLLOWERS</Text>
                 </View>
                 <View style={styles.statCell}>
-                  <Text style={styles.statNum}>—</Text>
-                  <Text style={styles.statLabel}>RANK</Text>
+                  <Text style={styles.statNum}>{profile?.following_count ?? 0}</Text>
+                  <Text style={styles.statLabel}>FOLLOWING</Text>
                 </View>
               </View>
             </View>

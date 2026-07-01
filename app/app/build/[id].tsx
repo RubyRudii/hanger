@@ -475,7 +475,12 @@ export default function Debrief() {
                       onLongPress={() => onLongPressComment(c)}
                       style={styles.commentRow}
                     >
-                      <View style={styles.commentAvatar}>
+                      <Pressable
+                        style={styles.commentAvatar}
+                        onPress={() => c.author_handle && router.push(`/pilot/${c.author_handle}`)}
+                        disabled={!c.author_handle}
+                        hitSlop={4}
+                      >
                         {c.author_avatar ? (
                           <Image source={{ uri: c.author_avatar }} style={styles.commentAvatarImg} />
                         ) : (
@@ -483,12 +488,18 @@ export default function Debrief() {
                             {(c.author_handle ?? '?').slice(0, 2).toUpperCase()}
                           </Text>
                         )}
-                      </View>
+                      </Pressable>
                       <View style={{ flex: 1 }}>
                         <View style={styles.commentMeta}>
-                          <Text style={styles.commentHandle}>
-                            @{c.author_handle ?? 'unknown'}
-                          </Text>
+                          <Pressable
+                            onPress={() => c.author_handle && router.push(`/pilot/${c.author_handle}`)}
+                            disabled={!c.author_handle}
+                            hitSlop={4}
+                          >
+                            <Text style={styles.commentHandle}>
+                              @{c.author_handle ?? 'unknown'}
+                            </Text>
+                          </Pressable>
                           <Text style={styles.commentTime}>· {timeAgo(c.created_at)}</Text>
                           {mine ? <Text style={styles.commentMine}>· you</Text> : null}
                         </View>
@@ -785,23 +796,23 @@ function makeStyles(C: Palette) {
   },
   btnRebuildText: { fontFamily: 'DMSans_500Medium', fontSize: 12, letterSpacing: 2, color: C.goldLight },
 
-  commentsEmpty: { fontSize: 12, color: C.textDim, fontFamily: 'DMSans_300Light', paddingVertical: 12 },
-  commentsList: { gap: 12, marginBottom: 12 },
-  commentRow: { flexDirection: 'row', gap: 10, paddingVertical: 8 },
+  commentsEmpty: { fontSize: 13, color: C.textDim, fontFamily: 'DMSans_300Light', paddingVertical: 14 },
+  commentsList: { gap: 14, marginBottom: 14 },
+  commentRow: { flexDirection: 'row', gap: 12, paddingVertical: 10 },
   commentAvatar: {
-    width: 32, height: 32, borderRadius: 16,
+    width: 40, height: 40, borderRadius: 20,
     backgroundColor: C.royalBright,
     borderWidth: 1, borderColor: C.accentRing,
     alignItems: 'center', justifyContent: 'center',
     overflow: 'hidden',
   },
   commentAvatarImg: { width: '100%', height: '100%' },
-  commentAvatarInitials: { fontFamily: 'BebasNeue_400Regular', fontSize: 12, letterSpacing: 1, color: C.goldLight },
-  commentMeta: { flexDirection: 'row', alignItems: 'baseline', gap: 4, marginBottom: 2 },
-  commentHandle: { fontSize: 12, color: C.accent, fontFamily: 'DMSans_500Medium' },
-  commentTime: { fontSize: 10, color: C.textDim, fontFamily: 'JetBrainsMono_400Regular' },
-  commentMine: { fontSize: 10, color: C.textDim, fontFamily: 'JetBrainsMono_400Regular' },
-  commentBody: { fontSize: 13, color: C.textMid, lineHeight: 19, fontFamily: 'DMSans_300Light' },
+  commentAvatarInitials: { fontFamily: 'BebasNeue_400Regular', fontSize: 15, letterSpacing: 1, color: C.goldLight },
+  commentMeta: { flexDirection: 'row', alignItems: 'baseline', gap: 5, marginBottom: 3 },
+  commentHandle: { fontSize: 14, color: C.accent, fontFamily: 'DMSans_500Medium' },
+  commentTime: { fontSize: 11, color: C.textDim, fontFamily: 'JetBrainsMono_400Regular' },
+  commentMine: { fontSize: 11, color: C.textDim, fontFamily: 'JetBrainsMono_400Regular' },
+  commentBody: { fontSize: 14, color: C.textMid, lineHeight: 21, fontFamily: 'DMSans_300Light' },
 
   commentInputRow: {
     flexDirection: 'row', alignItems: 'flex-end', gap: 8,

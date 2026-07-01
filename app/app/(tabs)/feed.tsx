@@ -222,8 +222,16 @@ export default function Feed() {
                           {champion.kit_name}
                         </Text>
                         <Text style={styles.featuredMeta}>
-                          {champion.builder_handle ? `@${champion.builder_handle}` : 'Anonymous'} · {champion.grade} ·{' '}
-                          {timeAgo(champion.created_at)}
+                          <Text
+                            onPress={() =>
+                              champion.builder_handle && router.push(`/pilot/${champion.builder_handle}`)
+                            }
+                            style={{ color: champion.builder_handle ? C.textMid : C.textDim }}
+                          >
+                            {champion.builder_handle ? `@${champion.builder_handle}` : 'Anonymous'}
+                          </Text>
+                          {' · '}
+                          {champion.grade} · {timeAgo(champion.created_at)}
                         </Text>
                         <View style={styles.featuredBottom}>
                           <View>
@@ -370,7 +378,13 @@ function FeedCard({
             {build.kit_name}
           </Text>
           <View style={styles.feedMeta}>
-            <Text style={styles.feedUser}>{build.builder_handle ? `@${build.builder_handle}` : 'Anonymous'}</Text>
+            <Pressable
+              onPress={() => build.builder_handle && router.push(`/pilot/${build.builder_handle}`)}
+              disabled={!build.builder_handle}
+              hitSlop={4}
+            >
+              <Text style={styles.feedUser}>{build.builder_handle ? `@${build.builder_handle}` : 'Anonymous'}</Text>
+            </Pressable>
             <View style={styles.metaDot} />
             <Text style={{ color: C.textDim, fontSize: 11 }}>{timeAgo(build.created_at)}</Text>
           </View>

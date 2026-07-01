@@ -11,6 +11,8 @@ export type Profile = {
   joined_year: number | null;
   bio: string | null;
   avatar_url: string | null;
+  follower_count: number;
+  following_count: number;
   push_enabled: boolean;
   is_premium: boolean;
   premium_until: string | null;

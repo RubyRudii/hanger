@@ -20,6 +20,7 @@ const CORS = {
 type Input =
   | { kind: 'like'; build_id: string }
   | { kind: 'comment'; build_id: string; body: string }
+  | { kind: 'follow'; followee_id: string }
   | { kind: 'raw'; recipient_id: string; title: string; body: string; data?: Record<string, unknown> };
 
 function jsonResponse(body: unknown, status = 200) {
@@ -136,6 +137,34 @@ Deno.serve(async (req) => {
       `@${handle} commented on ${build.kit_name}`,
       snippet,
       { kind: 'comment', build_id: build.id },
+    );
+    return jsonResponse({ ok: true });
+  }
+
+  if (input.kind === 'follow') {
+    if (input.followee_id === actorId) return jsonResponse({ ok: true, skipped: 'self' });
+
+    const { data: recipient } = await admin
+      .from('profiles')
+      .select('push_token, push_enabled')
+      .eq('id', input.followee_id)
+      .maybeSingle();
+    if (!recipient?.push_enabled || !recipient.push_token) {
+      return jsonResponse({ ok: true, skipped: 'no token' });
+    }
+
+    const { data: actor } = await admin
+      .from('profiles')
+      .select('handle')
+      .eq('id', actorId)
+      .maybeSingle();
+    const handle = actor?.handle ?? 'someone';
+
+    await sendExpoPush(
+      recipient.push_token,
+      'New follower',
+      `@${handle} started following you`,
+      { kind: 'follow', follower_id: actorId },
     );
     return jsonResponse({ ok: true });
   }
