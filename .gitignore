@@ -10,3 +10,11 @@ ios/
 android/
 qr.png
 *.zip
+
+# Local UI reference images / mockups
+pic*.webp
+pic*.png
+pic*.jpg
+pic*.jpeg
+reference*.png
+reference*.jpg
