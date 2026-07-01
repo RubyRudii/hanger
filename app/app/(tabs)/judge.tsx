@@ -18,7 +18,8 @@ import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Circle, Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
 import { createBuild, uploadPhoto } from '@/api/builds';
-import { judgeBuild } from '@/api/judge';
+import { JudgeError, judgeBuild } from '@/api/judge';
+import * as Sentry from '@sentry/react-native';
 import { hasAccess, useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
 import { Palette } from '@/lib/theme';
@@ -183,7 +184,16 @@ function Judge() {
       setSubmitting(false);
       setReviewStage(null);
       progress.setValue(0);
-      Alert.alert('Pilot review failed', e?.message ?? 'Something went wrong.');
+      if (e instanceof JudgeError) {
+        // Log the raw error to Sentry regardless — we want to know when users hit these
+        Sentry.captureException(new Error(`Judge failed [${e.code}]: ${e.raw ?? e.message}`), {
+          tags: { judge_code: e.code },
+        });
+        Alert.alert(e.userTitle, e.userMessage);
+      } else {
+        Sentry.captureException(e);
+        Alert.alert('Pilot review failed', e?.message ?? 'Something went wrong.');
+      }
     }
   }
 
