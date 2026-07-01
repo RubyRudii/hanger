@@ -468,7 +468,7 @@ function makeStyles(C: Palette) {
     },
     statCell: { flex: 1, paddingVertical: 14, paddingHorizontal: 12, backgroundColor: C.bg, alignItems: 'center' },
     statNum: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 1.5, color: C.text, lineHeight: 22 },
-    statLabel: { fontSize: 11, letterSpacing: 2, color: C.textDim, marginTop: 4, fontFamily: 'DMSans_500Medium' },
+    statLabel: { fontSize: 10, letterSpacing: 0.8, color: C.textDim, marginTop: 4, fontFamily: 'DMSans_500Medium' },
 
     section: { paddingHorizontal: 20, paddingTop: 24 },
     sectionHead: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 14 },

@@ -242,7 +242,7 @@ function makeStyles(C: Palette) {
     statCell: { flex: 1, alignItems: 'center' },
     statDivider: { width: 1, height: 32, backgroundColor: C.border },
     statNum: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 1, color: C.text, lineHeight: 22 },
-    statLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, letterSpacing: 1.5, color: C.textDim, marginTop: 5 },
+    statLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 10, letterSpacing: 0.6, color: C.textDim, marginTop: 5 },
 
     kitRow: {
       backgroundColor: C.surface,

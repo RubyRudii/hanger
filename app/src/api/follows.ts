@@ -1,5 +1,36 @@
 import { supabase } from '@/lib/supabase';
 
+export type FollowUser = {
+  id: string;
+  handle: string | null;
+  display_name: string | null;
+  avatar_url: string | null;
+};
+
+export async function fetchFollowers(userId: string): Promise<FollowUser[]> {
+  const { data, error } = await supabase
+    .from('follows')
+    .select('follower:profiles!follows_follower_id_fkey(id, handle, display_name, avatar_url)')
+    .eq('followee_id', userId)
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return ((data ?? []) as { follower: FollowUser | null }[])
+    .map((r) => r.follower)
+    .filter((u): u is FollowUser => !!u);
+}
+
+export async function fetchFollowing(userId: string): Promise<FollowUser[]> {
+  const { data, error } = await supabase
+    .from('follows')
+    .select('followee:profiles!follows_followee_id_fkey(id, handle, display_name, avatar_url)')
+    .eq('follower_id', userId)
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return ((data ?? []) as { followee: FollowUser | null }[])
+    .map((r) => r.followee)
+    .filter((u): u is FollowUser => !!u);
+}
+
 export async function fetchMyFollowingIds(userId: string): Promise<Set<string>> {
   const { data, error } = await supabase
     .from('follows')

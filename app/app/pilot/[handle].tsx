@@ -233,14 +233,22 @@ export default function PilotView() {
                 <Text style={[styles.statNum, { color: C.accent }]}>{avg || '—'}</Text>
                 <Text style={styles.statLabel}>AVG</Text>
               </View>
-              <View style={styles.statCell}>
+              <Pressable
+                style={styles.statCell}
+                onPress={() => profile.handle && router.push(`/follows/${profile.handle}?tab=followers`)}
+                disabled={!profile.handle}
+              >
                 <Text style={styles.statNum}>{profile.follower_count}</Text>
                 <Text style={styles.statLabel}>FOLLOWERS</Text>
-              </View>
-              <View style={styles.statCell}>
+              </Pressable>
+              <Pressable
+                style={styles.statCell}
+                onPress={() => profile.handle && router.push(`/follows/${profile.handle}?tab=following`)}
+                disabled={!profile.handle}
+              >
                 <Text style={styles.statNum}>{profile.following_count}</Text>
                 <Text style={styles.statLabel}>FOLLOWING</Text>
-              </View>
+              </Pressable>
             </View>
 
             {session && session.user.id !== profile.id ? (
@@ -398,7 +406,7 @@ function makeStyles(C: Palette) {
     },
     statCell: { flex: 1, backgroundColor: C.surface, paddingVertical: 12, paddingHorizontal: 8, alignItems: 'center' },
     statNum: { fontFamily: 'BebasNeue_400Regular', fontSize: 20, letterSpacing: 1, color: C.text, lineHeight: 22 },
-    statLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, letterSpacing: 1.5, color: C.textDim, marginTop: 5 },
+    statLabel: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 10, letterSpacing: 0.6, color: C.textDim, marginTop: 5 },
 
     followBtn: {
       marginTop: 14,
