@@ -170,9 +170,6 @@ export default function Profile() {
                     ) : (
                       <Text style={styles.avatarText}>{initials}</Text>
                     )}
-                    <View style={styles.rankBadge}>
-                      <Text style={styles.rankBadgeText}>{rank.short}</Text>
-                    </View>
                   </View>
                 </Pressable>
                 <View style={{ flex: 1 }}>

@@ -204,9 +204,6 @@ export default function PilotView() {
                   ) : (
                     <Text style={styles.avatarText}>{initials}</Text>
                   )}
-                  <View style={styles.rankBadge}>
-                    <Text style={styles.rankBadgeText}>{rank.short}</Text>
-                  </View>
                 </View>
               </View>
               <View style={{ flex: 1 }}>
