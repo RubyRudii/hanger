@@ -150,7 +150,7 @@ export default function Hangar() {
                 </View>
                 <View style={styles.statDivider} />
                 <View style={styles.statCell}>
-                  <Text style={[styles.statNum, { color: C.blueHud }]}>{rgCount}</Text>
+                  <Text style={styles.statNum}>{rgCount}</Text>
                   <Text style={styles.statLabel}>RG</Text>
                 </View>
                 <View style={styles.statDivider} />
