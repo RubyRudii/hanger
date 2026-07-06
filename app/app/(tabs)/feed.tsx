@@ -249,6 +249,10 @@ export default function Feed() {
                               {champion.like_count}
                             </Text>
                           </Pressable>
+                          <View style={styles.commentStat}>
+                            <SpeechBubble color={C.textMid} />
+                            <Text style={styles.likeCount}>{champion.comment_count}</Text>
+                          </View>
                         </View>
                       </View>
                     </Pressable>
@@ -404,6 +408,10 @@ function FeedCard({
               <Heart filled={liked} color={liked ? C.like : C.textDim} />
               <Text style={[styles.likeCount, liked && { color: C.like }]}>{build.like_count}</Text>
             </Pressable>
+            <View style={styles.commentStat}>
+              <SpeechBubble color={C.textDim} />
+              <Text style={styles.likeCount}>{build.comment_count}</Text>
+            </View>
           </View>
         </View>
         <View style={styles.feedRight}>
@@ -423,6 +431,20 @@ function Heart({ filled, color, size = 20 }: { filled: boolean; color: string; s
         fill={filled ? color : 'none'}
         stroke={color}
         strokeWidth={1.4}
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+}
+
+function SpeechBubble({ color, size = 18 }: { color: string; size?: number }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 16 16">
+      <Path
+        d="M2.5 3.5h11c.55 0 1 .45 1 1v6c0 .55-.45 1-1 1H8l-3 2.5v-2.5H2.5c-.55 0-1-.45-1-1v-6c0-.55.45-1 1-1z"
+        stroke={color}
+        strokeWidth={1.3}
+        fill="none"
         strokeLinejoin="round"
       />
     </Svg>
@@ -547,8 +569,9 @@ function makeStyles(C: Palette) {
     metaDot: { width: 2, height: 2, borderRadius: 1, backgroundColor: C.textFaint },
     feedRight: { alignItems: 'flex-end' },
     feedScore: { fontFamily: 'BebasNeue_400Regular', fontSize: 24, color: C.accent, letterSpacing: 1, lineHeight: 24 },
-    feedLikeRow: { flexDirection: 'row', marginTop: 6 },
+    feedLikeRow: { flexDirection: 'row', marginTop: 6, alignItems: 'center', gap: 4 },
     likeBtn: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 2, paddingRight: 6 },
+    commentStat: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 2, paddingRight: 6 },
     likeCount: { fontSize: 14, color: C.textDim, fontFamily: 'JetBrainsMono_400Regular' },
     heartPulse: {
       position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,

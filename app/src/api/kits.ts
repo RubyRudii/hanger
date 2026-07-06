@@ -1,5 +1,6 @@
 import { decode as decodeBase64 } from 'base64-arraybuffer';
 import { supabase } from '@/lib/supabase';
+import { track } from '@/lib/analytics';
 
 export type Kit = {
   id: string;
@@ -43,6 +44,7 @@ export async function createKit(input: {
     .select('*')
     .single();
   if (error) throw error;
+  track('kit_logged', { grade: input.grade, has_photo: !!input.photo_url });
   return data as Kit;
 }
 

@@ -1,8 +1,9 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Svg, { Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
 import { useTheme } from '@/context/ThemeContext';
 import { Palette } from '@/lib/theme';
+import { track } from '@/lib/analytics';
 
 const BENEFITS = [
   { icon: '🎖', title: 'Unlimited AI Judging', body: 'Submit any kit, any time. Senior pilot scores every build.' },
@@ -20,7 +21,12 @@ export function Paywall({ onClose }: { onClose?: () => void }) {
   const { colors: C } = useTheme();
   const styles = useMemo(() => makeStyles(C), [C]);
 
-  function onSubscribe(_planId: string) {
+  useEffect(() => {
+    track('paywall_viewed');
+  }, []);
+
+  function onSubscribe(planId: string) {
+    track('paywall_subscribe_click', { plan_id: planId });
     Alert.alert(
       'In-app purchases coming soon',
       'RevenueCat + App Store / Play Store products are next. For now, the paywall is wired but not purchasable.',

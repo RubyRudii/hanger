@@ -8,4 +8,5 @@ export type BuildSummary = {
   created_at: string;
   builder_handle: string | null;
   like_count: number;
+  comment_count: number;
 };

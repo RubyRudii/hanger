@@ -9,6 +9,9 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as Sentry from '@sentry/react-native';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
+import { initAnalytics } from '@/lib/analytics';
+
+initAnalytics();
 import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 
 Sentry.init({

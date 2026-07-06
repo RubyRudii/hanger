@@ -33,6 +33,7 @@ type DbBuild = {
   work_on: string;
   created_at: string;
   like_count: number;
+  comment_count: number;
   profiles: { handle: string | null } | null;
 };
 
@@ -47,6 +48,7 @@ function summarize(b: DbBuild): BuildSummary {
     created_at: b.created_at,
     builder_handle: b.profiles?.handle ?? null,
     like_count: b.like_count ?? 0,
+    comment_count: b.comment_count ?? 0,
   };
 }
 

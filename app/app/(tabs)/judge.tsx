@@ -20,6 +20,7 @@ import Svg, { Circle, Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
 import { createBuild, uploadPhoto } from '@/api/builds';
 import { JudgeError, judgeBuild } from '@/api/judge';
 import * as Sentry from '@sentry/react-native';
+import { track } from '@/lib/analytics';
 import { hasAccess, useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
 import { Palette } from '@/lib/theme';
@@ -166,6 +167,12 @@ function Judge() {
         result,
       });
       clearInterval(stageTimer);
+      track('judge_success', {
+        score: result.overall,
+        grade,
+        panel_lining: result.scores.panel_lining,
+        paint_finish: result.scores.paint_finish,
+      });
       setReviewStage({ pct: 100, text: 'Debrief complete!' });
       Animated.timing(progress, { toValue: 1, duration: 400, useNativeDriver: false }).start(() => {
         setTimeout(() => {
@@ -185,12 +192,14 @@ function Judge() {
       setReviewStage(null);
       progress.setValue(0);
       if (e instanceof JudgeError) {
+        track('judge_fail', { code: e.code });
         // Log the raw error to Sentry regardless — we want to know when users hit these
         Sentry.captureException(new Error(`Judge failed [${e.code}]: ${e.raw ?? e.message}`), {
           tags: { judge_code: e.code },
         });
         Alert.alert(e.userTitle, e.userMessage);
       } else {
+        track('judge_fail', { code: 'UNCAUGHT' });
         Sentry.captureException(e);
         Alert.alert('Pilot review failed', e?.message ?? 'Something went wrong.');
       }

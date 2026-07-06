@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase';
+import { track } from '@/lib/analytics';
 
 export type Comment = {
   id: string;
@@ -53,6 +54,7 @@ export async function addComment(userId: string, buildId: string, body: string):
     .single();
   if (error) throw error;
 
+  track('comment_posted', { build_id: buildId, length: trimmed.length });
   // Fire-and-forget push to the build owner.
   supabase.functions
     .invoke('send-push', { body: { kind: 'comment', build_id: buildId, body: trimmed } })

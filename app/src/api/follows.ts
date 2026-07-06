@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase';
+import { track } from '@/lib/analytics';
 
 export type FollowUser = {
   id: string;
@@ -54,6 +55,7 @@ export async function isFollowing(followerId: string, followeeId: string): Promi
 export async function followUser(followerId: string, followeeId: string): Promise<void> {
   const { error } = await supabase.from('follows').insert({ follower_id: followerId, followee_id: followeeId });
   if (error && !/duplicate|unique/i.test(error.message)) throw error;
+  track('follow_user', { followee_id: followeeId });
   supabase.functions
     .invoke('send-push', { body: { kind: 'follow', followee_id: followeeId } })
     .catch(() => {});
@@ -66,4 +68,5 @@ export async function unfollowUser(followerId: string, followeeId: string): Prom
     .eq('follower_id', followerId)
     .eq('followee_id', followeeId);
   if (error) throw error;
+  track('unfollow_user', { followee_id: followeeId });
 }
