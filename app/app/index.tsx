@@ -122,9 +122,11 @@ export default function Splash() {
                 <Text style={styles.btnPrimaryText}>GET STARTED</Text>
                 <Text style={styles.btnArrow}>  →</Text>
               </Pressable>
-              <Pressable style={styles.signInRow} onPress={() => router.push('/(auth)/sign-in')}>
-                <Text style={styles.signInText}>Already building? </Text>
-                <Text style={styles.signInLink}>Sign in</Text>
+              <Pressable
+                style={({ pressed }) => [styles.btnSecondary, pressed && { opacity: 0.65 }]}
+                onPress={() => router.push('/(auth)/sign-in')}
+              >
+                <Text style={styles.btnSecondaryText}>SIGN IN</Text>
               </Pressable>
             </>
           )}
@@ -219,6 +221,20 @@ function makeStyles(C: Palette) {
     signInRow: { flexDirection: 'row', alignItems: 'center', marginTop: 14 },
     signInText: { fontSize: 15, color: C.textDim, fontFamily: 'DMSans_300Light' },
     signInLink: { fontSize: 15, color: C.textMid, fontFamily: 'DMSans_500Medium', textDecorationLine: 'underline' },
+    btnSecondary: {
+      width: '100%',
+      marginTop: 12,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'transparent',
+      borderWidth: 1,
+      borderColor: C.borderGold,
+      borderRadius: 30,
+      paddingVertical: 15,
+      paddingHorizontal: 48,
+    },
+    btnSecondaryText: { fontSize: 15, letterSpacing: 2.5, color: C.accent, fontFamily: 'DMSans_500Medium' },
     continueBlock: { alignItems: 'center', paddingHorizontal: 24, paddingVertical: 18 },
     continueHint: { fontFamily: 'DMSans_500Medium', fontSize: 13, letterSpacing: 4, color: C.accent, textAlign: 'center' },
 
