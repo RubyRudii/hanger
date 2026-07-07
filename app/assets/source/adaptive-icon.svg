@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- Transparent background — Android composites this on the app.json backgroundColor -->
+  <!-- Content stays inside the center 66% safe area to survive Android's mask crop -->
+  <g fill="#C9A84C">
+    <rect x="336" y="292" width="94"  height="440" rx="6"/>
+    <rect x="594" y="292" width="94"  height="440" rx="6"/>
+    <rect x="430" y="479" width="164" height="66"  rx="6"/>
+  </g>
+</svg>

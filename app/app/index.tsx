@@ -42,16 +42,29 @@ export default function Splash() {
     fade(versionOp, 600, 1500).start();
   }, []);
 
+  const continueOp = useRef(new Animated.Value(0)).current;
   useEffect(() => {
-    if (loading) return;
-    if (session) {
-      const t = setTimeout(() => router.replace('/(tabs)/feed'), 600);
-      return () => clearTimeout(t);
-    }
-  }, [session, loading]);
+    if (!session) return;
+    // Gentle pulse on the "tap to continue" hint after the splash animates in.
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(continueOp, { toValue: 1, duration: 900, delay: 2200, useNativeDriver: true }),
+        Animated.timing(continueOp, { toValue: 0.35, duration: 900, useNativeDriver: true }),
+      ]),
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [session]);
+
+  function goHome() {
+    if (session) router.replace('/(tabs)/feed');
+  }
+
+  const RootWrapper: any = session ? Pressable : View;
+  const rootWrapperProps: any = session ? { onPress: goHome } : {};
 
   return (
-    <View style={styles.root}>
+    <RootWrapper style={styles.root} {...rootWrapperProps}>
       <View style={StyleSheet.absoluteFillObject} pointerEvents="none">
         <Svg width="100%" height="100%">
           <Defs>
@@ -90,17 +103,31 @@ export default function Splash() {
         </Animated.View>
 
         <Animated.View style={[styles.ctaBlock, { opacity: ctaOp, transform: [{ translateY: ctaY }] }]}>
-          <Pressable
-            style={({ pressed }) => [styles.btnPrimary, pressed && { opacity: 0.85 }]}
-            onPress={() => router.push('/(auth)/onboarding')}
-          >
-            <Text style={styles.btnPrimaryText}>GET STARTED</Text>
-            <Text style={styles.btnArrow}>  →</Text>
-          </Pressable>
-          <Pressable style={styles.signInRow} onPress={() => router.push('/(auth)/sign-in')}>
-            <Text style={styles.signInText}>Already building? </Text>
-            <Text style={styles.signInLink}>Sign in</Text>
-          </Pressable>
+          {session ? (
+            <Pressable
+              style={({ pressed }) => [styles.continueBlock, pressed && { opacity: 0.7 }]}
+              onPress={goHome}
+              hitSlop={20}
+            >
+              <Animated.Text style={[styles.continueHint, { opacity: continueOp }]}>
+                ⌁  TAP TO CONTINUE  ⌁
+              </Animated.Text>
+            </Pressable>
+          ) : (
+            <>
+              <Pressable
+                style={({ pressed }) => [styles.btnPrimary, pressed && { opacity: 0.85 }]}
+                onPress={() => router.push('/(auth)/onboarding')}
+              >
+                <Text style={styles.btnPrimaryText}>GET STARTED</Text>
+                <Text style={styles.btnArrow}>  →</Text>
+              </Pressable>
+              <Pressable style={styles.signInRow} onPress={() => router.push('/(auth)/sign-in')}>
+                <Text style={styles.signInText}>Already building? </Text>
+                <Text style={styles.signInLink}>Sign in</Text>
+              </Pressable>
+            </>
+          )}
         </Animated.View>
 
         <Animated.View style={[styles.badgeRow, { opacity: badgeOp }]}>
@@ -115,7 +142,7 @@ export default function Splash() {
       <Animated.View style={[styles.version, { opacity: versionOp }]} pointerEvents="none">
         <Text style={styles.versionText}>V 1.0 · ALPHA</Text>
       </Animated.View>
-    </View>
+    </RootWrapper>
   );
 }
 
@@ -192,6 +219,8 @@ function makeStyles(C: Palette) {
     signInRow: { flexDirection: 'row', alignItems: 'center', marginTop: 14 },
     signInText: { fontSize: 15, color: C.textDim, fontFamily: 'DMSans_300Light' },
     signInLink: { fontSize: 15, color: C.textMid, fontFamily: 'DMSans_500Medium', textDecorationLine: 'underline' },
+    continueBlock: { alignItems: 'center', paddingHorizontal: 24, paddingVertical: 18 },
+    continueHint: { fontFamily: 'DMSans_500Medium', fontSize: 13, letterSpacing: 4, color: C.accent, textAlign: 'center' },
 
     badgeRow: { flexDirection: 'row', marginTop: 48 },
     gradeBadge: {
