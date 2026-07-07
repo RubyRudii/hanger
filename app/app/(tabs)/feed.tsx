@@ -18,6 +18,7 @@ import { fetchFeed, fetchMyBuilds, fetchTopThisWeek } from '@/api/builds';
 import { fetchMyFollowingIds } from '@/api/follows';
 import { fetchMyLikedBuildIds, likeBuild, unlikeBuild } from '@/api/likes';
 import { BuildSummary } from '@/components/BuildCard';
+import { EmptyState } from '@/components/EmptyState';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
 import { Palette } from '@/lib/theme';
@@ -258,9 +259,14 @@ export default function Feed() {
                     </Pressable>
                   ) : (
                     <View style={[styles.featured, styles.featuredEmpty]}>
-                      <Text style={styles.emptyText}>
-                        No champion yet this week.{'\n'}Submit a build to be the first.
-                      </Text>
+                      <EmptyState
+                        compact
+                        icon={<Text style={{ fontSize: 30 }}>👑</Text>}
+                        title="NO CHAMPION YET"
+                        body="First build submitted this week takes the crown."
+                        ctaLabel="SUBMIT A BUILD"
+                        onCta={() => router.push('/(tabs)/judge')}
+                      />
                     </View>
                   )}
                 </View>
@@ -301,17 +307,39 @@ export default function Feed() {
               />
             )}
             ListEmptyComponent={
-              <View style={styles.emptyWrap}>
-                <Text style={styles.emptyText}>
-                  {filter === 'FOLLOWING'
-                    ? followingIds.size === 0
-                      ? 'You are not following anyone yet.\nTap an @handle to visit a pilot and follow them.'
-                      : 'None of the pilots you follow have builds yet.'
-                    : filter === 'ALL'
-                    ? 'No builds yet.\nTap JUDGE to submit your first.'
-                    : `No ${filter} builds match your filter.`}
-                </Text>
-              </View>
+              filter === 'FOLLOWING' && followingIds.size === 0 ? (
+                <EmptyState
+                  icon={<Text style={{ fontSize: 30 }}>👥</Text>}
+                  title="NOT FOLLOWING ANYONE"
+                  body="Tap an @handle on any build to visit a pilot and follow them."
+                  ctaLabel="BROWSE ALL BUILDS"
+                  onCta={() => setFilter('ALL')}
+                />
+              ) : filter === 'FOLLOWING' ? (
+                <EmptyState
+                  icon={<Text style={{ fontSize: 30 }}>📡</Text>}
+                  title="QUIET IN HERE"
+                  body="None of the pilots you follow have filed a build yet."
+                  ctaLabel="BROWSE ALL"
+                  onCta={() => setFilter('ALL')}
+                />
+              ) : filter === 'ALL' ? (
+                <EmptyState
+                  icon={<Text style={{ fontSize: 32 }}>🚀</Text>}
+                  title="THE FEED AWAITS"
+                  body="Be the first pilot to file a build. Submit for review and land on the community feed."
+                  ctaLabel="OPEN JUDGE"
+                  onCta={() => router.push('/(tabs)/judge')}
+                />
+              ) : (
+                <EmptyState
+                  icon={<Text style={{ fontSize: 30 }}>🔍</Text>}
+                  title="NO MATCHES"
+                  body={`Nothing on the feed matches “${filter}” yet.`}
+                  ctaLabel="SHOW ALL"
+                  onCta={() => setFilter('ALL')}
+                />
+              )
             }
           />
         )}

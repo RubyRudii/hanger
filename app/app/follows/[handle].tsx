@@ -21,6 +21,7 @@ import {
 } from '@/api/follows';
 import { fetchProfileByHandle } from '@/api/profile';
 import { useAuth } from '@/context/AuthContext';
+import { EmptyState } from '@/components/EmptyState';
 import { useTheme } from '@/context/ThemeContext';
 import { Palette } from '@/lib/theme';
 
@@ -172,13 +173,15 @@ export default function FollowsList() {
               );
             }}
             ListEmptyComponent={
-              <View style={styles.empty}>
-                <Text style={styles.emptyText}>
-                  {tab === 'FOLLOWERS'
-                    ? `@${handle} has no followers yet.`
-                    : `@${handle} is not following anyone yet.`}
-                </Text>
-              </View>
+              <EmptyState
+                icon={<Text style={{ fontSize: 30 }}>👥</Text>}
+                title={tab === 'FOLLOWERS' ? 'NO FOLLOWERS YET' : 'NOT FOLLOWING ANYONE'}
+                body={
+                  tab === 'FOLLOWERS'
+                    ? `@${handle} hasn't picked up any followers yet.`
+                    : `@${handle} isn't following anyone yet.`
+                }
+              />
             }
           />
         )}

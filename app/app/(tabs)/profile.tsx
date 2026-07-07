@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Circle, Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
 import { fetchMyBuilds } from '@/api/builds';
 import { BuildSummary } from '@/components/BuildCard';
+import { EmptyState } from '@/components/EmptyState';
 import { SettingsSheet } from '@/components/SettingsSheet';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
@@ -284,12 +285,14 @@ function HangarTab({ builds }: { builds: BuildSummary[] }) {
       </View>
 
       {builds.length === 0 ? (
-        <View style={styles.empty}>
-          <Text style={styles.emptyText}>No kits on the shelf yet.</Text>
-          <Pressable style={styles.cta} onPress={() => router.push('/(tabs)/judge')}>
-            <Text style={styles.ctaText}>FILE FIRST BUILD →</Text>
-          </Pressable>
-        </View>
+        <EmptyState
+          compact
+          icon={<Text style={{ fontSize: 30 }}>🛩️</Text>}
+          title="SHELF IS BARE"
+          body="File your first build for pilot review — scored builds land here."
+          ctaLabel="OPEN JUDGE"
+          onCta={() => router.push('/(tabs)/judge')}
+        />
       ) : (
         <View style={styles.shelfGrid}>
           {builds.map((b) => {
@@ -371,9 +374,12 @@ function LogTab({ builds }: { builds: BuildSummary[] }) {
   if (builds.length === 0) {
     return (
       <View style={styles.tabSection}>
-        <View style={styles.empty}>
-          <Text style={styles.emptyText}>No activity yet.</Text>
-        </View>
+        <EmptyState
+          compact
+          icon={<Text style={{ fontSize: 28 }}>📜</Text>}
+          title="NOTHING TO REPORT"
+          body="Activity from your builds and follows will show up here."
+        />
       </View>
     );
   }

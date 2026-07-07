@@ -16,6 +16,7 @@ import { followUser, isFollowing, unfollowUser } from '@/api/follows';
 import { fetchProfileByHandle, PublicProfile } from '@/api/profile';
 import { BuildSummary } from '@/components/BuildCard';
 import { useAuth } from '@/context/AuthContext';
+import { EmptyState } from '@/components/EmptyState';
 import { useTheme } from '@/context/ThemeContext';
 import { Palette } from '@/lib/theme';
 
@@ -290,9 +291,12 @@ export default function PilotView() {
             </View>
 
             {builds.length === 0 ? (
-              <View style={styles.empty}>
-                <Text style={styles.emptyText}>No builds filed yet.</Text>
-              </View>
+              <EmptyState
+                compact
+                icon={<Text style={{ fontSize: 26 }}>🛩️</Text>}
+                title="NO BUILDS ON RECORD"
+                body="This pilot hasn't filed any builds yet."
+              />
             ) : (
               <View style={styles.shelfGrid}>
                 {builds.map((b) => {

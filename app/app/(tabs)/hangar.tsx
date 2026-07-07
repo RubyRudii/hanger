@@ -14,6 +14,7 @@ import { router, useFocusEffect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
 import { deleteKit, Kit, listKits } from '@/api/kits';
+import { EmptyState } from '@/components/EmptyState';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
 import { Palette } from '@/lib/theme';
@@ -163,16 +164,13 @@ export default function Hangar() {
             renderItem={({ item }) => <KitRow kit={item} onLongPress={() => confirmDelete(item)} />}
             ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
             ListEmptyComponent={
-              <View style={styles.empty}>
-                <Text style={styles.emptyTitle}>HANGAR EMPTY</Text>
-                <Text style={styles.emptyText}>
-                  Log every kit you own, are building, or have your eye on.{'\n'}
-                  No judging. No score. Just inventory.
-                </Text>
-                <Pressable style={styles.cta} onPress={() => router.push('/add-kit')}>
-                  <Text style={styles.ctaText}>+ LOG FIRST KIT</Text>
-                </Pressable>
-              </View>
+              <EmptyState
+                icon={<Text style={{ fontSize: 32 }}>📦</Text>}
+                title="HANGAR EMPTY"
+                body={'Log every kit you own, are building, or have your eye on.\nNo judging. No score. Just inventory.'}
+                ctaLabel="+ LOG FIRST KIT"
+                onCta={() => router.push('/add-kit')}
+              />
             }
           />
         )}
