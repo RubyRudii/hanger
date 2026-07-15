@@ -17,6 +17,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { fetchFeed, fetchMyBuilds, fetchTopThisWeek } from '@/api/builds';
 import { fetchMyFollowingIds } from '@/api/follows';
 import { fetchMyLikedBuildIds, likeBuild, unlikeBuild } from '@/api/likes';
+import { listBlockedIds } from '@/api/moderation';
 import { BuildSummary } from '@/components/BuildCard';
 import { EmptyState } from '@/components/EmptyState';
 import { useAuth } from '@/context/AuthContext';
@@ -55,22 +56,26 @@ export default function Feed() {
   const [filter, setFilter] = useState<Filter>('ALL');
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
   const [followingIds, setFollowingIds] = useState<Set<string>>(new Set());
+  const [blockedIds, setBlockedIds] = useState<Set<string>>(new Set());
 
   const load = useCallback(async () => {
     try {
-      const [f, t, mine, liked, following] = await Promise.all([
+      const [f, t, mine, liked, following, blocked] = await Promise.all([
         fetchFeed(),
         fetchTopThisWeek(),
         session ? fetchMyBuilds(session.user.id) : Promise.resolve([]),
         session ? fetchMyLikedBuildIds(session.user.id) : Promise.resolve(new Set<string>()),
         session ? fetchMyFollowingIds(session.user.id) : Promise.resolve(new Set<string>()),
+        session ? listBlockedIds(session.user.id) : Promise.resolve(new Set<string>()),
       ]);
-      setFeed(f);
-      setChampion(t[0] ?? null);
+      const notBlocked = (b: BuildSummary) => !blocked.has(b.user_id);
+      setFeed(f.filter(notBlocked));
+      setChampion(t.find(notBlocked) ?? null);
       setMyCount(mine.length);
       setMyAvg(mine.length ? Math.round(mine.reduce((s, b) => s + b.score, 0) / mine.length) : 0);
       setLikedIds(liked);
       setFollowingIds(following);
+      setBlockedIds(blocked);
     } catch (e) {
       console.warn('feed load failed', e);
     } finally {

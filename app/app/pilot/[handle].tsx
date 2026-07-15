@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Image,
   Pressable,
   ScrollView,
@@ -10,13 +11,15 @@ import {
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Svg, { Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
+import Svg, { Circle, Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
 import { fetchMyBuilds } from '@/api/builds';
 import { followUser, isFollowing, unfollowUser } from '@/api/follows';
+import { blockUser, listBlockedIds, unblockUser } from '@/api/moderation';
 import { fetchProfileByHandle, PublicProfile } from '@/api/profile';
 import { BuildSummary } from '@/components/BuildCard';
 import { useAuth } from '@/context/AuthContext';
 import { EmptyState } from '@/components/EmptyState';
+import { ReportSheet } from '@/components/ReportSheet';
 import { useTheme } from '@/context/ThemeContext';
 import { Palette } from '@/lib/theme';
 
@@ -70,6 +73,8 @@ export default function PilotView() {
   const [notFound, setNotFound] = useState(false);
   const [following, setFollowing] = useState(false);
   const [togglingFollow, setTogglingFollow] = useState(false);
+  const [blocked, setBlocked] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
 
   useEffect(() => {
     if (!handle) return;
@@ -81,14 +86,16 @@ export default function PilotView() {
           return;
         }
         setProfile(p);
-        const [b, isFollow] = await Promise.all([
+        const [b, isFollow, blockedIds] = await Promise.all([
           fetchMyBuilds(p.id),
           session && session.user.id !== p.id
             ? isFollowing(session.user.id, p.id)
             : Promise.resolve(false),
+          session ? listBlockedIds(session.user.id) : Promise.resolve(new Set<string>()),
         ]);
         setBuilds(b);
         setFollowing(isFollow);
+        setBlocked(blockedIds.has(p.id));
       } catch (e: any) {
         console.warn('pilot load failed', e?.message ?? e);
       } finally {
@@ -96,6 +103,59 @@ export default function PilotView() {
       }
     })();
   }, [handle, session?.user.id]);
+
+  function openMenu() {
+    if (!session || !profile || session.user.id === profile.id) return;
+    Alert.alert(
+      `@${profile.handle ?? 'pilot'}`,
+      undefined,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Report pilot', style: 'destructive', onPress: () => setReportOpen(true) },
+        blocked
+          ? { text: 'Unblock', onPress: onUnblock }
+          : { text: 'Block pilot', style: 'destructive', onPress: onConfirmBlock },
+      ],
+    );
+  }
+
+  function onConfirmBlock() {
+    if (!session || !profile) return;
+    Alert.alert(
+      `Block @${profile.handle ?? 'pilot'}?`,
+      'They won\'t know they\'ve been blocked, but you won\'t see their builds or comments anymore. Blocking also unfollows them.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Block',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              if (following) {
+                await unfollowUser(session.user.id, profile.id);
+                setFollowing(false);
+                setProfile((prev) => (prev ? { ...prev, follower_count: Math.max(0, prev.follower_count - 1) } : prev));
+              }
+              await blockUser(session.user.id, profile.id);
+              setBlocked(true);
+            } catch (e: any) {
+              Alert.alert('Could not block', e?.message ?? 'Try again later.');
+            }
+          },
+        },
+      ],
+    );
+  }
+
+  async function onUnblock() {
+    if (!session || !profile) return;
+    try {
+      await unblockUser(session.user.id, profile.id);
+      setBlocked(false);
+    } catch (e: any) {
+      Alert.alert('Could not unblock', e?.message ?? 'Try again later.');
+    }
+  }
 
   async function onToggleFollow() {
     if (!session || !profile || session.user.id === profile.id) return;
@@ -183,7 +243,17 @@ export default function PilotView() {
             </Svg>
           </Pressable>
           <Text style={styles.headerTitle}>PILOT PROFILE</Text>
-          <View style={{ width: 36 }} />
+          {session && session.user.id !== profile.id ? (
+            <Pressable style={styles.iconBtn} onPress={openMenu} hitSlop={8}>
+              <Svg width={16} height={16} viewBox="0 0 16 16">
+                <Circle cx={8} cy={3} r={1.5} fill={C.textMid} />
+                <Circle cx={8} cy={8} r={1.5} fill={C.textMid} />
+                <Circle cx={8} cy={13} r={1.5} fill={C.textMid} />
+              </Svg>
+            </Pressable>
+          ) : (
+            <View style={{ width: 36 }} />
+          )}
         </View>
 
         <ScrollView contentContainerStyle={{ paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
@@ -332,6 +402,16 @@ export default function PilotView() {
           </View>
         </ScrollView>
       </SafeAreaView>
+
+      {profile ? (
+        <ReportSheet
+          visible={reportOpen}
+          onClose={() => setReportOpen(false)}
+          subjectKind="profile"
+          subjectId={profile.id}
+          subjectLabel={`@${profile.handle ?? 'pilot'}`}
+        />
+      ) : null}
     </View>
   );
 }

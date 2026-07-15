@@ -29,7 +29,9 @@ import Svg, {
 } from 'react-native-svg';
 import { DbBuild, fetchBuild, fetchMyBuilds } from '@/api/builds';
 import { addComment, Comment, deleteComment, fetchComments } from '@/api/comments';
+import { listBlockedIds } from '@/api/moderation';
 import { EmptyState } from '@/components/EmptyState';
+import { ReportSheet } from '@/components/ReportSheet';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
 import { Palette } from '@/lib/theme';
@@ -88,6 +90,8 @@ export default function Debrief() {
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentText, setCommentText] = useState('');
   const [posting, setPosting] = useState(false);
+  const [blockedIds, setBlockedIds] = useState<Set<string>>(new Set());
+  const [reportOpen, setReportOpen] = useState(false);
   const scrollRef = useRef<ScrollView | null>(null);
 
   // Animated values
@@ -107,13 +111,18 @@ export default function Debrief() {
         const b = await fetchBuild(id);
         setBuild(b);
         if (b) {
-          const [mine, cs] = await Promise.all([fetchMyBuilds(b.user_id), fetchComments(b.id)]);
+          const [mine, cs, blocked] = await Promise.all([
+            fetchMyBuilds(b.user_id),
+            fetchComments(b.id),
+            session ? listBlockedIds(session.user.id) : Promise.resolve(new Set<string>()),
+          ]);
           const earlier = mine
             .filter((m) => m.id !== b.id && new Date(m.created_at) < new Date(b.created_at))
             .sort((a, z) => +new Date(z.created_at) - +new Date(a.created_at));
           setPrevScore(earlier[0]?.score ?? null);
           setTotalXp(mine.reduce((s, m) => s + m.score * 10, 0));
-          setComments(cs);
+          setComments(cs.filter((c) => !blocked.has(c.user_id)));
+          setBlockedIds(blocked);
         }
       } catch (e) {
         console.warn('build load failed', e);
@@ -139,23 +148,33 @@ export default function Debrief() {
     }
   }
 
+  const [reportingComment, setReportingComment] = useState<Comment | null>(null);
+
   function onLongPressComment(c: Comment) {
-    if (!session || c.user_id !== session.user.id) return;
-    Alert.alert('Delete comment?', c.body.length > 60 ? c.body.slice(0, 60) + '…' : c.body, [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Delete',
-        style: 'destructive',
-        onPress: async () => {
-          try {
-            await deleteComment(c.id);
-            setComments((prev) => prev.filter((x) => x.id !== c.id));
-          } catch (e: any) {
-            Alert.alert('Failed', e?.message ?? 'Could not delete.');
-          }
+    if (!session) return;
+    const snippet = c.body.length > 60 ? c.body.slice(0, 60) + '…' : c.body;
+    if (c.user_id === session.user.id) {
+      Alert.alert('Delete comment?', snippet, [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await deleteComment(c.id);
+              setComments((prev) => prev.filter((x) => x.id !== c.id));
+            } catch (e: any) {
+              Alert.alert('Failed', e?.message ?? 'Could not delete.');
+            }
+          },
         },
-      },
-    ]);
+      ]);
+    } else {
+      Alert.alert('Comment', snippet, [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Report comment', style: 'destructive', onPress: () => setReportingComment(c) },
+      ]);
+    }
   }
 
   useEffect(() => {
@@ -273,6 +292,13 @@ export default function Debrief() {
               <Path d="M4.5 6L9.5 4M4.5 8L9.5 10" stroke="rgba(255,255,255,0.6)" strokeWidth={1.2} />
             </Svg>
           </Pressable>
+          {session && build && build.user_id !== session.user.id ? (
+            <Pressable style={styles.iconBtn} onPress={() => setReportOpen(true)}>
+              <Svg width={14} height={14} viewBox="0 0 14 14" fill="none">
+                <Path d="M2 12V2 M2 2 H10 L8 5 L10 8 H2" stroke={C.textMid} strokeWidth={1.2} strokeLinejoin="round" />
+              </Svg>
+            </Pressable>
+          ) : null}
         </View>
 
         <ScrollView
@@ -579,6 +605,29 @@ export default function Debrief() {
           </View>
         </ScrollView>
       </SafeAreaView>
+
+      {build ? (
+        <ReportSheet
+          visible={reportOpen}
+          onClose={() => setReportOpen(false)}
+          subjectKind="build"
+          subjectId={build.id}
+          subjectLabel={build.kit_name}
+        />
+      ) : null}
+      {reportingComment ? (
+        <ReportSheet
+          visible={!!reportingComment}
+          onClose={() => setReportingComment(null)}
+          subjectKind="comment"
+          subjectId={reportingComment.id}
+          subjectLabel={
+            reportingComment.body.length > 40
+              ? reportingComment.body.slice(0, 40) + '…'
+              : reportingComment.body
+          }
+        />
+      ) : null}
     </View>
   );
 }
