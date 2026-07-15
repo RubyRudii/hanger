@@ -12,6 +12,20 @@ export type PublicProfile = {
   following_count: number;
 };
 
+export async function searchPilots(query: string, limit = 20): Promise<PublicProfile[]> {
+  const q = query.trim().toLowerCase().replace(/^@/, '');
+  if (q.length < 2) return [];
+  const safe = q.replace(/[%_]/g, '\\$&');
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('id, handle, display_name, joined_year, bio, avatar_url, follower_count, following_count')
+    .or(`handle.ilike.%${safe}%,display_name.ilike.%${safe}%`)
+    .order('follower_count', { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+  return (data ?? []) as PublicProfile[];
+}
+
 export async function fetchProfileByHandle(handle: string): Promise<PublicProfile | null> {
   const { data, error } = await supabase
     .from('profiles')

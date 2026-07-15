@@ -12,7 +12,7 @@ import {
   View,
 } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import Svg, { Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
+import Svg, { Circle, Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { fetchFeed, fetchMyBuilds, fetchTopThisWeek } from '@/api/builds';
 import { fetchMyFollowingIds } from '@/api/follows';
@@ -146,6 +146,12 @@ export default function Feed() {
             <Text style={styles.logo}>HANGER</Text>
           </View>
           <View style={styles.headerRight}>
+            <Pressable style={styles.iconBtn} onPress={() => router.push('/search')}>
+              <Svg width={16} height={16} viewBox="0 0 16 16">
+                <Circle cx={7} cy={7} r={4.5} stroke={C.textMid} strokeWidth={1.3} fill="none" />
+                <Path d="M10.5 10.5L14 14" stroke={C.textMid} strokeWidth={1.3} strokeLinecap="round" />
+              </Svg>
+            </Pressable>
             <Pressable style={styles.iconBtn} onPress={() => router.push('/inbox')}>
               <Svg width={16} height={16} viewBox="0 0 16 16">
                 <Path

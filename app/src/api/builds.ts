@@ -135,6 +135,22 @@ export async function createBuild(input: {
   return data.id;
 }
 
+export async function searchBuilds(query: string, limit = 20): Promise<BuildSummary[]> {
+  const q = query.trim();
+  if (q.length < 2) return [];
+  // Escape SQL LIKE wildcards from the user input so a "%" doesn't blow up
+  const safe = q.replace(/[%_]/g, '\\$&');
+  const { data, error } = await supabase
+    .from('builds')
+    .select('*, profiles!builds_user_id_fkey(handle)')
+    .ilike('kit_name', `%${safe}%`)
+    .order('score', { ascending: false })
+    .order('created_at', { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+  return (data as DbBuild[]).map(summarize);
+}
+
 export async function updateBuild(
   buildId: string,
   fields: { kit_name?: string; grade?: string; modifications?: string; series?: string | null },
