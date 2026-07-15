@@ -27,9 +27,10 @@ import Svg, {
   Rect,
   Stop,
 } from 'react-native-svg';
-import { DbBuild, fetchBuild, fetchMyBuilds } from '@/api/builds';
+import { DbBuild, deleteBuild, fetchBuild, fetchMyBuilds } from '@/api/builds';
 import { addComment, Comment, deleteComment, fetchComments } from '@/api/comments';
 import { listBlockedIds } from '@/api/moderation';
+import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { EmptyState } from '@/components/EmptyState';
 import { ReportSheet } from '@/components/ReportSheet';
 import { useAuth } from '@/context/AuthContext';
@@ -149,6 +150,34 @@ export default function Debrief() {
   }
 
   const [reportingComment, setReportingComment] = useState<Comment | null>(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  function openOwnerMenu() {
+    if (!build) return;
+    Alert.alert(
+      build.kit_name,
+      undefined,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Edit build', onPress: () => router.push(`/edit-build/${build.id}`) },
+        { text: 'Delete build', style: 'destructive', onPress: () => setDeleteOpen(true) },
+      ],
+    );
+  }
+
+  async function confirmDeleteBuild() {
+    if (!build) return;
+    setDeleting(true);
+    try {
+      await deleteBuild(build.id);
+      setDeleteOpen(false);
+      router.back();
+    } catch (e: any) {
+      setDeleting(false);
+      Alert.alert('Could not delete', e?.message ?? 'Try again later.');
+    }
+  }
 
   function onLongPressComment(c: Comment) {
     if (!session) return;
@@ -278,12 +307,15 @@ export default function Debrief() {
             <Text style={styles.headerTitle}>PILOT'S DEBRIEF</Text>
             <Text style={styles.headerSub}>EVALUATION COMPLETE</Text>
           </View>
-          <Pressable style={styles.iconBtn} onPress={() => Alert.alert('Saved', 'Filed to your Hangar.')}>
-            <Svg width={14} height={14} viewBox="0 0 14 14">
-              <Path d="M2 2H10L12 4V12C12 12.55 11.55 13 11 13H3C2.45 13 2 12.55 2 12V2Z" stroke={C.accent} strokeWidth={1.2} />
-              <Path d="M4 2V6H9V2" stroke={C.accent} strokeWidth={1.2} />
-            </Svg>
-          </Pressable>
+          {session && build && build.user_id === session.user.id ? (
+            <Pressable style={styles.iconBtn} onPress={openOwnerMenu}>
+              <Svg width={16} height={16} viewBox="0 0 16 16">
+                <Circle cx={8} cy={3} r={1.5} fill={C.textMid} />
+                <Circle cx={8} cy={8} r={1.5} fill={C.textMid} />
+                <Circle cx={8} cy={13} r={1.5} fill={C.textMid} />
+              </Svg>
+            </Pressable>
+          ) : null}
           <Pressable style={styles.iconBtn} onPress={onShare}>
             <Svg width={14} height={14} viewBox="0 0 14 14">
               <Circle cx={11} cy={3} r={2} stroke="rgba(255,255,255,0.6)" strokeWidth={1.2} />
@@ -628,6 +660,16 @@ export default function Debrief() {
           }
         />
       ) : null}
+      <ConfirmDialog
+        visible={deleteOpen}
+        title="DELETE BUILD?"
+        body="The scored debrief, likes, and comments will be permanently removed. This cannot be undone."
+        confirmLabel="DELETE"
+        destructive
+        busy={deleting}
+        onConfirm={confirmDeleteBuild}
+        onCancel={() => setDeleteOpen(false)}
+      />
     </View>
   );
 }

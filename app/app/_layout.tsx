@@ -54,6 +54,8 @@ function AuthGate() {
       <Stack.Screen name="add-kit" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
       <Stack.Screen name="edit-profile" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
       <Stack.Screen name="inbox" options={{ presentation: 'card' }} />
+      <Stack.Screen name="edit-build/[id]" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
+      <Stack.Screen name="leaderboard" options={{ presentation: 'card' }} />
       <Stack.Screen name="pilot/[handle]" options={{ presentation: 'card' }} />
       <Stack.Screen name="follows/[handle]" options={{ presentation: 'card' }} />
     </Stack>

@@ -208,7 +208,9 @@ export default function Feed() {
                     <Text style={styles.sectionTitle}>
                       THIS WEEK'S <Text style={{ color: C.accent }}>CHAMPION</Text>
                     </Text>
-                    <Text style={styles.sectionMore}>VIEW ALL ↗</Text>
+                    <Pressable onPress={() => router.push('/leaderboard')} hitSlop={8}>
+                      <Text style={styles.sectionMore}>VIEW ALL ↗</Text>
+                    </Pressable>
                   </View>
 
                   {champion ? (

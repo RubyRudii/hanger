@@ -62,14 +62,15 @@ export async function fetchFeed(): Promise<BuildSummary[]> {
   return (data as DbBuild[]).map(summarize);
 }
 
-export async function fetchTopThisWeek(): Promise<BuildSummary[]> {
+export async function fetchTopThisWeek(limit = 3): Promise<BuildSummary[]> {
   const weekAgo = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
   const { data, error } = await supabase
     .from('builds')
     .select('*, profiles!builds_user_id_fkey(handle)')
     .gte('created_at', weekAgo)
     .order('score', { ascending: false })
-    .limit(3);
+    .order('created_at', { ascending: false })
+    .limit(limit);
   if (error) throw error;
   return (data as DbBuild[]).map(summarize);
 }
@@ -132,6 +133,37 @@ export async function createBuild(input: {
     .single();
   if (error) throw error;
   return data.id;
+}
+
+export async function updateBuild(
+  buildId: string,
+  fields: { kit_name?: string; grade?: string; modifications?: string; series?: string | null },
+): Promise<void> {
+  const { error } = await supabase.from('builds').update(fields).eq('id', buildId);
+  if (error) throw error;
+}
+
+export async function deleteBuild(buildId: string): Promise<void> {
+  // Grab the photo URL first so we can also clear the storage object.
+  const { data: b } = await supabase
+    .from('builds')
+    .select('photo_url')
+    .eq('id', buildId)
+    .maybeSingle();
+
+  const { error } = await supabase.from('builds').delete().eq('id', buildId);
+  if (error) throw error;
+
+  // Best-effort photo cleanup — storage failures don't roll back the delete.
+  if (b?.photo_url) {
+    const marker = '/build-photos/';
+    const idx = (b.photo_url as string).indexOf(marker);
+    if (idx >= 0) {
+      const rawPath = (b.photo_url as string).slice(idx + marker.length).split('?')[0];
+      const path = decodeURIComponent(rawPath);
+      await supabase.storage.from('build-photos').remove([path]).catch(() => {});
+    }
+  }
 }
 
 export type { DbBuild };
