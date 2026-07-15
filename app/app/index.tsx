@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef } from 'react';
-import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Animated, Easing, Pressable, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Defs, Line, Pattern, Rect } from 'react-native-svg';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
+import { hasSeenOnboarding } from '@/lib/onboarding';
 import { Palette } from '@/lib/theme';
 
 export default function Splash() {
@@ -49,6 +50,7 @@ export default function Splash() {
     const loop = Animated.loop(
       Animated.sequence([
         Animated.timing(continueOp, { toValue: 1, duration: 900, delay: 2200, useNativeDriver: true }),
+        Animated.delay(1000),
         Animated.timing(continueOp, { toValue: 0.35, duration: 900, useNativeDriver: true }),
       ]),
     );
@@ -58,6 +60,11 @@ export default function Splash() {
 
   function goHome() {
     if (session) router.replace('/(tabs)/feed');
+  }
+
+  async function onGetStarted() {
+    const seen = await hasSeenOnboarding();
+    router.push(seen ? '/(auth)/sign-up' : '/(auth)/onboarding');
   }
 
   const RootWrapper: any = session ? Pressable : View;
@@ -117,7 +124,7 @@ export default function Splash() {
             <>
               <Pressable
                 style={({ pressed }) => [styles.btnPrimary, pressed && { opacity: 0.85 }]}
-                onPress={() => router.push('/(auth)/onboarding')}
+                onPress={onGetStarted}
               >
                 <Text style={styles.btnPrimaryText}>GET STARTED</Text>
                 <Text style={styles.btnArrow}>  →</Text>

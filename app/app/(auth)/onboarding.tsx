@@ -4,6 +4,7 @@ import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
 import { useTheme } from '@/context/ThemeContext';
+import { markOnboardingSeen } from '@/lib/onboarding';
 import { Palette } from '@/lib/theme';
 
 type Slide = { id: number; step: string; titleA: string; titleAccent: string; titleB: string; body: string; pills: string[]; visual: 'judge' | 'community' | 'backlog' };
@@ -67,13 +68,18 @@ export default function Onboarding() {
   }
 
   function next() {
-    if (isLast) router.replace('/(auth)/sign-up');
-    else go(current + 1);
+    if (isLast) {
+      markOnboardingSeen().catch(() => {});
+      router.replace('/(auth)/sign-up');
+    } else {
+      go(current + 1);
+    }
   }
   function back() {
     if (current > 0) go(current - 1);
   }
   function skip() {
+    markOnboardingSeen().catch(() => {});
     router.replace('/(auth)/sign-up');
   }
 

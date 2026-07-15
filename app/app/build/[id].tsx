@@ -29,6 +29,7 @@ import Svg, {
 } from 'react-native-svg';
 import { DbBuild, fetchBuild, fetchMyBuilds } from '@/api/builds';
 import { addComment, Comment, deleteComment, fetchComments } from '@/api/comments';
+import { EmptyState } from '@/components/EmptyState';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
 import { Palette } from '@/lib/theme';
@@ -462,9 +463,12 @@ export default function Debrief() {
             </View>
 
             {comments.length === 0 ? (
-              <Text style={styles.commentsEmpty}>
-                No comments yet — be the first.
-              </Text>
+              <EmptyState
+                compact
+                icon={<Text style={{ fontSize: 26 }}>💬</Text>}
+                title="NO CHATTER YET"
+                body="Be the first to leave feedback for this pilot."
+              />
             ) : (
               <View style={styles.commentsList}>
                 {comments.map((c) => {
