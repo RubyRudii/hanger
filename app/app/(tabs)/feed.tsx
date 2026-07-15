@@ -261,7 +261,14 @@ export default function Feed() {
                     <View style={[styles.featured, styles.featuredEmpty]}>
                       <EmptyState
                         compact
-                        icon={<Text style={{ fontSize: 30 }}>👑</Text>}
+                        icon={
+                          <Svg width={38} height={38} viewBox="0 0 16 16">
+                            <Path
+                              d="M2 5L5 8L8 3L11 8L14 5V12H2V5Z M2 13H14V14H2V13Z"
+                              fill="#E63946"
+                            />
+                          </Svg>
+                        }
                         title="NO CHAMPION YET"
                         body="First build submitted this week takes the crown."
                         ctaLabel="SUBMIT A BUILD"
