@@ -146,7 +146,7 @@ export default function Feed() {
             <Text style={styles.logo}>HANGER</Text>
           </View>
           <View style={styles.headerRight}>
-            <Pressable style={styles.iconBtn}>
+            <Pressable style={styles.iconBtn} onPress={() => router.push('/inbox')}>
               <Svg width={16} height={16} viewBox="0 0 16 16">
                 <Path
                   d="M3 6.5C3 4.0147 5.0147 2 7.5 2H8.5C10.9853 2 13 4.0147 13 6.5V9.5L14 11H2L3 9.5V6.5Z"
