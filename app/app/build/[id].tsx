@@ -16,6 +16,7 @@ import {
   View,
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
+import * as Linking from 'expo-linking';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, {
   Circle,
@@ -276,8 +277,10 @@ export default function Debrief() {
 
   async function onShare() {
     try {
+      const url = Linking.createURL(`/build/${build.id}`);
       await Share.share({
-        message: `My ${build.kit_name} (${build.grade}) just scored ${build.score} on Hanger — ${a.grade}.`,
+        message: `My ${build.kit_name} (${build.grade}) just scored ${build.score} on Hanger — ${a.grade}.\n${url}`,
+        url,
       });
     } catch {}
   }

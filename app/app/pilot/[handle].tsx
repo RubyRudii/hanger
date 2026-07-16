@@ -5,11 +5,13 @@ import {
   Image,
   Pressable,
   ScrollView,
+  Share,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
+import * as Linking from 'expo-linking';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Circle, Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
 import { fetchMyBuilds } from '@/api/builds';
@@ -104,19 +106,34 @@ export default function PilotView() {
     })();
   }, [handle, session?.user.id]);
 
+  async function onShareProfile() {
+    if (!profile?.handle) return;
+    try {
+      const url = Linking.createURL(`/pilot/${profile.handle}`);
+      const name = profile.display_name ?? `@${profile.handle}`;
+      await Share.share({
+        message: `Check out ${name} on Hanger.\n${url}`,
+        url,
+      });
+    } catch {}
+  }
+
   function openMenu() {
-    if (!session || !profile || session.user.id === profile.id) return;
-    Alert.alert(
-      `@${profile.handle ?? 'pilot'}`,
-      undefined,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Report pilot', style: 'destructive', onPress: () => setReportOpen(true) },
+    if (!profile) return;
+    const isSelf = session?.user.id === profile.id;
+    const options: any[] = [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Share profile', onPress: onShareProfile },
+    ];
+    if (session && !isSelf) {
+      options.push({ text: 'Report pilot', style: 'destructive', onPress: () => setReportOpen(true) });
+      options.push(
         blocked
           ? { text: 'Unblock', onPress: onUnblock }
           : { text: 'Block pilot', style: 'destructive', onPress: onConfirmBlock },
-      ],
-    );
+      );
+    }
+    Alert.alert(`@${profile.handle ?? 'pilot'}`, undefined, options);
   }
 
   function onConfirmBlock() {
@@ -243,17 +260,13 @@ export default function PilotView() {
             </Svg>
           </Pressable>
           <Text style={styles.headerTitle}>PILOT PROFILE</Text>
-          {session && session.user.id !== profile.id ? (
-            <Pressable style={styles.iconBtn} onPress={openMenu} hitSlop={8}>
-              <Svg width={16} height={16} viewBox="0 0 16 16">
-                <Circle cx={8} cy={3} r={1.5} fill={C.textMid} />
-                <Circle cx={8} cy={8} r={1.5} fill={C.textMid} />
-                <Circle cx={8} cy={13} r={1.5} fill={C.textMid} />
-              </Svg>
-            </Pressable>
-          ) : (
-            <View style={{ width: 36 }} />
-          )}
+          <Pressable style={styles.iconBtn} onPress={openMenu} hitSlop={8}>
+            <Svg width={16} height={16} viewBox="0 0 16 16">
+              <Circle cx={8} cy={3} r={1.5} fill={C.textMid} />
+              <Circle cx={8} cy={8} r={1.5} fill={C.textMid} />
+              <Circle cx={8} cy={13} r={1.5} fill={C.textMid} />
+            </Svg>
+          </Pressable>
         </View>
 
         <ScrollView contentContainerStyle={{ paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
