@@ -9,6 +9,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
 import { Palette } from '@/lib/theme';
 import { supabase } from '@/lib/supabase';
+import { isConfigured as isPurchasesConfigured, restorePurchases, syncEntitlementToProfile } from '@/lib/purchases';
 
 const TERMS_URL = 'https://rubyrudii.github.io/hanger/terms.html';
 const PRIVACY_URL = 'https://rubyrudii.github.io/hanger/privacy.html';
@@ -22,7 +23,7 @@ const MANAGE_SUB_URL = Platform.select({
 
 export function SettingsSheet({ visible, onClose }: { visible: boolean; onClose: () => void }) {
   const { mode, setMode, colors: C } = useTheme();
-  const { signOut, profile, refreshProfile } = useAuth();
+  const { session, signOut, profile, refreshProfile } = useAuth();
   const styles = useMemo(() => makeStyles(C), [C]);
   const [deleting, setDeleting] = useState(false);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
@@ -60,10 +61,28 @@ export function SettingsSheet({ visible, onClose }: { visible: boolean; onClose:
     setTimeout(() => signOut(), 250);
   }
 
-  function onRestorePurchases() {
+  async function onRestorePurchases() {
+    if (!isPurchasesConfigured()) {
+      Alert.alert(
+        'Restore Purchases',
+        'This build does not have App Store / Play Store products wired yet. Restores will work once RevenueCat + a real build are in place.',
+      );
+      return;
+    }
+    const res = await restorePurchases();
+    if (!res.ok) {
+      Alert.alert('Restore failed', res.error ?? 'Try again in a moment.');
+      return;
+    }
+    if (session?.user) {
+      await syncEntitlementToProfile(session.user.id);
+      await refreshProfile();
+    }
     Alert.alert(
-      'Restore Purchases',
-      'Subscription restore will be wired once RevenueCat is connected to your App Store / Play Store accounts.',
+      res.entitlementActive ? 'Restored' : 'Nothing to restore',
+      res.entitlementActive
+        ? 'Your subscription is active again.'
+        : 'No active subscriptions found on this Apple ID / Google account.',
     );
   }
 

@@ -1,9 +1,19 @@
-import { useEffect, useMemo } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Svg, { Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
+import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
 import { Palette } from '@/lib/theme';
 import { track } from '@/lib/analytics';
+import {
+  getCurrentOffering,
+  isConfigured,
+  Offering,
+  Package,
+  purchasePackage,
+  restorePurchases,
+  syncEntitlementToProfile,
+} from '@/lib/purchases';
 
 const BENEFITS = [
   { icon: '🎖', title: 'Unlimited AI Judging', body: 'Submit any kit, any time. Senior pilot scores every build.' },
@@ -12,25 +22,104 @@ const BENEFITS = [
   { icon: '🏅', title: 'Earn Medals', body: 'Unlock achievements as your hangar grows.' },
 ];
 
-const PLANS = [
-  { id: 'monthly', name: 'MONTHLY', price: '$5.99', sub: '/ month', highlight: false },
-  { id: 'yearly', name: 'YEARLY', price: '$49.99', sub: '/ year · save 30%', highlight: true },
+// Placeholder plan copy for Expo Go / unconfigured builds where the RC
+// SDK can't return real prices. Once RC is wired the offering supplies
+// the real priceString.
+const PLACEHOLDER_PLANS = [
+  { identifier: 'monthly', name: 'MONTHLY', price: '$5.99', sub: '/ month', highlight: false },
+  { identifier: 'yearly', name: 'YEARLY', price: '$49.99', sub: '/ year · save 30%', highlight: true },
 ];
+
+type PlanCard = {
+  identifier: string;
+  name: string;
+  price: string;
+  sub: string;
+  highlight: boolean;
+  pkg?: Package;
+};
 
 export function Paywall({ onClose }: { onClose?: () => void }) {
   const { colors: C } = useTheme();
+  const { session, refreshProfile } = useAuth();
   const styles = useMemo(() => makeStyles(C), [C]);
+  const [offering, setOffering] = useState<Offering | null>(null);
+  const [purchasing, setPurchasing] = useState<string | null>(null);
+  const [restoring, setRestoring] = useState(false);
 
   useEffect(() => {
     track('paywall_viewed');
+    if (isConfigured()) {
+      getCurrentOffering().then(setOffering).catch(() => {});
+    }
   }, []);
 
-  function onSubscribe(planId: string) {
-    track('paywall_subscribe_click', { plan_id: planId });
-    Alert.alert(
-      'In-app purchases coming soon',
-      'RevenueCat + App Store / Play Store products are next. For now, the paywall is wired but not purchasable.',
-    );
+  const plans: PlanCard[] = useMemo(() => {
+    if (!offering) return PLACEHOLDER_PLANS.map((p) => ({ ...p })) as PlanCard[];
+    // Sort so any yearly package sits on the right as the recommended one.
+    const sorted = [...offering.packages].sort((a, b) => {
+      const rank = (id: string) => (id.includes('year') || id === '$rc_annual' ? 1 : 0);
+      return rank(a.identifier) - rank(b.identifier);
+    });
+    return sorted.map((p, i) => ({
+      identifier: p.identifier,
+      name: p.identifier.toUpperCase().replace(/[^A-Z0-9]/g, ' '),
+      price: p.priceString,
+      sub: p.identifier.includes('year') ? '/ year · save 30%' : '/ month',
+      highlight: i === sorted.length - 1,
+      pkg: p,
+    }));
+  }, [offering]);
+
+  async function onSubscribe(plan: PlanCard) {
+    track('paywall_subscribe_click', { plan_id: plan.identifier });
+    if (!plan.pkg || !isConfigured()) {
+      Alert.alert(
+        'In-app purchases coming soon',
+        'This build has no App Store / Play Store products wired yet. Once EAS Build + RevenueCat are configured, tapping a plan will start a real purchase.',
+      );
+      return;
+    }
+    setPurchasing(plan.identifier);
+    try {
+      const res = await purchasePackage(plan.pkg);
+      if (res.cancelled) return;
+      if (!res.ok) {
+        Alert.alert('Purchase failed', res.error ?? 'Try again in a moment.');
+        return;
+      }
+      if (session?.user) {
+        await syncEntitlementToProfile(session.user.id);
+        await refreshProfile();
+      }
+      track('paywall_subscribe_success', { plan_id: plan.identifier });
+      if (res.entitlementActive) onClose?.();
+    } finally {
+      setPurchasing(null);
+    }
+  }
+
+  async function onRestore() {
+    setRestoring(true);
+    try {
+      const res = await restorePurchases();
+      if (!res.ok) {
+        Alert.alert('Restore failed', res.error ?? 'No previous purchases found.');
+        return;
+      }
+      if (session?.user) {
+        await syncEntitlementToProfile(session.user.id);
+        await refreshProfile();
+      }
+      if (res.entitlementActive) {
+        Alert.alert('Restored', 'Your subscription is active again.');
+        onClose?.();
+      } else {
+        Alert.alert('Nothing to restore', 'No active subscriptions found on this Apple ID / Google account.');
+      }
+    } finally {
+      setRestoring(false);
+    }
   }
 
   return (
@@ -88,23 +177,46 @@ export function Paywall({ onClose }: { onClose?: () => void }) {
         </View>
 
         <View style={styles.plans}>
-          {PLANS.map((p) => (
-            <Pressable
-              key={p.id}
-              style={[styles.plan, p.highlight && styles.planHighlight]}
-              onPress={() => onSubscribe(p.id)}
-            >
-              {p.highlight ? (
-                <View style={styles.planBadge}>
-                  <Text style={styles.planBadgeText}>BEST VALUE</Text>
-                </View>
-              ) : null}
-              <Text style={[styles.planName, p.highlight && { color: C.goldLight }]}>{p.name}</Text>
-              <Text style={[styles.planPrice, p.highlight && { color: C.goldLight }]}>{p.price}</Text>
-              <Text style={styles.planSub}>{p.sub}</Text>
-            </Pressable>
-          ))}
+          {plans.map((p) => {
+            const busy = purchasing === p.identifier;
+            return (
+              <Pressable
+                key={p.identifier}
+                style={[styles.plan, p.highlight && styles.planHighlight, purchasing && !busy && { opacity: 0.4 }]}
+                onPress={() => onSubscribe(p)}
+                disabled={!!purchasing || restoring}
+              >
+                {p.highlight ? (
+                  <View style={styles.planBadge}>
+                    <Text style={styles.planBadgeText}>BEST VALUE</Text>
+                  </View>
+                ) : null}
+                <Text style={[styles.planName, p.highlight && { color: C.goldLight }]}>{p.name}</Text>
+                {busy ? (
+                  <ActivityIndicator color={p.highlight ? C.goldLight : C.text} style={{ marginVertical: 6 }} />
+                ) : (
+                  <>
+                    <Text style={[styles.planPrice, p.highlight && { color: C.goldLight }]}>{p.price}</Text>
+                    <Text style={styles.planSub}>{p.sub}</Text>
+                  </>
+                )}
+              </Pressable>
+            );
+          })}
         </View>
+
+        <Pressable
+          style={styles.restoreBtn}
+          onPress={onRestore}
+          disabled={restoring || !!purchasing}
+          hitSlop={8}
+        >
+          {restoring ? (
+            <ActivityIndicator color={C.textMid} />
+          ) : (
+            <Text style={styles.restoreText}>RESTORE PURCHASES</Text>
+          )}
+        </Pressable>
 
         <Text style={styles.legal}>
           7-day free trial, then auto-renews monthly / annually. Cancel anytime in your App Store or Play Store settings before day 7 to avoid being charged.{'\n'}
@@ -172,6 +284,9 @@ function makeStyles(C: Palette) {
     planPrice: { fontFamily: 'BebasNeue_400Regular', fontSize: 28, letterSpacing: 1, color: C.text, lineHeight: 28 },
     planSub: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 12, color: C.textDim, marginTop: 6, textAlign: 'center' },
 
-    legal: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 11, color: C.textDim, textAlign: 'center', marginTop: 24, lineHeight: 14 },
+    restoreBtn: { alignSelf: 'center', paddingVertical: 12, paddingHorizontal: 20, marginTop: 14 },
+    restoreText: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, letterSpacing: 1.8, color: C.textMid },
+
+    legal: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 11, color: C.textDim, textAlign: 'center', marginTop: 12, lineHeight: 14 },
   });
 }

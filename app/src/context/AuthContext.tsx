@@ -4,6 +4,7 @@ import * as Sentry from '@sentry/react-native';
 import { supabase } from '@/lib/supabase';
 import { clearPushToken, registerPushToken } from '@/lib/notifications';
 import { identify, resetAnalytics, track } from '@/lib/analytics';
+import { configurePurchases, linkUser, syncEntitlementToProfile, unlinkUser } from '@/lib/purchases';
 
 export type Profile = {
   id: string;
@@ -51,10 +52,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
+    // Boot RevenueCat once. No-ops in Expo Go or when the API keys are
+    // missing — the paywall falls back to its placeholder state there.
+    configurePurchases().catch(() => {});
+
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
       if (data.session?.user) {
-        loadProfile(data.session.user.id).finally(() => setLoading(false));
+        const uid = data.session.user.id;
+        loadProfile(uid).finally(() => setLoading(false));
+        // Link the RC user to the Supabase user so restores work across
+        // devices, then reconcile any premium state we already have.
+        linkUser(uid)
+          .then(() => syncEntitlementToProfile(uid))
+          .then(() => loadProfile(uid))
+          .catch(() => {});
       } else {
         setLoading(false);
       }
@@ -67,11 +79,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         registerPushToken(s.user.id).catch(() => {});
         Sentry.setUser({ id: s.user.id });
         identify(s.user.id);
-        if (event === 'SIGNED_IN') track('sign_in');
+        if (event === 'SIGNED_IN') {
+          track('sign_in');
+          linkUser(s.user.id)
+            .then(() => syncEntitlementToProfile(s.user.id))
+            .then(() => loadProfile(s.user.id))
+            .catch(() => {});
+        }
       } else {
         setProfile(null);
         Sentry.setUser(null);
         resetAnalytics();
+        unlinkUser().catch(() => {});
       }
     });
     return () => sub.subscription.unsubscribe();
