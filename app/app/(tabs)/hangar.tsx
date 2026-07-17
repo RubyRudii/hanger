@@ -14,6 +14,7 @@ import { router, useFocusEffect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
 import { deleteKit, Kit, listKits } from '@/api/kits';
+import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { EmptyState } from '@/components/EmptyState';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
@@ -43,6 +44,8 @@ export default function Hangar() {
   const [kits, setKits] = useState<Kit[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [pendingDelete, setPendingDelete] = useState<Kit | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const load = useCallback(async () => {
     if (!session) return;
@@ -65,25 +68,23 @@ export default function Hangar() {
   );
 
   function confirmDelete(kit: Kit) {
-    Alert.alert(
-      'Remove from hangar',
-      `Delete "${kit.kit_name}" from your collection log?`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await deleteKit(kit.id);
-              setKits((prev) => prev.filter((k) => k.id !== kit.id));
-            } catch (e: any) {
-              Alert.alert('Failed', e?.message ?? 'Could not delete.');
-            }
-          },
-        },
-      ],
-    );
+    setPendingDelete(kit);
+  }
+
+  async function runDelete() {
+    if (!pendingDelete) return;
+    const kit = pendingDelete;
+    setDeleting(true);
+    try {
+      await deleteKit(kit.id);
+      setKits((prev) => prev.filter((k) => k.id !== kit.id));
+      setPendingDelete(null);
+    } catch (e: any) {
+      setPendingDelete(null);
+      Alert.alert('Failed', e?.message ?? 'Could not delete.');
+    } finally {
+      setDeleting(false);
+    }
   }
 
   const mgCount = kits.filter((k) => k.grade.toUpperCase() === 'MG').length;
@@ -175,6 +176,16 @@ export default function Hangar() {
           />
         )}
       </SafeAreaView>
+      <ConfirmDialog
+        visible={!!pendingDelete}
+        title="REMOVE FROM HANGAR?"
+        body={pendingDelete ? `Delete "${pendingDelete.kit_name}" from your collection log?` : undefined}
+        confirmLabel="DELETE"
+        destructive
+        busy={deleting}
+        onConfirm={runDelete}
+        onCancel={() => setPendingDelete(null)}
+      />
     </View>
   );
 }

@@ -4,6 +4,7 @@ import Constants from 'expo-constants';
 import * as Sentry from '@sentry/react-native';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { deleteAccount } from '@/api/account';
+import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
 import { Palette } from '@/lib/theme';
@@ -24,6 +25,7 @@ export function SettingsSheet({ visible, onClose }: { visible: boolean; onClose:
   const { signOut, profile, refreshProfile } = useAuth();
   const styles = useMemo(() => makeStyles(C), [C]);
   const [deleting, setDeleting] = useState(false);
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [pushOn, setPushOn] = useState(profile?.push_enabled ?? true);
 
   useEffect(() => {
@@ -70,28 +72,21 @@ export function SettingsSheet({ visible, onClose }: { visible: boolean; onClose:
   }
 
   function onDeleteAccount() {
-    Alert.alert(
-      'Delete your account?',
-      'This permanently removes your profile, all kits in your hangar, all builds, and any subscription. This cannot be undone.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete forever',
-          style: 'destructive',
-          onPress: async () => {
-            setDeleting(true);
-            try {
-              await deleteAccount();
-              onClose();
-            } catch (e: any) {
-              Alert.alert('Could not delete account', e?.message ?? 'Something went wrong.');
-            } finally {
-              setDeleting(false);
-            }
-          },
-        },
-      ],
-    );
+    setConfirmDeleteOpen(true);
+  }
+
+  async function runDeleteAccount() {
+    setDeleting(true);
+    try {
+      await deleteAccount();
+      setConfirmDeleteOpen(false);
+      onClose();
+    } catch (e: any) {
+      setConfirmDeleteOpen(false);
+      Alert.alert('Could not delete account', e?.message ?? 'Something went wrong.');
+    } finally {
+      setDeleting(false);
+    }
   }
 
   return (
@@ -192,6 +187,18 @@ export function SettingsSheet({ visible, onClose }: { visible: boolean; onClose:
           </Pressable>
         </Pressable>
       </Pressable>
+
+      <ConfirmDialog
+        visible={confirmDeleteOpen}
+        title="DELETE ACCOUNT?"
+        body="This permanently removes your profile, all kits in your hangar, all builds, and any subscription. This cannot be undone."
+        confirmLabel="DELETE FOREVER"
+        cancelLabel="CANCEL"
+        destructive
+        busy={deleting}
+        onConfirm={runDeleteAccount}
+        onCancel={() => setConfirmDeleteOpen(false)}
+      />
     </Modal>
   );
 }

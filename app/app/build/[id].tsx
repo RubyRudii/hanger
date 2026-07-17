@@ -153,6 +153,8 @@ export default function Debrief() {
   const [reportingComment, setReportingComment] = useState<Comment | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [pendingDeleteComment, setPendingDeleteComment] = useState<Comment | null>(null);
+  const [deletingComment, setDeletingComment] = useState(false);
 
   function openOwnerMenu() {
     if (!build) return;
@@ -184,26 +186,28 @@ export default function Debrief() {
     if (!session) return;
     const snippet = c.body.length > 60 ? c.body.slice(0, 60) + '…' : c.body;
     if (c.user_id === session.user.id) {
-      Alert.alert('Delete comment?', snippet, [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await deleteComment(c.id);
-              setComments((prev) => prev.filter((x) => x.id !== c.id));
-            } catch (e: any) {
-              Alert.alert('Failed', e?.message ?? 'Could not delete.');
-            }
-          },
-        },
-      ]);
+      setPendingDeleteComment(c);
     } else {
       Alert.alert('Comment', snippet, [
         { text: 'Cancel', style: 'cancel' },
         { text: 'Report comment', style: 'destructive', onPress: () => setReportingComment(c) },
       ]);
+    }
+  }
+
+  async function confirmDeleteComment() {
+    if (!pendingDeleteComment) return;
+    const c = pendingDeleteComment;
+    setDeletingComment(true);
+    try {
+      await deleteComment(c.id);
+      setComments((prev) => prev.filter((x) => x.id !== c.id));
+      setPendingDeleteComment(null);
+    } catch (e: any) {
+      setPendingDeleteComment(null);
+      Alert.alert('Failed', e?.message ?? 'Could not delete.');
+    } finally {
+      setDeletingComment(false);
     }
   }
 
@@ -672,6 +676,18 @@ export default function Debrief() {
         busy={deleting}
         onConfirm={confirmDeleteBuild}
         onCancel={() => setDeleteOpen(false)}
+      />
+      <ConfirmDialog
+        visible={!!pendingDeleteComment}
+        title="DELETE COMMENT?"
+        body={pendingDeleteComment ? (pendingDeleteComment.body.length > 100
+          ? pendingDeleteComment.body.slice(0, 100) + '…'
+          : pendingDeleteComment.body) : undefined}
+        confirmLabel="DELETE"
+        destructive
+        busy={deletingComment}
+        onConfirm={confirmDeleteComment}
+        onCancel={() => setPendingDeleteComment(null)}
       />
     </View>
   );
