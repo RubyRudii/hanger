@@ -36,6 +36,13 @@
           "cameraPermission": "Hanger needs camera access so you can shoot your kit for AI judging."
         }
       ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#C9A84C"
+        }
+      ],
       "expo-font",
       "@sentry/react-native"
     ],

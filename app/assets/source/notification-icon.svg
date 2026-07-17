@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96">
+  <!-- Android notification icons must be pure white on a transparent
+       background. Android tints them via `notificationColor`; anything
+       colored in the source is discarded. Keep it a bold, chunky shape
+       that reads at 24 px in the status bar. -->
+  <g fill="#FFFFFF">
+    <rect x="22" y="18" width="14" height="60" rx="2"/>
+    <rect x="60" y="18" width="14" height="60" rx="2"/>
+    <rect x="36" y="41" width="24" height="14" rx="2"/>
+  </g>
+</svg>
