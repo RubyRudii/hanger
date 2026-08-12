@@ -33,8 +33,14 @@ export async function configurePurchases(userId?: string): Promise<boolean> {
   if (!key) return false;
   try {
     if (!Purchases) {
-      const rc = await import('react-native-purchases');
-      Purchases = rc.default;
+      // eval hides the require from Metro's static analyzer so the app
+      // still bundles in Expo Go / any environment where the native module
+      // isn't installed. Real dev-client / production builds resolve it
+      // at runtime as expected.
+      // eslint-disable-next-line no-eval
+      const req: NodeRequire = eval('require');
+      const rc = req('react-native-purchases');
+      Purchases = rc.default ?? rc;
     }
     await Purchases.configure({ apiKey: key, appUserID: userId ?? null });
     configured = true;
