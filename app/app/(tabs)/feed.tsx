@@ -128,7 +128,7 @@ export default function Feed() {
 
   return (
     <View style={styles.root}>
-      <View style={StyleSheet.absoluteFillObject} pointerEvents="none">
+      <View style={StyleSheet.absoluteFill} pointerEvents="none">
         <Svg width="100%" height="100%">
           <Defs>
             <Pattern id="g" patternUnits="userSpaceOnUse" width={32} height={32}>

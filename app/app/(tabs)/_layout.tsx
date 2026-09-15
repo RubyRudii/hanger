@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { ColorValue, Pressable, StyleSheet, View } from 'react-native';
 import { Tabs, router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
 import { useTheme } from '@/context/ThemeContext';
 import { Palette } from '@/lib/theme';
 
-function FeedIcon({ color }: { color: string }) {
+function FeedIcon({ color }: { color: ColorValue }) {
   return (
     <Svg width={20} height={20} viewBox="0 0 20 20" fill="none">
       <Rect x={3} y={9} width={6} height={9} rx={1.5} stroke={color} strokeWidth={1.5} />
@@ -15,7 +15,7 @@ function FeedIcon({ color }: { color: string }) {
   );
 }
 
-function JudgeIcon({ color }: { color: string }) {
+function JudgeIcon({ color }: { color: ColorValue }) {
   // Mech head — V fin + angular helmet + two eyes + mouth vent.
   return (
     <Svg width={22} height={22} viewBox="0 0 20 20" fill="none">
@@ -41,7 +41,7 @@ function JudgeIcon({ color }: { color: string }) {
   );
 }
 
-function HangarIcon({ color }: { color: string }) {
+function HangarIcon({ color }: { color: ColorValue }) {
   return (
     <Svg width={20} height={20} viewBox="0 0 20 20" fill="none">
       <Rect x={3} y={3} width={6} height={6} rx={1.5} stroke={color} strokeWidth={1.5} />
@@ -52,7 +52,7 @@ function HangarIcon({ color }: { color: string }) {
   );
 }
 
-function ProfileIcon({ color }: { color: string }) {
+function ProfileIcon({ color }: { color: ColorValue }) {
   return (
     <Svg width={20} height={20} viewBox="0 0 20 20" fill="none">
       <Circle cx={10} cy={7} r={3.5} stroke={color} strokeWidth={1.5} />
