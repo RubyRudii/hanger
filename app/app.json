@@ -22,7 +22,10 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#050918"
       },
-      "package": "com.hanger.app"
+      "package": "com.hanger.app",
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -48,6 +51,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "1b2eb03b-25cc-4989-a1f9-c8c92997b58f"
+      }
+    },
+    "owner": "rubyrudii"
   }
 }
