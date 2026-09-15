@@ -271,8 +271,6 @@ export default function PilotView() {
 
         <ScrollView contentContainerStyle={{ paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
           <View style={styles.pilotCard}>
-            <View style={styles.pilotCardGlow} pointerEvents="none" />
-
             <View style={styles.idStrip}>
               <Text style={styles.idStripText}>PILOT ID</Text>
               <View style={styles.idDash} />
@@ -454,7 +452,6 @@ function makeStyles(C: Palette) {
       borderWidth: 1, borderColor: C.borderGold, borderRadius: 20,
       padding: 18, overflow: 'hidden', position: 'relative',
     },
-    pilotCardGlow: { position: 'absolute', top: -80, right: -60, width: 280, height: 280, borderRadius: 140, backgroundColor: C.orbHalo },
     watermark: {
       position: 'absolute', bottom: 12, right: 14,
       fontFamily: 'BebasNeue_400Regular', fontSize: 56, letterSpacing: 4,

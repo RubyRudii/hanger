@@ -29,7 +29,6 @@ export type Palette = {
   scrim: string;
   shadow: string;
   orbCore: string;
-  orbHalo: string;
 };
 
 // Palettes match the softer fintech reference: warm neutrals + a single
@@ -67,7 +66,6 @@ export const DARK: Palette = {
   scrim: 'rgba(0,0,0,0.60)',
   shadow: '#000000',
   orbCore: 'rgba(50,20,20,0.55)',
-  orbHalo: 'rgba(239,59,59,0.07)',
 };
 
 export const LIGHT: Palette = {
@@ -101,7 +99,6 @@ export const LIGHT: Palette = {
   scrim: 'rgba(0,0,0,0.45)',
   shadow: '#0A0A0A',
   orbCore: 'rgba(224,30,30,0.10)',
-  orbHalo: 'rgba(224,30,30,0.05)',
 };
 
 export function gradeFromScore(score: number): string {

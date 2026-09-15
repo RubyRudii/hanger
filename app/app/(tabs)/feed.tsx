@@ -221,7 +221,6 @@ export default function Feed() {
 
                   {champion ? (
                     <Pressable style={styles.featured} onPress={() => router.push(`/build/${champion.id}`)}>
-                      <View style={styles.featuredGlow} pointerEvents="none" />
                       <Text style={styles.featuredRank}>01</Text>
                       <View style={styles.featuredImg}>
                         {champion.photo_url ? (
@@ -553,11 +552,6 @@ function makeStyles(C: Palette) {
       overflow: 'hidden', position: 'relative',
     },
     featuredEmpty: { justifyContent: 'center', paddingVertical: 28 },
-    featuredGlow: {
-      position: 'absolute', top: 0, right: 0,
-      width: 140, height: 140, borderRadius: 70,
-      backgroundColor: C.orbHalo,
-    },
     crownBadge: {
       alignSelf: 'flex-start',
       flexDirection: 'row', alignItems: 'center', gap: 5,

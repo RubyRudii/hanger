@@ -84,7 +84,6 @@ export default function Splash() {
         </Svg>
       </View>
 
-      <Animated.View style={[styles.orbHalo, { opacity: orbOp }]} pointerEvents="none" />
       <Animated.View style={[styles.orbMid, { opacity: orbOp }]} pointerEvents="none" />
       <Animated.View style={[styles.orbCore, { opacity: orbOp }]} pointerEvents="none" />
 
@@ -162,12 +161,6 @@ function makeStyles(C: Palette) {
     root: { flex: 1, backgroundColor: C.bg, overflow: 'hidden' },
     page: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 28, paddingVertical: 40 },
 
-    orbHalo: {
-      position: 'absolute', top: ORB_TOP, alignSelf: 'center',
-      width: 420, height: 420, borderRadius: 210,
-      backgroundColor: C.orbHalo,
-      opacity: 0.6,
-    },
     orbMid: {
       position: 'absolute', top: ORB_TOP, alignSelf: 'center',
       width: 320, height: 320, borderRadius: 160, marginTop: 50,

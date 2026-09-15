@@ -140,7 +140,6 @@ export default function Hangar() {
             }
             ListHeaderComponent={
               <View style={styles.statsCard}>
-                <View style={styles.statsCardGlow} pointerEvents="none" />
                 <View style={styles.statCell}>
                   <Text style={styles.statNum}>{kits.length}</Text>
                   <Text style={styles.statLabel}>TOTAL</Text>
@@ -247,7 +246,6 @@ function makeStyles(C: Palette) {
       flexDirection: 'row', alignItems: 'center',
       overflow: 'hidden', position: 'relative',
     },
-    statsCardGlow: { position: 'absolute', top: -80, right: -60, width: 240, height: 240, borderRadius: 120, backgroundColor: C.accentSoft },
     statCell: { flex: 1, alignItems: 'center' },
     statDivider: { width: 1, height: 32, backgroundColor: C.border },
     statNum: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 1, color: C.text, lineHeight: 22 },
