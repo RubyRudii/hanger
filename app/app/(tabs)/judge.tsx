@@ -243,7 +243,6 @@ function Judge() {
         <ScrollView contentContainerStyle={{ paddingBottom: 40 }} keyboardShouldPersistTaps="handled">
           {/* Intro */}
           <View style={styles.intro}>
-            <View style={styles.introGlow} pointerEvents="none" />
             <Text style={styles.introEyebrow}>INCOMING TRANSMISSION</Text>
             <Text style={styles.introTitle}>"Show me what you've built."</Text>
             <Text style={styles.introBody}>
@@ -263,7 +262,6 @@ function Judge() {
             </View>
 
             <Pressable style={styles.uploadZone} onPress={pick} onLongPress={shoot}>
-              <View style={styles.uploadGlow} pointerEvents="none" />
               <View style={styles.uploadIconWrap}>
                 {photo ? (
                   <Svg width={22} height={22} viewBox="0 0 22 22">
@@ -561,7 +559,6 @@ function makeStyles(C: Palette) {
     borderWidth: 1, borderColor: C.borderGold, borderRadius: 14,
     overflow: 'hidden', position: 'relative',
   },
-  introGlow: { position: 'absolute', top: 0, right: 0, width: 120, height: 120, borderRadius: 60, backgroundColor: 'rgba(201,168,76,0.10)' },
   introEyebrow: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 12, letterSpacing: 2, color: C.accent, marginBottom: 6 },
   introTitle: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 1.5, color: C.text, marginBottom: 8 },
   introBody: { fontSize: 14, color: C.textMid, lineHeight: 19, fontFamily: 'DMSans_300Light' },
@@ -582,11 +579,6 @@ function makeStyles(C: Palette) {
     paddingVertical: 28, paddingHorizontal: 16,
     alignItems: 'center', justifyContent: 'center',
     overflow: 'hidden', position: 'relative',
-  },
-  uploadGlow: {
-    position: 'absolute',
-    width: 200, height: 200, borderRadius: 100,
-    backgroundColor: C.accentDim, opacity: 0.5,
   },
   uploadIconWrap: {
     width: 56, height: 56, borderRadius: 28,

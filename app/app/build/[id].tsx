@@ -356,7 +356,6 @@ export default function Debrief() {
 
           {/* Hero */}
           <Animated.View style={[styles.hero, { opacity: heroOp, transform: [{ translateY: heroY }] }]}>
-            <View style={styles.heroGlow} pointerEvents="none" />
             <View style={styles.heroTop}>
               <View style={{ flex: 1, paddingRight: 12 }}>
                 <Text style={styles.kitName} numberOfLines={2}>
@@ -802,7 +801,6 @@ function makeStyles(C: Palette) {
     borderRadius: 20, padding: 20,
     overflow: 'hidden', position: 'relative',
   },
-  heroGlow: { position: 'absolute', top: -100, right: -60, width: 280, height: 280, borderRadius: 140, backgroundColor: 'rgba(201,168,76,0.10)' },
   heroTop: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16 },
   kitName: { fontSize: 17, color: C.text, fontFamily: 'DMSans_500Medium', marginBottom: 4 },
   kitMeta: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 12, letterSpacing: 1.5, color: C.textDim },
