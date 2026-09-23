@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hanger — Support</title>
+<style>
+  :root {
+    --bg: #0F0E0D;
+    --surface: #1A1817;
+    --accent: #EF3B3B;
+    --gold-light: #F5847E;
+    --text-mid: rgba(255, 255, 255, 0.72);
+    --text-dim: rgba(255, 255, 255, 0.45);
+    --border: rgba(255, 255, 255, 0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    line-height: 1.65;
+    padding: 0 24px 60px;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+  header {
+    padding: 36px 0 28px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 32px;
+  }
+  .logo {
+    font-size: 12px; letter-spacing: 4px;
+    color: var(--accent); margin-bottom: 6px;
+  }
+  .logo a { color: var(--accent); text-decoration: none; }
+  h1 { font-size: 28px; letter-spacing: 1px; margin-bottom: 6px; }
+  .updated { font-size: 12px; color: var(--text-dim); }
+  h2 {
+    font-size: 16px;
+    margin: 32px 0 12px;
+    color: var(--gold-light);
+    letter-spacing: 1px;
+  }
+  h3 {
+    font-size: 14px;
+    margin: 20px 0 8px;
+    color: #fff;
+    letter-spacing: 0.5px;
+  }
+  p, li { font-size: 15px; color: var(--text-mid); margin-bottom: 12px; }
+  ul, ol { margin-left: 22px; margin-bottom: 12px; }
+  a { color: var(--accent); }
+  strong { color: #fff; }
+  .contact-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 20px;
+    margin: 16px 0 24px;
+  }
+  .contact-card .label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+  .contact-card .email {
+    font-size: 20px;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+  }
+  .contact-card .email:hover { text-decoration: underline; }
+  .response-note {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 10px;
+  }
+  footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text-dim);
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="logo"><a href="index.html">HANGER</a></div>
+    <h1>Support</h1>
+    <div class="updated">Last updated: September 22, 2026</div>
+  </header>
+
+  <p>
+    Hanger is built by a small independent studio. We read every message
+    and try to reply within two business days. The fastest path to a
+    resolution is a clear description of what happened plus the version
+    of Hanger you're on (Settings → About) and your device model.
+  </p>
+
+  <div class="contact-card">
+    <div class="label">CONTACT</div>
+    <a href="mailto:hangerapp.support@gmail.com" class="email">hangerapp.support@gmail.com</a>
+    <div class="response-note">Typical response time: 1–2 business days. Bug reports get priority.</div>
+  </div>
+
+  <h2>Common Questions</h2>
+
+  <h3>I can't sign up or sign in</h3>
+  <p>
+    Double-check that your email is entered correctly and your password is
+    at least 6 characters. If the app says "email already in use," you may
+    have signed up previously — try resetting the password. If the sign-in
+    screen never responds, close and reopen the app; a network hiccup during
+    boot can leave the auth handshake stuck.
+  </p>
+
+  <h3>The AI Judge failed to score my build</h3>
+  <p>
+    The AI reviews photos of finished kits. If it declines a submission,
+    try one of the following:
+  </p>
+  <ul>
+    <li>Take the photo in normal light against a plain background — no glare, no busy backdrops.</li>
+    <li>Make sure the entire kit is in frame and the shot is in focus.</li>
+    <li>Only one build per photo. The AI can't grade multiple kits in one shot.</li>
+    <li>Photos that don't contain a mecha model kit will be declined by design.</li>
+  </ul>
+  <p>
+    If the Judge times out repeatedly with a clean photo, that's a server
+    issue on our end — email support with the approximate time you tried
+    and we'll investigate.
+  </p>
+
+  <h3>Subscription, billing, or free trial</h3>
+  <p>
+    Hanger's subscription is processed by Google Play (or Apple, on iOS).
+    All billing questions — including refunds, trial cancellations, and
+    payment method issues — are handled by the store directly.
+  </p>
+  <ul>
+    <li>
+      <strong>Cancel or manage:</strong> Google Play Store → Menu → Payments &amp; subscriptions → Subscriptions → Hanger.
+    </li>
+    <li>
+      <strong>Refund request:</strong> Google Play's refund page at
+      <a href="https://play.google.com/store/account/orderhistory">play.google.com/store/account/orderhistory</a>.
+      Refunds within 48 hours of purchase are typically automatic.
+    </li>
+    <li>
+      <strong>Restore a purchase on a new device:</strong> open Hanger →
+      Settings → <em>Restore purchases</em>. Sign in with the same Google
+      account that made the original purchase.
+    </li>
+  </ul>
+
+  <h3>How do I delete my account?</h3>
+  <p>
+    Open Hanger → Settings → scroll to <em>Danger Zone</em> → <em>Delete
+    Account</em>. This permanently removes your profile, all kits in your
+    hangar, all posted builds, comments, likes, and follows. It cannot be
+    undone. Any active subscription is <strong>not</strong> automatically
+    cancelled — cancel it through the store separately, or you'll continue
+    to be billed.
+  </p>
+  <p>
+    If you can't sign in to reach the delete option, email support from
+    the address on the account and we'll delete it manually within 5
+    business days.
+  </p>
+
+  <h3>Report or block another pilot</h3>
+  <p>
+    Open the pilot's profile → tap the ⋮ menu in the top-right → choose
+    <em>Report pilot</em> or <em>Block pilot</em>. You can also report an
+    individual comment by long-pressing it. Reports go straight to us for
+    review; blocks hide the pilot's content from your feed instantly and
+    unfollow them.
+  </p>
+
+  <h3>Push notifications aren't showing up</h3>
+  <p>
+    Check the following in order:
+  </p>
+  <ol>
+    <li>Hanger's Settings → <em>Push notifications</em> is on.</li>
+    <li>Your device's Settings → Apps → Hanger → Notifications is on.</li>
+    <li>You're not in Do Not Disturb / Focus mode.</li>
+    <li>Sign out and back in — that re-registers your device token.</li>
+  </ol>
+
+  <h3>Feature requests or general feedback</h3>
+  <p>
+    We love hearing what would make Hanger better for how you build.
+    Email support with "Feature request" in the subject and a short
+    description of what you're trying to do. Not every idea ships, but
+    every idea gets read.
+  </p>
+
+  <h2>Bug reports</h2>
+  <p>
+    When emailing about a bug, please include:
+  </p>
+  <ul>
+    <li>What you were doing when it happened.</li>
+    <li>What you expected vs. what actually happened.</li>
+    <li>Your device model and OS version (e.g., Pixel 8, Android 15).</li>
+    <li>Hanger version (Settings → About).</li>
+    <li>Screenshots or a screen recording if you have them.</li>
+  </ul>
+
+  <h2>Privacy and data</h2>
+  <p>
+    Full details on what Hanger collects and how we handle it are in our
+    <a href="privacy.html">Privacy Policy</a>. Data export requests can be
+    sent to the support email; we respond within 30 days.
+  </p>
+
+  <footer>
+    Hanger · Standby Studios · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>
+  </footer>
+</div>
+</body>
+</html>
