@@ -10,7 +10,7 @@
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash-icon.png",
-      "backgroundColor": "#050918",
+      "backgroundColor": "#0F0E0D",
       "resizeMode": "contain"
     },
     "ios": {
@@ -20,7 +20,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#050918"
+        "backgroundColor": "#0F0E0D"
       },
       "package": "com.hanger.app",
       "permissions": [
@@ -43,7 +43,7 @@
         "expo-notifications",
         {
           "icon": "./assets/notification-icon.png",
-          "color": "#C9A84C"
+          "color": "#EF3B3B"
         }
       ],
       "expo-font",

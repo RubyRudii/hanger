@@ -1,7 +1,8 @@
 # Icon + Splash source files
 
-Placeholder brand mark for Hanger: gold "H" on deep navy `#050918`, with subtle
-gold corner brackets on the main icon.
+Placeholder brand mark for Hanger: red "H" (`#EF3B3B`) on the warm-dark app
+background (`#0F0E0D`), with subtle red corner brackets on the main icon.
+Matches the current in-app palette (`src/lib/theme.ts` DARK).
 
 ## Convert SVG → PNG
 
@@ -29,7 +30,7 @@ Easiest path — go to **[svgtopng.com](https://svgtopng.com)** (no signup):
 Nothing further to do in code — `app.json` already points at
 `./assets/icon.png`, `./assets/adaptive-icon.png`, etc.
 
-Splash `backgroundColor` is `#050918` (deep navy), matching the "H" bg.
+Splash `backgroundColor` is `#0F0E0D` (matches DARK palette bg).
 
 ## When you commission real art later
 
