@@ -13,6 +13,7 @@ import { isConfigured as isPurchasesConfigured, restorePurchases, syncEntitlemen
 
 const TERMS_URL = 'https://rubyrudii.github.io/hanger/terms.html';
 const PRIVACY_URL = 'https://rubyrudii.github.io/hanger/privacy.html';
+const SUPPORT_URL = 'https://rubyrudii.github.io/hanger/support.html';
 const SUPPORT_EMAIL = 'hangerapp.support@gmail.com';
 
 const MANAGE_SUB_URL = Platform.select({
@@ -174,9 +175,10 @@ export function SettingsSheet({ visible, onClose }: { visible: boolean; onClose:
             <Row label="Restore purchases" caption="Re-sync an existing subscription" onPress={onRestorePurchases} />
 
             <Text style={styles.sectionLabel}>ABOUT</Text>
+            <Row label="Help & FAQ" onPress={() => openExternal(SUPPORT_URL)} />
+            <Row label="Contact support" onPress={() => openExternal(`mailto:${SUPPORT_EMAIL}`)} />
             <Row label="Terms of Use" onPress={() => openExternal(TERMS_URL)} />
             <Row label="Privacy Policy" onPress={() => openExternal(PRIVACY_URL)} />
-            <Row label="Contact support" onPress={() => openExternal(`mailto:${SUPPORT_EMAIL}`)} />
             <Row label="Version" caption={version} />
             {__DEV__ ? (
               <Row

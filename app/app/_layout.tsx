@@ -30,8 +30,12 @@ function AuthGate() {
 
   useEffect(() => {
     if (loading) return;
-    const inAuthGroup = segments[0] === '(auth)';
-    const onSplash = segments.length === 0 || segments[0] === 'index';
+    // useSegments()'s typed-routes tuple treats length as 1 | 2 and the
+    // first entry as a union that excludes 'index', so widen to string
+    // for the "are we on the splash/root?" check.
+    const first = segments[0] as string | undefined;
+    const inAuthGroup = first === '(auth)';
+    const onSplash = !first || first === 'index';
     if (onSplash) return;
     if (!session && !inAuthGroup) router.replace('/(auth)/onboarding');
     else if (session && inAuthGroup) router.replace('/(tabs)/feed');

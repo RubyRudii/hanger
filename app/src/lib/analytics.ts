@@ -1,5 +1,10 @@
 import PostHog from 'posthog-react-native';
 
+// PostHog's stricter JsonType-based props type isn't re-exported at the
+// top level, so accept any and let the SDK's own validation handle
+// unexpected values. Analytics props are non-critical throwaway data.
+type Props = Record<string, any>;
+
 const KEY = process.env.EXPO_PUBLIC_POSTHOG_KEY;
 const HOST = process.env.EXPO_PUBLIC_POSTHOG_HOST ?? 'https://us.i.posthog.com';
 
@@ -24,12 +29,12 @@ export function initAnalytics(): PostHog | null {
   return client;
 }
 
-export function track(event: string, properties?: Record<string, unknown>) {
+export function track(event: string, properties?: Props) {
   const c = client ?? initAnalytics();
   c?.capture(event, properties);
 }
 
-export function identify(distinctId: string, properties?: Record<string, unknown>) {
+export function identify(distinctId: string, properties?: Props) {
   const c = client ?? initAnalytics();
   c?.identify(distinctId, properties);
 }

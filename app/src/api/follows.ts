@@ -15,7 +15,7 @@ export async function fetchFollowers(userId: string): Promise<FollowUser[]> {
     .eq('followee_id', userId)
     .order('created_at', { ascending: false });
   if (error) throw error;
-  return ((data ?? []) as { follower: FollowUser | null }[])
+  return ((data ?? []) as unknown as { follower: FollowUser | null }[])
     .map((r) => r.follower)
     .filter((u): u is FollowUser => !!u);
 }
@@ -27,7 +27,7 @@ export async function fetchFollowing(userId: string): Promise<FollowUser[]> {
     .eq('follower_id', userId)
     .order('created_at', { ascending: false });
   if (error) throw error;
-  return ((data ?? []) as { followee: FollowUser | null }[])
+  return ((data ?? []) as unknown as { followee: FollowUser | null }[])
     .map((r) => r.followee)
     .filter((u): u is FollowUser => !!u);
 }

@@ -280,6 +280,7 @@ export default function Debrief() {
   });
 
   async function onShare() {
+    if (!build) return;
     try {
       const url = Linking.createURL(`/build/${build.id}`);
       await Share.share({
