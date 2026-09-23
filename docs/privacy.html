@@ -6,10 +6,10 @@
 <title>Hanger — Privacy Policy</title>
 <style>
   :root {
-    --bg: #050918;
-    --surface: #0B1530;
-    --accent: #C9A84C;
-    --gold-light: #F0D98A;
+    --bg: #0F0E0D;
+    --surface: #1A1817;
+    --accent: #EF3B3B;
+    --gold-light: #F5847E;
     --text-mid: rgba(255, 255, 255, 0.72);
     --text-dim: rgba(255, 255, 255, 0.45);
     --border: rgba(255, 255, 255, 0.08);
@@ -74,13 +74,14 @@
   <header>
     <div class="logo"><a href="index.html">HANGER</a></div>
     <h1>Privacy Policy</h1>
-    <div class="updated">Last updated: June 5, 2026</div>
+    <div class="updated">Last updated: September 22, 2026</div>
   </header>
 
   <p>
-    This Privacy Policy describes how Scott Ruybalid ("we", "us", "our") collects, uses, and
-    shares information when you use the Hanger mobile application ("App"). We aim to collect
-    only what we need to run the App and to be transparent about everything we do.
+    This Privacy Policy describes how Standby Studios (operated by Scott Ruybalid; "we", "us",
+    "our") collects, uses, and shares information when you use the Hanger mobile application
+    ("App"). We aim to collect only what we need to run the App and to be transparent about
+    everything we do.
   </p>
 
   <h2>1. What We Collect</h2>
@@ -101,14 +102,24 @@
       <td>Power your hangar, the community feed, and AI scoring.</td>
     </tr>
     <tr>
+      <td>Community activity</td>
+      <td>Likes, follows, comments, reports, blocks</td>
+      <td>Power the community feed, notifications, and safety tools. Follows, likes, and comments are visible to other pilots; reports and blocks are private to you.</td>
+    </tr>
+    <tr>
       <td>Subscription state</td>
       <td>Whether you have an active subscription, trial status, renewal date</td>
       <td>Gate paid features and apply your benefits.</td>
     </tr>
     <tr>
+      <td>Push notification token</td>
+      <td>A device-specific token issued by Apple or Google via Expo</td>
+      <td>Send notifications for likes, comments, and follows on your builds. You can turn this off in Settings.</td>
+    </tr>
+    <tr>
       <td>Device / diagnostic</td>
-      <td>Crash logs, app version, OS, anonymous usage events</td>
-      <td>Diagnose bugs and improve the App. Never tied to your real-world identity.</td>
+      <td>Crash logs, app version, OS, anonymous usage events, your account ID</td>
+      <td>Diagnose bugs and understand which features are used. Not sold or used for advertising.</td>
     </tr>
   </table>
   <p>
@@ -128,12 +139,27 @@
       under our API terms.
     </li>
     <li>
+      <strong>PostHog Inc.</strong> — receives anonymized product analytics events (screen
+      views, feature usage) tied to your account ID so we can see which features are used and
+      which to improve. Not used for advertising.
+    </li>
+    <li>
+      <strong>Functional Software, Inc. (Sentry)</strong> — receives crash reports, error
+      stack traces, device model, and OS version, tied to your account ID so we can reproduce
+      bugs.
+    </li>
+    <li>
+      <strong>Expo (650 Industries, Inc.)</strong> — routes push notifications to your device
+      through Apple / Google. Expo holds your push token so we can deliver notifications for
+      likes, comments, and follows.
+    </li>
+    <li>
       <strong>Apple and Google</strong> — process subscription payments. We never see your
       payment card details.
     </li>
     <li>
-      <strong>RevenueCat, Inc.</strong> — once subscriptions are live, will validate your
-      receipts on our behalf.
+      <strong>RevenueCat, Inc.</strong> — validates App Store and Google Play receipts on our
+      behalf so we know whether your subscription is active.
     </li>
   </ul>
   <p>
@@ -197,7 +223,7 @@
   </p>
 
   <footer>
-    Hanger · Built by Scott Ruybalid · <a href="terms.html">Terms of Use</a>
+    Hanger · Standby Studios · <a href="terms.html">Terms of Use</a>
   </footer>
 </div>
 </body>
