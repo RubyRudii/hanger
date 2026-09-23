@@ -527,6 +527,7 @@ function makeStyles(C: Palette) {
       backgroundColor: C.royalBright,
       borderWidth: 1.5, borderColor: C.accentRing,
       alignItems: 'center', justifyContent: 'center',
+      overflow: 'hidden',
     },
     avatarText: { fontFamily: 'BebasNeue_400Regular', fontSize: 15, letterSpacing: 1, color: C.goldLight },
 

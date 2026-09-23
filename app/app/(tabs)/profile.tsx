@@ -460,7 +460,7 @@ function makeStyles(C: Palette) {
       backgroundColor: C.royalBright,
       borderWidth: 2, borderColor: C.accent,
       alignItems: 'center', justifyContent: 'center',
-      position: 'relative',
+      position: 'relative', overflow: 'hidden',
     },
     avatarImg: { width: '100%', height: '100%' },
     avatarText: { fontFamily: 'BebasNeue_400Regular', fontSize: 36, letterSpacing: 2, color: C.goldLight },
