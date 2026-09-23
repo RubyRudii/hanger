@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Easing, Pressable, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Svg, { Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
+import Svg, { Path } from 'react-native-svg';
 import { useTheme } from '@/context/ThemeContext';
 import { markOnboardingSeen } from '@/lib/onboarding';
 import { Palette } from '@/lib/theme';
@@ -85,18 +85,6 @@ export default function Onboarding() {
 
   return (
     <View style={styles.root}>
-      <View style={StyleSheet.absoluteFill} pointerEvents="none">
-        <Svg width="100%" height="100%">
-          <Defs>
-            <Pattern id="g" patternUnits="userSpaceOnUse" width={30} height={30}>
-              <Line x1="0" y1="0" x2="30" y2="0" stroke={C.gridLine} strokeWidth={1} />
-              <Line x1="0" y1="0" x2="0" y2="30" stroke={C.gridLine} strokeWidth={1} />
-            </Pattern>
-          </Defs>
-          <Rect width="100%" height="100%" fill="url(#g)" />
-        </Svg>
-      </View>
-
       <SafeAreaView style={styles.shell}>
         <View style={styles.topbar}>
           <Text style={styles.logoSm}>HANGER</Text>

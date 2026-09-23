@@ -18,16 +18,7 @@ import {
 import { router, useLocalSearchParams } from 'expo-router';
 import * as Linking from 'expo-linking';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Svg, {
-  Circle,
-  Defs,
-  LinearGradient as SvgGradient,
-  Line,
-  Path,
-  Pattern,
-  Rect,
-  Stop,
-} from 'react-native-svg';
+import Svg, { Circle, Defs, LinearGradient as SvgGradient, Path, Stop } from 'react-native-svg';
 import { DbBuild, deleteBuild, fetchBuild, fetchMyBuilds } from '@/api/builds';
 import { addComment, Comment, deleteComment, fetchComments } from '@/api/comments';
 import { listBlockedIds } from '@/api/moderation';
@@ -292,18 +283,6 @@ export default function Debrief() {
 
   return (
     <View style={styles.root}>
-      <View style={StyleSheet.absoluteFill} pointerEvents="none">
-        <Svg width="100%" height="100%">
-          <Defs>
-            <Pattern id="g" patternUnits="userSpaceOnUse" width={32} height={32}>
-              <Line x1="0" y1="0" x2="32" y2="0" stroke="rgba(41,82,204,0.05)" strokeWidth={1} />
-              <Line x1="0" y1="0" x2="0" y2="32" stroke="rgba(41,82,204,0.05)" strokeWidth={1} />
-            </Pattern>
-          </Defs>
-          <Rect width="100%" height="100%" fill="url(#g)" />
-        </Svg>
-      </View>
-
       <SafeAreaView style={{ flex: 1 }} edges={['top']}>
         <View style={styles.header}>
           <Pressable style={styles.iconBtn} onPress={() => router.back()}>

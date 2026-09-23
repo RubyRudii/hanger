@@ -22,7 +22,6 @@ export type Palette = {
   greenHud: string;
   redHud: string;
   blueHud: string;
-  gridLine: string;
   like: string;
   tabBg: string;
   onAccent: string;
@@ -59,7 +58,6 @@ export const DARK: Palette = {
   greenHud: '#4ADE80',
   redHud: '#EF3B3B',
   blueHud: '#9FB4E5',
-  gridLine: 'rgba(255,255,255,0.03)',
   like: '#EF3B3B',
   tabBg: 'rgba(15,14,13,0.94)',
   onAccent: '#FFFFFF',
@@ -92,7 +90,6 @@ export const LIGHT: Palette = {
   greenHud: '#0FA55A',
   redHud: '#E01E1E',
   blueHud: '#3F66BB',
-  gridLine: 'rgba(10,10,10,0.03)',
   like: '#E01E1E',
   tabBg: 'rgba(240,238,235,0.95)',
   onAccent: '#FFFFFF',

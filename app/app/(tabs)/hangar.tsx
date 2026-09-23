@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Svg, { Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
+import Svg, { Path } from 'react-native-svg';
 import { deleteKit, Kit, listKits } from '@/api/kits';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { EmptyState } from '@/components/EmptyState';
@@ -93,18 +93,6 @@ export default function Hangar() {
 
   return (
     <View style={styles.root}>
-      <View style={StyleSheet.absoluteFill} pointerEvents="none">
-        <Svg width="100%" height="100%">
-          <Defs>
-            <Pattern id="g" patternUnits="userSpaceOnUse" width={32} height={32}>
-              <Line x1="0" y1="0" x2="32" y2="0" stroke={C.gridLine} strokeWidth={1} />
-              <Line x1="0" y1="0" x2="0" y2="32" stroke={C.gridLine} strokeWidth={1} />
-            </Pattern>
-          </Defs>
-          <Rect width="100%" height="100%" fill="url(#g)" />
-        </Svg>
-      </View>
-
       <SafeAreaView style={{ flex: 1 }} edges={['top']}>
         <View style={styles.header}>
           <View>

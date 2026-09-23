@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import Svg, { Defs, Line, Path, Pattern, Rect } from 'react-native-svg';
+import Svg, { Path } from 'react-native-svg';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
 import { Palette } from '@/lib/theme';
@@ -124,18 +124,6 @@ export function Paywall({ onClose }: { onClose?: () => void }) {
 
   return (
     <View style={styles.root}>
-      <View style={StyleSheet.absoluteFill} pointerEvents="none">
-        <Svg width="100%" height="100%">
-          <Defs>
-            <Pattern id="gp" patternUnits="userSpaceOnUse" width={32} height={32}>
-              <Line x1="0" y1="0" x2="32" y2="0" stroke={C.gridLine} strokeWidth={1} />
-              <Line x1="0" y1="0" x2="0" y2="32" stroke={C.gridLine} strokeWidth={1} />
-            </Pattern>
-          </Defs>
-          <Rect width="100%" height="100%" fill="url(#gp)" />
-        </Svg>
-      </View>
-
       <ScrollView contentContainerStyle={{ padding: 24, paddingBottom: 40 }}>
         {onClose ? (
           <Pressable style={styles.closeBtn} onPress={onClose} hitSlop={10}>

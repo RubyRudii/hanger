@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { Animated, Easing, Pressable, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Svg, { Defs, Line, Pattern, Rect } from 'react-native-svg';
+import Svg from 'react-native-svg';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
 import { hasSeenOnboarding } from '@/lib/onboarding';
@@ -72,18 +72,6 @@ export default function Splash() {
 
   return (
     <RootWrapper style={styles.root} {...rootWrapperProps}>
-      <View style={StyleSheet.absoluteFill} pointerEvents="none">
-        <Svg width="100%" height="100%">
-          <Defs>
-            <Pattern id="g" patternUnits="userSpaceOnUse" width={30} height={30}>
-              <Line x1="0" y1="0" x2="30" y2="0" stroke={C.gridLine} strokeWidth={1} />
-              <Line x1="0" y1="0" x2="0" y2="30" stroke={C.gridLine} strokeWidth={1} />
-            </Pattern>
-          </Defs>
-          <Rect width="100%" height="100%" fill="url(#g)" />
-        </Svg>
-      </View>
-
       <Animated.View style={[styles.orbMid, { opacity: orbOp }]} pointerEvents="none" />
       <Animated.View style={[styles.orbCore, { opacity: orbOp }]} pointerEvents="none" />
 
