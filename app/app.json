@@ -10,7 +10,7 @@
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash-icon.png",
-      "backgroundColor": "#0F0E0D",
+      "backgroundColor": "#DDE3E8",
       "resizeMode": "contain"
     },
     "ios": {
@@ -20,7 +20,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#0F0E0D"
+        "backgroundColor": "#DDE3E8"
       },
       "package": "com.hanger.app",
       "permissions": [
