@@ -13,10 +13,10 @@ const SLIDES: Slide[] = [
   {
     id: 0,
     step: '01 / 03',
-    titleA: 'Pilot Judges',
+    titleA: 'Pilot Reviews',
     titleAccent: 'Build!',
     titleB: 'Your',
-    body: 'Upload photos of your finished kit and our Pilot grades it across panel lining, weathering, paint finish, and composition — just like a real competition judge.',
+    body: 'Upload photos of your finished kit and our Pilot reviews it across panel lining, weathering, paint finish, and composition — like a real competition.',
     pills: ['Panel lining', 'Weathering', 'Paint finish', 'Composition'],
     visual: 'judge',
   },

@@ -155,7 +155,7 @@ export default function Hangar() {
               <EmptyState
                 icon={<Text style={{ fontSize: 32 }}>📦</Text>}
                 title="HANGAR EMPTY"
-                body={'Log every kit you own, are building, or have your eye on.\nNo judging. No score. Just inventory.'}
+                body={'Log every kit you own, are building, or have your eye on.\nNo review. No score. Just inventory.'}
                 ctaLabel="+ LOG FIRST KIT"
                 onCta={() => router.push('/add-kit')}
               />

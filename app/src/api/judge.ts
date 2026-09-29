@@ -27,7 +27,7 @@ function classify(raw: string): JudgeError {
     return new JudgeError(
       'PAYWALL',
       'Subscription required',
-      'AI Judge is a subscriber feature. Start your 7-day free trial to submit builds.',
+      "Pilot's Review is a subscriber feature. Start your 7-day free trial to submit builds.",
       raw,
     );
   }
@@ -37,7 +37,7 @@ function classify(raw: string): JudgeError {
   if (/credit balance is too low|insufficient_quota|billing/i.test(message)) {
     return new JudgeError(
       'NO_CREDITS',
-      'AI Judge paused',
+      "Pilot's Review paused",
       'The scoring service is temporarily unavailable. Please try again shortly.',
       raw,
     );
@@ -45,7 +45,7 @@ function classify(raw: string): JudgeError {
   if (/anthropic|overloaded|rate.?limit|502|503|504/i.test(message)) {
     return new JudgeError(
       'ANTHROPIC_DOWN',
-      'AI Judge busy',
+      "Pilot's Review busy",
       'The scoring service is under load. Give it a minute and try again.',
       raw,
     );
@@ -61,7 +61,7 @@ function classify(raw: string): JudgeError {
 
   return new JudgeError(
     'UNKNOWN',
-    'Pilot review failed',
+    "Pilot's Review failed",
     'Something went wrong on our end. Please try again.',
     raw,
   );
@@ -87,7 +87,7 @@ export async function judgeBuild(input: {
     throw classify(bodyText || error.message || 'Unknown error');
   }
   if (!data) {
-    throw new JudgeError('UNKNOWN', 'Pilot review failed', 'Empty response from AI Judge. Please try again.');
+    throw new JudgeError('UNKNOWN', "Pilot's Review failed", 'Empty response from the Pilot. Please try again.');
   }
   return data;
 }

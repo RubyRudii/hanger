@@ -88,7 +88,7 @@ export default function AddKitModal() {
         </View>
 
         <ScrollView contentContainerStyle={{ padding: 22, paddingBottom: 40 }} keyboardShouldPersistTaps="handled">
-          <Text style={styles.sub}>Add to your collection — no judging, no score.</Text>
+          <Text style={styles.sub}>Add to your collection — no review, no score.</Text>
 
           <Pressable style={styles.photoPicker} onPress={pickPhoto}>
             {photo ? (

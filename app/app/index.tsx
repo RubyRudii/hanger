@@ -86,7 +86,7 @@ export default function Splash() {
 
         <Animated.View style={[styles.taglineBlock, { opacity: taglineOp, transform: [{ translateY: taglineY }] }]}>
           <Text style={styles.tagline}>
-            Build it. Judge it.{'\n'}
+            Build it. Show it.{'\n'}
             <Text style={styles.taglineAccent}>Show the world.</Text>
           </Text>
           <Animated.View style={[styles.divider, { opacity: dividerOp }]} />

@@ -108,7 +108,7 @@ export default function SignIn() {
           </Pressable>
         </View>
 
-        <Text style={styles.footer}>BUILD IT · JUDGE IT · SHOW THE WORLD</Text>
+        <Text style={styles.footer}>BUILD IT · REVIEW IT · SHOW THE WORLD</Text>
       </SafeAreaView>
     </View>
   );

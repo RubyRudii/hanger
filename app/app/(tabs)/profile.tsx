@@ -276,7 +276,7 @@ function HangarTab({ builds }: { builds: BuildSummary[] }) {
           icon={<Text style={{ fontSize: 30 }}>🛩️</Text>}
           title="SHELF IS BARE"
           body="File your first build for pilot review — scored builds land here."
-          ctaLabel="OPEN JUDGE"
+          ctaLabel="OPEN REVIEW"
           onCta={() => router.push('/(tabs)/judge')}
         />
       ) : (

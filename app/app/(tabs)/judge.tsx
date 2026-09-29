@@ -25,6 +25,7 @@ import { hasAccess, useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
 import { Palette } from '@/lib/theme';
 import { Paywall } from '@/components/Paywall';
+import { hasSeenJudgeDisclaimer, JudgeDisclaimer } from '@/components/JudgeDisclaimer';
 
 const GRADES = [
   { value: 'HG', label: 'HG — High Grade' },
@@ -80,7 +81,14 @@ function Judge() {
   const [showScale, setShowScale] = useState(false);
   const [showMods, setShowMods] = useState(false);
   const [reviewStage, setReviewStage] = useState<{ text: string; pct: number } | null>(null);
+  const [disclaimerOpen, setDisclaimerOpen] = useState(false);
   const reviewId = useRef(buildReviewId()).current;
+
+  useEffect(() => {
+    hasSeenJudgeDisclaimer().then((seen) => {
+      if (!seen) setDisclaimerOpen(true);
+    });
+  }, []);
 
   const scanY = useRef(new Animated.Value(0)).current;
   const orbSpin = useRef(new Animated.Value(0)).current;
@@ -224,9 +232,21 @@ function Judge() {
             </Svg>
           </Pressable>
           <View style={{ flex: 1 }}>
-            <Text style={styles.headerTitle}>PILOT REVIEW</Text>
+            <Text style={styles.headerTitle}>PILOT'S REVIEW</Text>
             <Text style={styles.headerSub}>SUBMIT BUILD FOR EVALUATION</Text>
           </View>
+          <Pressable
+            style={styles.backBtn}
+            onPress={() => setDisclaimerOpen(true)}
+            hitSlop={8}
+            accessibilityLabel="About Pilot's Review"
+          >
+            <Svg width={14} height={14} viewBox="0 0 14 14">
+              <Circle cx={7} cy={7} r={6} stroke={C.textMid} strokeWidth={1.2} fill="none" />
+              <Path d="M7 6.2V10.2" stroke={C.textMid} strokeWidth={1.4} strokeLinecap="round" />
+              <Circle cx={7} cy={4} r={0.8} fill={C.textMid} />
+            </Svg>
+          </Pressable>
         </View>
 
         <ScrollView contentContainerStyle={{ paddingBottom: 40 }} keyboardShouldPersistTaps="handled">
@@ -449,6 +469,8 @@ function Judge() {
           </View>
         </View>
       </Modal>
+
+      <JudgeDisclaimer visible={disclaimerOpen} onClose={() => setDisclaimerOpen(false)} />
     </View>
   );
 }

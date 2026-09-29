@@ -95,7 +95,7 @@ export default function TabsLayout() {
         <Tabs.Screen
           name="judge"
           options={{
-            title: 'JUDGE',
+            title: 'REVIEW',
             tabBarIcon: ({ color }) => <JudgeIcon color={color} />,
             tabBarItemStyle: { paddingRight: 36, paddingVertical: 2 },
           }}

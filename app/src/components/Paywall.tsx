@@ -16,8 +16,8 @@ import {
 } from '@/lib/purchases';
 
 const BENEFITS = [
-  { icon: '🎖', title: 'Unlimited AI Judging', body: 'Submit any kit, any time. Senior pilot scores every build.' },
-  { icon: '📡', title: 'Post to the Community Feed', body: 'Share your judged builds. Earn likes, climb the weekly leaderboard.' },
+  { icon: '🎖', title: "Unlimited Pilot's Review", body: 'Submit any kit, any time. Senior pilot scores every build.' },
+  { icon: '📡', title: 'Post to the Community Feed', body: 'Share your reviewed builds. Earn likes, climb the weekly leaderboard.' },
   { icon: '⚙️', title: 'XP & Rank Progression', body: 'Earn XP per build. Promote from Recruit to Captain and beyond.' },
   { icon: '🏅', title: 'Earn Medals', body: 'Unlock achievements as your hangar grows.' },
 ];
@@ -143,13 +143,13 @@ export function Paywall({ onClose }: { onClose?: () => void }) {
         <Text style={styles.eyebrow}>PILOT'S COMMISSION</Text>
         <Text style={styles.title}>UNLOCK FULL{'\n'}OPERATIONS</Text>
         <Text style={styles.sub}>
-          Hangar logging is free forever. Judge submissions and community feed posting require a pilot's commission.
+          Hangar logging is free forever. Pilot's Review submissions and community feed posting require a pilot's commission.
         </Text>
 
         <View style={styles.trialBanner}>
           <Text style={styles.trialEyebrow}>LIMITED-TIME</Text>
           <Text style={styles.trialTitle}>7 DAYS FREE</Text>
-          <Text style={styles.trialBody}>Try Judge and the community feed. Cancel anytime before day 7 — no charge.</Text>
+          <Text style={styles.trialBody}>Try Pilot's Review and the community feed. Cancel anytime before day 7 — no charge.</Text>
         </View>
 
         <View style={styles.benefits}>

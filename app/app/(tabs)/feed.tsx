@@ -335,7 +335,7 @@ export default function Feed() {
                   icon={<Text style={{ fontSize: 32 }}>🚀</Text>}
                   title="THE FEED AWAITS"
                   body="Be the first pilot to file a build. Submit for review and land on the community feed."
-                  ctaLabel="OPEN JUDGE"
+                  ctaLabel="OPEN REVIEW"
                   onCta={() => router.push('/(tabs)/judge')}
                 />
               ) : (

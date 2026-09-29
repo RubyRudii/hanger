@@ -113,7 +113,7 @@ export default function Leaderboard() {
                 }
                 title="NO BUILDS THIS WEEK"
                 body="The leaderboard resets every week. Submit a build to claim the crown."
-                ctaLabel="OPEN JUDGE"
+                ctaLabel="OPEN REVIEW"
                 onCta={() => router.push('/(tabs)/judge')}
               />
             }
