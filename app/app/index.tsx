@@ -72,22 +72,23 @@ export default function Splash() {
 
   return (
     <RootWrapper style={styles.root} {...rootWrapperProps}>
-      <Animated.View style={[styles.orbMid, { opacity: orbOp }]} pointerEvents="none" />
-      <Animated.View style={[styles.orbCore, { opacity: orbOp }]} pointerEvents="none" />
-
-      <Animated.View style={[styles.ring, styles.ring2, { opacity: ringOp }]} pointerEvents="none" />
-      <Animated.View style={[styles.ring, styles.ring1, { opacity: ringOp }]} pointerEvents="none" />
+      <Animated.Text
+        style={[styles.ghostMark, { opacity: Animated.multiply(orbOp, 0.06) }]}
+        numberOfLines={1}
+        allowFontScaling={false}
+      >
+        HANGER
+      </Animated.Text>
 
       <SafeAreaView style={styles.page}>
         <Animated.View style={[styles.logoBlock, { opacity: logoOp, transform: [{ translateY: logoY }] }]}>
-          <Text style={styles.logoText}>HANGER</Text>
-          <Text style={styles.logoSub}>MECHA BUILDER COMMUNITY</Text>
+          <Text style={styles.logoSub}>A mecha builder community</Text>
         </Animated.View>
 
         <Animated.View style={[styles.taglineBlock, { opacity: taglineOp, transform: [{ translateY: taglineY }] }]}>
           <Text style={styles.tagline}>
-            Build it. Show it.{'\n'}
-            <Text style={styles.taglineAccent}>Show the world.</Text>
+            Build it. Score it.{'\n'}
+            <Text style={styles.taglineAccent}>Show the world!</Text>
           </Text>
           <Animated.View style={[styles.divider, { opacity: dividerOp }]} />
           <Text style={styles.taglineSub}>
@@ -149,25 +150,15 @@ function makeStyles(C: Palette) {
     root: { flex: 1, backgroundColor: C.bg, overflow: 'hidden' },
     page: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 28, paddingVertical: 40 },
 
-    orbMid: {
-      position: 'absolute', top: ORB_TOP, alignSelf: 'center',
-      width: 320, height: 320, borderRadius: 160, marginTop: 50,
-      backgroundColor: C.royalSoft,
+    ghostMark: {
+      position: 'absolute', top: ORB_TOP, marginTop: 60,
+      left: 0, right: 0,
+      textAlign: 'center',
+      fontFamily: 'BebasNeue_400Regular',
+      fontSize: 260, letterSpacing: 6,
+      color: C.accent,
+      // opacity is composed from orbOp × 0.06 at the JSX level
     },
-    orbCore: {
-      position: 'absolute', top: ORB_TOP, alignSelf: 'center',
-      width: 200, height: 200, borderRadius: 100, marginTop: 110,
-      backgroundColor: C.orbCore,
-      shadowColor: C.accent,
-      shadowOffset: { width: 0, height: 0 },
-      shadowOpacity: 0.6,
-      shadowRadius: 60,
-      elevation: 30,
-    },
-
-    ring: { position: 'absolute', top: ORB_TOP, alignSelf: 'center', borderRadius: 999, borderWidth: 1 },
-    ring1: { width: 240, height: 240, marginTop: 90, borderColor: C.accentRing },
-    ring2: { width: 340, height: 340, marginTop: 40, borderColor: C.accentSoft },
 
     corner: { position: 'absolute', width: 40, height: 40, borderColor: C.borderMid },
     cornerTL: { top: 30, left: 24, borderTopWidth: 1, borderLeftWidth: 1 },
@@ -176,12 +167,8 @@ function makeStyles(C: Palette) {
     cornerBR: { bottom: 30, right: 24, borderBottomWidth: 1, borderRightWidth: 1 },
 
     logoBlock: { alignItems: 'center', marginBottom: 44 },
-    logoText: {
-      fontFamily: 'BebasNeue_400Regular',
-      fontSize: 80, letterSpacing: 10, color: C.accent, lineHeight: 84,
-    },
     logoSub: {
-      fontSize: 12, letterSpacing: 5, color: C.textDim, marginTop: 6,
+      fontSize: 16, letterSpacing: 0.5, color: C.textDim,
       fontFamily: 'DMSans_300Light',
     },
 

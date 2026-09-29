@@ -125,7 +125,7 @@ export default function SignUp() {
           </Pressable>
         </View>
 
-        <Text style={styles.footer}>BUILD IT · REVIEW IT · SHOW THE WORLD</Text>
+        <Text style={styles.footer}>BUILD IT · SCORE IT · SHOW THE WORLD</Text>
       </SafeAreaView>
     </View>
   );
