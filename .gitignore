@@ -32,3 +32,9 @@ LOGO*.png
 *Runner*.png
 *Runner*.jpg
 *Runner*.webp
+
+# Test kit photos dropped in the repo root for Judge testing
+image*.jpg
+image*.jpeg
+image*.png
+image*.webp
