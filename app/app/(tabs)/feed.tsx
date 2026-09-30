@@ -408,11 +408,13 @@ function FeedCard({
     <Animated.View style={{ opacity: op, transform: [{ translateY: ty }], paddingHorizontal: 20 }}>
       <Pressable style={styles.feedCard} onPress={handlePress}>
         <View style={styles.feedImg}>
-          {build.photo_url ? (
-            <Image source={{ uri: build.photo_url }} style={{ width: '100%', height: '100%' }} />
-          ) : (
-            <Text style={{ fontSize: 26 }}>🤖</Text>
-          )}
+          <View style={styles.feedImgClip}>
+            {build.photo_url ? (
+              <Image source={{ uri: build.photo_url }} style={{ width: '100%', height: '100%' }} />
+            ) : (
+              <Text style={{ fontSize: 26 }}>🤖</Text>
+            )}
+          </View>
           <View style={[styles.gradePip, { borderColor: pip.border }]}>
             <Text style={[styles.gradePipText, { color: pip.color }]}>{build.grade.toUpperCase()}</Text>
           </View>
@@ -580,11 +582,16 @@ function makeStyles(C: Palette) {
       flexDirection: 'row', alignItems: 'center', gap: 12,
     },
     feedImg: {
-      width: 58, height: 58, borderRadius: 12,
+      width: 58, height: 58,
+      position: 'relative', overflow: 'visible',
+      alignItems: 'center', justifyContent: 'center',
+    },
+    feedImgClip: {
+      width: '100%', height: '100%',
+      borderRadius: 12, overflow: 'hidden',
       backgroundColor: C.surface3,
       borderWidth: 1, borderColor: C.borderMid,
       alignItems: 'center', justifyContent: 'center',
-      position: 'relative', overflow: 'visible',
     },
     gradePip: {
       position: 'absolute', bottom: -6, alignSelf: 'center',
