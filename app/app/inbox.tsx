@@ -74,7 +74,7 @@ export default function Inbox() {
           </Pressable>
           <View style={{ flex: 1 }}>
             <Text style={styles.headerTitle}>INBOX</Text>
-            <Text style={styles.headerSub}>// TRANSMISSIONS</Text>
+            <Text style={styles.headerSub}>TRANSMISSIONS</Text>
           </View>
           <View style={{ width: 36 }} />
         </View>

@@ -208,7 +208,7 @@ export function Paywall({ onClose }: { onClose?: () => void }) {
 
         <Text style={styles.legal}>
           7-day free trial, then auto-renews monthly / annually. Cancel anytime in your App Store or Play Store settings before day 7 to avoid being charged.{'\n'}
-          // TRANSMISSION SECURED · APPLE / GOOGLE PROCESSING
+          Payments processed by Apple or Google.
         </Text>
       </ScrollView>
     </View>

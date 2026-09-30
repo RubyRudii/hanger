@@ -23,7 +23,6 @@ export default function Splash() {
   const ctaOp = useRef(new Animated.Value(0)).current;
   const ctaY = useRef(new Animated.Value(16)).current;
   const badgeOp = useRef(new Animated.Value(0)).current;
-  const cornerOp = useRef(new Animated.Value(0)).current;
   const versionOp = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -39,7 +38,6 @@ export default function Splash() {
     fade(dividerOp, 500, 1100).start();
     Animated.parallel([fade(ctaOp, 600, 1050), slide(ctaY, 600, 1050)]).start();
     fade(badgeOp, 600, 1300).start();
-    fade(cornerOp, 1000, 1400).start();
     fade(versionOp, 600, 1500).start();
   }, []);
 
@@ -160,11 +158,6 @@ function makeStyles(C: Palette) {
       // opacity is composed from orbOp × 0.06 at the JSX level
     },
 
-    corner: { position: 'absolute', width: 40, height: 40, borderColor: C.borderMid },
-    cornerTL: { top: 30, left: 24, borderTopWidth: 1, borderLeftWidth: 1 },
-    cornerTR: { top: 30, right: 24, borderTopWidth: 1, borderRightWidth: 1 },
-    cornerBL: { bottom: 30, left: 24, borderBottomWidth: 1, borderLeftWidth: 1 },
-    cornerBR: { bottom: 30, right: 24, borderBottomWidth: 1, borderRightWidth: 1 },
 
     logoBlock: { alignItems: 'center', marginBottom: 44 },
     logoSub: {

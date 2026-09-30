@@ -289,12 +289,6 @@ function makeStyles(C: Palette) {
     root: { flex: 1, backgroundColor: C.bg, overflow: 'hidden' },
     shell: { flex: 1, paddingHorizontal: 28, paddingBottom: 28, maxWidth: 520, alignSelf: 'center', width: '100%' },
 
-    corner: { position: 'absolute', width: 36, height: 36, borderColor: C.borderGold },
-    cornerTL: { top: 20, left: 20, borderTopWidth: 1, borderLeftWidth: 1 },
-    cornerTR: { top: 20, right: 20, borderTopWidth: 1, borderRightWidth: 1 },
-    cornerBL: { bottom: 20, left: 20, borderBottomWidth: 1, borderLeftWidth: 1 },
-    cornerBR: { bottom: 20, right: 20, borderBottomWidth: 1, borderRightWidth: 1 },
-
     topbar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8 },
     logoSm: { fontFamily: 'BebasNeue_400Regular', fontSize: 22, letterSpacing: 4, color: C.accent },
     skipBtn: { fontSize: 14, color: C.textDim, fontFamily: 'DMSans_300Light', letterSpacing: 1 },

@@ -155,7 +155,7 @@ export default function Search() {
                 return (
                   <View style={styles.sectionHead}>
                     <Text style={styles.sectionLabel}>
-                      // {item.title} · {item.count}
+                      {item.title} · {item.count}
                     </Text>
                   </View>
                 );

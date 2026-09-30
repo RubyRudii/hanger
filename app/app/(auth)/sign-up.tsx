@@ -136,11 +136,6 @@ function makeStyles(C: Palette) {
     root: { flex: 1, backgroundColor: C.bg },
     shell: { flex: 1, paddingHorizontal: 28, paddingTop: 24, paddingBottom: 32, alignItems: 'center', justifyContent: 'center' },
 
-    corner: { position: 'absolute', width: 36, height: 36, borderColor: C.borderGold },
-    cornerTL: { top: 20, left: 20, borderTopWidth: 1, borderLeftWidth: 1 },
-    cornerTR: { top: 20, right: 20, borderTopWidth: 1, borderRightWidth: 1 },
-    cornerBL: { bottom: 20, left: 20, borderBottomWidth: 1, borderLeftWidth: 1 },
-    cornerBR: { bottom: 20, right: 20, borderBottomWidth: 1, borderRightWidth: 1 },
 
     brandRow: { alignItems: 'center', marginBottom: 24 },
     logoMark: { fontFamily: 'BebasNeue_400Regular', fontSize: 32, letterSpacing: 6, color: C.accent },

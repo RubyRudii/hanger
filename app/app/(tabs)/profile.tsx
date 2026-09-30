@@ -96,7 +96,6 @@ export default function Profile() {
   const rankSpan = Math.max(nextRank.min - rankBase, 1);
   const rankPct = Math.min(100, Math.round(((totalXp - rankBase) / rankSpan) * 100));
   const initials = (profile?.handle ?? profile?.display_name ?? '??').slice(0, 2).toUpperCase();
-  const pilotId = `${initials}-${new Date().getFullYear()}-${session?.user.id.slice(0, 4).toUpperCase() ?? '0000'}`;
   const yearJoined = profile?.joined_year ?? new Date().getFullYear();
 
   return (
@@ -142,12 +141,6 @@ export default function Profile() {
         ) : (
           <ScrollView contentContainerStyle={{ paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
             <View style={styles.pilotCard}>
-              <View style={styles.idStrip}>
-                <Text style={styles.idStripText}>PILOT ID</Text>
-                <View style={styles.idDash} />
-                <Text style={styles.idStripText}>{pilotId}</Text>
-              </View>
-
               <View style={styles.pilotRow}>
                 <Pressable style={styles.avatarWrap} onPress={() => router.push('/edit-profile')}>
                   <View style={styles.avatarRing} />
@@ -436,9 +429,6 @@ function makeStyles(C: Palette) {
       color: C.accentSoft, lineHeight: 56,
     },
 
-    idStrip: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 16 },
-    idStripText: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, letterSpacing: 1.5, color: C.accent },
-    idDash: { flex: 1, height: 1, backgroundColor: C.accentRing },
 
     pilotRow: { flexDirection: 'row', alignItems: 'center', gap: 16, marginBottom: 16 },
     avatarWrap: { width: 92, height: 92, alignItems: 'center', justifyContent: 'center' },

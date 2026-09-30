@@ -44,10 +44,10 @@ const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 function assessment(score: number) {
   if (score >= 90) return { text: 'ELITE\nBUILD', grade: 'GRADE S' };
-  if (score >= 85) return { text: 'COMBAT\nREADY', grade: 'GRADE A' };
-  if (score >= 75) return { text: 'IN\nSERVICE', grade: 'GRADE B' };
-  if (score >= 65) return { text: 'NEEDS\nREPAIRS', grade: 'GRADE C' };
-  return { text: 'GROUNDED', grade: 'GRADE D' };
+  if (score >= 85) return { text: 'SHARP\nWORK', grade: 'GRADE A' };
+  if (score >= 75) return { text: 'SOLID\nBUILD', grade: 'GRADE B' };
+  if (score >= 65) return { text: 'KEEP\nGOING', grade: 'GRADE C' };
+  return { text: 'EARLY\nDAYS', grade: 'GRADE D' };
 }
 
 function rankFromXP(totalXp: number) {
@@ -292,7 +292,7 @@ export default function Debrief() {
           </Pressable>
           <View style={{ flex: 1 }}>
             <Text style={styles.headerTitle}>PILOT'S DEBRIEF</Text>
-            <Text style={styles.headerSub}>EVALUATION COMPLETE</Text>
+            <Text style={styles.headerSub}>YOUR REVIEW</Text>
           </View>
           {session && build && build.user_id === session.user.id ? (
             <Pressable style={styles.iconBtn} onPress={openOwnerMenu}>
@@ -330,7 +330,7 @@ export default function Debrief() {
         >
           {/* Classified banner */}
           <View style={styles.classified}>
-            <Text style={styles.classifiedText}>OFFICIAL DEBRIEF</Text>
+            <Text style={styles.classifiedText}>DEBRIEF</Text>
             <Text style={styles.classifiedId}>PR-{build.id.slice(0, 8).toUpperCase()}</Text>
           </View>
 
@@ -424,7 +424,7 @@ export default function Debrief() {
           <View style={styles.section}>
             <View style={styles.eyebrowRow}>
               <View style={styles.eyebrowDash} />
-              <Text style={styles.sectionEyebrow}>SENIOR PILOT'S NOTES</Text>
+              <Text style={styles.sectionEyebrow}>NOTES</Text>
             </View>
             <View style={styles.debrief}>
               <View style={styles.debriefAccent} />
@@ -438,7 +438,7 @@ export default function Debrief() {
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.pilotName}>Captain N. Vega</Text>
-                  <Text style={styles.pilotRank}>SENIOR PILOT · INSTRUCTOR</Text>
+                  <Text style={styles.pilotRank}>PILOT REVIEW</Text>
                   <Text style={styles.pilotCallsign}>CALLSIGN: NIGHT TIGER</Text>
                 </View>
               </View>

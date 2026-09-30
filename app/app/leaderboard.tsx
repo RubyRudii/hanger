@@ -76,7 +76,7 @@ export default function Leaderboard() {
           </Pressable>
           <View style={{ flex: 1 }}>
             <Text style={styles.headerTitle}>LEADERBOARD</Text>
-            <Text style={styles.headerSub}>// THIS WEEK'S TOP BUILDS</Text>
+            <Text style={styles.headerSub}>THIS WEEK'S TOP BUILDS</Text>
           </View>
           <View style={{ width: 36 }} />
         </View>

@@ -45,8 +45,8 @@ export function JudgeDisclaimer({ visible, onClose }: Props) {
           <View style={[styles.corner, styles.cornerBL]} pointerEvents="none" />
           <View style={[styles.corner, styles.cornerBR]} pointerEvents="none" />
 
-          <Text style={styles.eyebrow}>// TRANSMISSION</Text>
-          <Text style={styles.title}>PILOT'S NOTE</Text>
+          <Text style={styles.eyebrow}>TRANSMISSION</Text>
+          <Text style={styles.title}>A QUICK NOTE</Text>
 
           <ScrollView style={{ maxHeight: 340 }} contentContainerStyle={{ paddingBottom: 8 }}>
             <Text style={styles.body}>

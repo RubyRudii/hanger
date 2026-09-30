@@ -233,7 +233,7 @@ function Judge() {
           </Pressable>
           <View style={{ flex: 1 }}>
             <Text style={styles.headerTitle}>PILOT'S REVIEW</Text>
-            <Text style={styles.headerSub}>SUBMIT BUILD FOR EVALUATION</Text>
+            <Text style={styles.headerSub}>SUBMIT A PHOTO FOR SCORING</Text>
           </View>
           <Pressable
             style={styles.backBtn}
@@ -252,7 +252,7 @@ function Judge() {
         <ScrollView contentContainerStyle={{ paddingBottom: 40 }} keyboardShouldPersistTaps="handled">
           {/* Intro */}
           <View style={styles.intro}>
-            <Text style={styles.introEyebrow}>INCOMING TRANSMISSION</Text>
+            <Text style={styles.introEyebrow}>ABOUT THE REVIEW</Text>
             <Text style={styles.introTitle}>"Show me what you've built."</Text>
             <Text style={styles.introBody}>
               Submit your finished kit for review by a <Text style={{ color: C.goldLight }}>senior pilot</Text>. They'll evaluate construction, finish, and combat readiness — then file an official debrief on your build.
@@ -266,7 +266,7 @@ function Judge() {
                 <Text style={styles.stepNumText}>STEP 01</Text>
               </View>
               <Text style={styles.stepTitle}>
-                UPLOAD <Text style={{ color: C.accent }}>VISUAL RECON</Text>
+                UPLOAD <Text style={{ color: C.accent }}>A PHOTO</Text>
               </Text>
             </View>
 
@@ -401,7 +401,7 @@ function Judge() {
               </Svg>
               <Text style={styles.btnSubmitText}>SUBMIT FOR REVIEW</Text>
             </Pressable>
-            <Text style={styles.submitHint}>TRANSMISSION SECURED · AWAITING UPLINK</Text>
+            <Text style={styles.submitHint}>Photos stay private until you post to the feed.</Text>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -457,7 +457,7 @@ function Judge() {
               </Svg>
             </Animated.View>
           </Animated.View>
-          <Text style={styles.reviewStatus}>SENIOR PILOT INCOMING</Text>
+          <Text style={styles.reviewStatus}>REVIEWING YOUR BUILD</Text>
           <Text style={styles.reviewSubstatus}>{reviewStage?.text ?? 'Establishing secure connection...'}</Text>
           <View style={styles.reviewProgress}>
             <Animated.View
