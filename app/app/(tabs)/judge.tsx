@@ -284,33 +284,18 @@ function Judge() {
                 )}
               </View>
               <Text style={[styles.uploadTitle, photo && { color: C.greenHud }]}>
-                {photo ? '1 photo uploaded' : 'Upload kit photos'}
+                {photo ? 'Photo added' : 'Add a kit photo'}
               </Text>
               <Text style={styles.uploadHint}>
-                {photo ? 'Tap upload to replace · Long-press for camera' : 'Tap to add — long-press for camera'}
+                {photo ? 'Tap to replace · Long-press for camera' : 'Tap to pick from library · Long-press for camera'}
               </Text>
             </Pressable>
 
-            <View style={styles.photoStrip}>
-              {[0, 1, 2].map((i) => {
-                const tags = ['FRONT', 'BACK', 'DETAIL'];
-                const filled = i === 0 && !!photo;
-                return (
-                  <View key={i} style={[styles.photoSlot, filled ? styles.photoSlotFilled : styles.photoSlotEmpty]}>
-                    {filled && photo ? (
-                      <Image source={{ uri: photo.uri }} style={styles.photoSlotImg} />
-                    ) : (
-                      <Text style={styles.photoSlotPlus}>+</Text>
-                    )}
-                    {filled ? (
-                      <View style={styles.photoTag}>
-                        <Text style={styles.photoTagText}>{tags[i]}</Text>
-                      </View>
-                    ) : null}
-                  </View>
-                );
-              })}
-            </View>
+            {photo ? (
+              <View style={styles.previewWrap}>
+                <Image source={{ uri: photo.uri }} style={styles.previewImg} />
+              </View>
+            ) : null}
           </View>
 
           {/* Step 2 */}
@@ -601,24 +586,13 @@ function makeStyles(C: Palette) {
   uploadTitle: { fontSize: 16, color: C.text, fontFamily: 'DMSans_500Medium', marginBottom: 4 },
   uploadHint: { fontSize: 13, color: C.textDim, fontFamily: 'DMSans_300Light' },
 
-  photoStrip: { flexDirection: 'row', gap: 8, marginTop: 12 },
-  photoSlot: {
-    flex: 1, aspectRatio: 1, borderRadius: 10,
-    backgroundColor: C.surface2,
-    alignItems: 'center', justifyContent: 'center',
-    overflow: 'hidden', position: 'relative',
+  previewWrap: {
+    marginTop: 12,
+    borderRadius: 12, overflow: 'hidden',
+    borderWidth: 1, borderColor: C.border,
+    aspectRatio: 4 / 3, backgroundColor: C.surface2,
   },
-  photoSlotFilled: { borderWidth: 1, borderColor: C.borderGold, backgroundColor: C.surface3 },
-  photoSlotEmpty: { borderWidth: 1, borderColor: C.border, borderStyle: 'dashed' },
-  photoSlotPlus: { fontSize: 22, color: C.textFaint },
-  photoSlotImg: { width: '100%', height: '100%' },
-  photoTag: {
-    position: 'absolute', bottom: 4, left: 4,
-    backgroundColor: 'rgba(5,9,24,0.85)',
-    borderWidth: 1, borderColor: C.borderGold, borderRadius: 3,
-    paddingHorizontal: 5, paddingVertical: 2,
-  },
-  photoTagText: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, letterSpacing: 1, color: C.accent },
+  previewImg: { width: '100%', height: '100%' },
 
   fieldLabelRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5 },
   fieldChev: { color: C.accent, fontSize: 11, fontFamily: 'JetBrainsMono_500Medium' },
