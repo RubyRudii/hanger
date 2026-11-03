@@ -168,7 +168,7 @@ export default function KitDetail() {
             <View style={styles.actions}>
               <Pressable
                 style={({ pressed }) => [styles.btnPrimary, pressed && { opacity: 0.85 }]}
-                onPress={() => router.push('/(tabs)/judge')}
+                onPress={() => router.push(`/(tabs)/judge?kitId=${kit.id}` as any)}
               >
                 <Text style={styles.btnPrimaryText}>SEND TO PILOT'S REVIEW</Text>
               </Pressable>

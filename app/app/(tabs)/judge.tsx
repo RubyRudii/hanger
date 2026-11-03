@@ -14,7 +14,8 @@ import {
   View,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
+import { fetchKit } from '@/api/kits';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { createBuild, uploadPhoto } from '@/api/builds';
@@ -68,6 +69,7 @@ function Judge() {
   const { session, profile } = useAuth();
   const { colors: C } = useTheme();
   const styles = useMemo(() => makeStyles(C), [C]);
+  const params = useLocalSearchParams<{ kitId?: string }>();
   const [photo, setPhoto] = useState<ImagePicker.ImagePickerAsset | null>(null);
   const [kitName, setKitName] = useState('');
   const [grade, setGrade] = useState('MG');
@@ -76,6 +78,7 @@ function Judge() {
   const [mods, setMods] = useState('Panel lined + weathered');
   const [notes, setNotes] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [prefilling, setPrefilling] = useState(false);
   const [focused, setFocused] = useState<string | null>(null);
   const [showGrade, setShowGrade] = useState(false);
   const [showScale, setShowScale] = useState(false);
@@ -83,12 +86,63 @@ function Judge() {
   const [reviewStage, setReviewStage] = useState<{ text: string; pct: number } | null>(null);
   const [disclaimerOpen, setDisclaimerOpen] = useState(false);
   const reviewId = useRef(buildReviewId()).current;
+  const prefilledFor = useRef<string | null>(null);
 
   useEffect(() => {
     hasSeenJudgeDisclaimer().then((seen) => {
       if (!seen) setDisclaimerOpen(true);
     });
   }, []);
+
+  // Prefill the form from a Hangar kit when the user tapped
+  // 'SEND TO PILOT'S REVIEW' there. Guarded by a ref so the same
+  // kitId never prefills twice (and never clobbers user edits on
+  // a re-render).
+  useEffect(() => {
+    const kitId = typeof params.kitId === 'string' ? params.kitId : null;
+    if (!kitId || prefilledFor.current === kitId) return;
+    prefilledFor.current = kitId;
+    setPrefilling(true);
+    (async () => {
+      try {
+        const kit = await fetchKit(kitId);
+        if (!kit) return;
+        setKitName(kit.kit_name);
+        if (kit.grade) setGrade(kit.grade);
+        if (kit.series) setSeries(kit.series);
+        if (kit.notes) setNotes(kit.notes);
+        if (kit.photo_url) {
+          const res = await fetch(kit.photo_url);
+          const blob = await res.blob();
+          const mime = blob.type || 'image/jpeg';
+          const dataUrl: string = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(blob);
+          });
+          const base64 = dataUrl.split(',')[1] ?? '';
+          setPhoto({
+            uri: kit.photo_url,
+            base64,
+            mimeType: mime,
+            width: 0,
+            height: 0,
+            assetId: null,
+            fileName: null,
+            fileSize: null,
+            exif: null,
+            type: 'image',
+            duration: null,
+          } as unknown as ImagePicker.ImagePickerAsset);
+        }
+      } catch (e: any) {
+        console.warn('kit prefill failed', e?.message ?? e);
+      } finally {
+        setPrefilling(false);
+      }
+    })();
+  }, [params.kitId]);
 
   const scanY = useRef(new Animated.Value(0)).current;
   const orbSpin = useRef(new Animated.Value(0)).current;
@@ -270,9 +324,11 @@ function Judge() {
               </Text>
             </View>
 
-            <Pressable style={styles.uploadZone} onPress={pick} onLongPress={shoot}>
+            <Pressable style={styles.uploadZone} onPress={pick} onLongPress={shoot} disabled={prefilling}>
               <View style={styles.uploadIconWrap}>
-                {photo ? (
+                {prefilling ? (
+                  <ActivityIndicator color={C.accent} />
+                ) : photo ? (
                   <Svg width={22} height={22} viewBox="0 0 22 22">
                     <Path d="M5 11L9 15L17 7" stroke={C.greenHud} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
                   </Svg>
@@ -284,10 +340,10 @@ function Judge() {
                 )}
               </View>
               <Text style={[styles.uploadTitle, photo && { color: C.greenHud }]}>
-                {photo ? 'Photo added' : 'Add a kit photo'}
+                {prefilling ? 'Loading kit from hangar…' : photo ? 'Photo added' : 'Add a kit photo'}
               </Text>
               <Text style={styles.uploadHint}>
-                {photo ? 'Tap to replace · Long-press for camera' : 'Tap to pick from library · Long-press for camera'}
+                {prefilling ? 'One sec' : photo ? 'Tap to replace · Long-press for camera' : 'Tap to pick from library · Long-press for camera'}
               </Text>
             </Pressable>
 
