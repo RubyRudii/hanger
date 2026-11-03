@@ -23,6 +23,16 @@ export async function listKits(userId: string): Promise<Kit[]> {
   return (data ?? []) as Kit[];
 }
 
+export async function fetchKit(id: string): Promise<Kit | null> {
+  const { data, error } = await supabase
+    .from('kits')
+    .select('*')
+    .eq('id', id)
+    .maybeSingle();
+  if (error) throw error;
+  return (data as Kit | null) ?? null;
+}
+
 export async function createKit(input: {
   user_id: string;
   kit_name: string;

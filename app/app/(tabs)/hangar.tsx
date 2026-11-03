@@ -182,7 +182,11 @@ function KitRow({ kit, onLongPress }: { kit: Kit; onLongPress: () => void }) {
   const styles = useMemo(() => makeStyles(C), [C]);
   const pip = gradeColor(kit.grade, C);
   return (
-    <Pressable style={styles.kitRow} onLongPress={onLongPress}>
+    <Pressable
+      style={styles.kitRow}
+      onPress={() => router.push(`/kit/${kit.id}` as any)}
+      onLongPress={onLongPress}
+    >
       <View style={styles.kitThumb}>
         {kit.photo_url ? (
           <Image source={{ uri: kit.photo_url }} style={{ width: '100%', height: '100%' }} />
