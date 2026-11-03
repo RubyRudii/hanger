@@ -861,7 +861,7 @@ function makeStyles(C: Palette) {
   tipText: { fontSize: 14, color: C.textMid, lineHeight: 18, fontFamily: 'DMSans_300Light' },
 
   xpCard: {
-    backgroundColor: C.royalSoft,
+    backgroundColor: '#3C1618',
     borderWidth: 1, borderColor: C.borderGold, borderRadius: 14,
     paddingVertical: 14, paddingHorizontal: 18,
     flexDirection: 'row', alignItems: 'center', gap: 14,
