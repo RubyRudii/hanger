@@ -147,7 +147,7 @@ function makeStyles(C: Palette) {
     title: { fontFamily: 'BebasNeue_400Regular', fontSize: 18, letterSpacing: 3, color: C.text },
     sub: { fontFamily: 'DMSans_300Light', fontSize: 14, color: C.textDim, marginBottom: 16 },
 
-    photoPicker: { width: '100%', height: 180, borderRadius: 14, overflow: 'hidden', marginBottom: 16, backgroundColor: C.surface2, borderWidth: 1, borderColor: C.borderMid, borderStyle: 'dashed' },
+    photoPicker: { width: '100%', maxWidth: 180, aspectRatio: 2 / 3, alignSelf: 'center', borderRadius: 12, overflow: 'hidden', marginBottom: 16, backgroundColor: C.surface2, borderWidth: 1, borderColor: C.borderMid, borderStyle: 'dashed' },
     photoPreview: { width: '100%', height: '100%' },
     photoPlaceholder: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 8 },
     photoHint: { color: C.textDim, fontSize: 14, fontFamily: 'DMSans_300Light' },
