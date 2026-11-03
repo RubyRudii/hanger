@@ -460,14 +460,14 @@ export default function Debrief() {
               <Text style={styles.sectionEyebrow}>FIELD NOTES</Text>
             </View>
             <View style={styles.tipsGrid}>
-              <View style={[styles.tipCard, { borderColor: 'rgba(74,222,128,0.25)' }]}>
+              <View style={[styles.tipCard, { backgroundColor: '#2C7045', borderColor: 'rgba(74,222,128,0.25)' }]}>
                 <View style={styles.tipEyebrow}>
                   <Text style={[styles.tipIcon, { color: C.greenHud }]}>✓</Text>
                   <Text style={[styles.tipEyebrowText, { color: C.greenHud }]}>STRENGTH</Text>
                 </View>
                 <Text style={styles.tipText}>{build.strength}</Text>
               </View>
-              <View style={[styles.tipCard, { borderColor: 'rgba(201,168,76,0.3)' }]}>
+              <View style={[styles.tipCard, { backgroundColor: '#7A5D1E', borderColor: 'rgba(201,168,76,0.3)' }]}>
                 <View style={styles.tipEyebrow}>
                   <Text style={[styles.tipIcon, { color: C.accent }]}>▲</Text>
                   <Text style={[styles.tipEyebrowText, { color: C.accent }]}>TRAIN UP</Text>
@@ -858,7 +858,7 @@ function makeStyles(C: Palette) {
   tipEyebrow: { flexDirection: 'row', alignItems: 'center', gap: 5, marginBottom: 8 },
   tipIcon: { fontSize: 13, fontFamily: 'DMSans_500Medium' },
   tipEyebrowText: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, letterSpacing: 1.5 },
-  tipText: { fontSize: 14, color: C.textMid, lineHeight: 18, fontFamily: 'DMSans_300Light' },
+  tipText: { fontSize: 14, color: '#FFFFFF', lineHeight: 18, fontFamily: 'DMSans_400Regular' },
 
   xpCard: {
     backgroundColor: '#3C1618',
