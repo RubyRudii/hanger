@@ -778,10 +778,10 @@ function makeStyles(C: Palette) {
     marginHorizontal: 20, marginTop: 14,
     backgroundColor: C.surface,
     borderWidth: 1, borderColor: C.borderGold,
-    borderRadius: 20, padding: 20,
+    borderRadius: 18, padding: 14,
     overflow: 'hidden', position: 'relative',
   },
-  heroTop: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16 },
+  heroTop: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10 },
   kitName: { fontSize: 17, color: C.text, fontFamily: 'DMSans_500Medium', marginBottom: 4 },
   kitMeta: { fontFamily: 'JetBrainsMono_400Regular', fontSize: 12, letterSpacing: 1.5, color: C.textDim },
   verdictStamp: {
@@ -791,7 +791,7 @@ function makeStyles(C: Palette) {
   },
   verdictStampText: { fontFamily: 'BebasNeue_400Regular', fontSize: 13, letterSpacing: 2, color: C.onAccent },
 
-  heroPhotoWrap: { width: '100%', height: 180, borderRadius: 12, overflow: 'hidden', marginBottom: 16, backgroundColor: C.surface2 },
+  heroPhotoWrap: { width: '100%', maxWidth: 220, aspectRatio: 4 / 5, alignSelf: 'center', borderRadius: 10, overflow: 'hidden', marginBottom: 12, backgroundColor: C.surface2 },
   heroPhoto: { width: '100%', height: '100%' },
 
   scoreDisplay: { flexDirection: 'row', alignItems: 'center', gap: 20 },

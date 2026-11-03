@@ -523,7 +523,7 @@ function makeStyles(C: Palette) {
       overflow: 'hidden',
     },
     kitPhoto: {
-      height: 100, backgroundColor: C.surface2,
+      aspectRatio: 4 / 5, backgroundColor: C.surface2,
       alignItems: 'center', justifyContent: 'center',
       position: 'relative',
       borderBottomWidth: 1, borderBottomColor: C.border,
